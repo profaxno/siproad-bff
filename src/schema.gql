@@ -1,0 +1,143 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductsElementDto {
+  id: String
+  companyId: String!
+  name: String!
+  cost: Float!
+  stock: Float!
+  unit: String!
+}
+
+type ProductsFormulaDto {
+  id: String
+  companyId: String!
+  name: String!
+  cost: Float!
+  elementList: [ProductsFormulaElementDto!]
+}
+
+type ProductsFormulaElementDto {
+  id: String!
+  qty: Float!
+  name: String!
+  cost: Float!
+  unit: String!
+}
+
+type ProductsProductDto {
+  id: String
+  companyId: String!
+  name: String!
+  description: String!
+  cost: Float!
+  price: Float!
+  formulaList: [ProductsProductFormulaDto!]
+}
+
+type ProductsProductFormulaDto {
+  id: String!
+  qty: Float!
+  name: String!
+  cost: Float!
+  elementList: [ProductsFormulaElementDto!]
+}
+
+type ProductsElementResponseDto {
+  internalCode: Float!
+  message: String!
+  payload: [ProductsElementDto!]
+}
+
+type ProductsFormulaResponseDto {
+  internalCode: Float!
+  message: String!
+  payload: [ProductsFormulaDto!]
+}
+
+type ProductsProductResponseDto {
+  internalCode: Float!
+  message: String!
+  payload: [ProductsProductDto!]
+}
+
+type Query {
+  """Find all elements"""
+  findElements(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseDto!
+
+  """Find element by value"""
+  findOneElementByValue(companyId: String!, value: String!): ProductsElementResponseDto!
+
+  """Find all formulas"""
+  findFormulas(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseDto!
+
+  """Find formula by value"""
+  findOneFormulaByValue(companyId: String!, value: String!): ProductsFormulaResponseDto!
+
+  """Find all products"""
+  findProducts(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseDto!
+
+  """Find product by value"""
+  findOneProductByValue(companyId: String!, value: String!): ProductsProductResponseDto!
+}
+
+type Mutation {
+  """Create/Update element"""
+  updateElement(element: InputProductsElementDto!): ProductsElementResponseDto!
+
+  """Delete element"""
+  deleteElement(id: String!): ProductsElementResponseDto!
+
+  """Create/Update formula"""
+  updateFormula(formula: InputProductsFormulaDto!): ProductsFormulaResponseDto!
+
+  """Delete formula"""
+  deleteFormula(id: String!): ProductsFormulaResponseDto!
+
+  """Create/Update product"""
+  updateProduct(product: InputProductsProductDto!): ProductsProductResponseDto!
+
+  """Delete product"""
+  deleteProduct(id: String!): ProductsProductResponseDto!
+}
+
+input InputProductsElementDto {
+  id: String
+  companyId: String!
+  name: String!
+  cost: Float!
+  stock: Float!
+  unit: String!
+}
+
+input InputProductsFormulaDto {
+  id: String
+  companyId: String!
+  name: String!
+  cost: Float!
+  elementList: [InputProductsFormulaElementDto!]
+}
+
+input InputProductsFormulaElementDto {
+  id: String!
+  qty: Float!
+  name: String
+}
+
+input InputProductsProductDto {
+  id: String
+  companyId: String!
+  name: String!
+  description: String!
+  cost: Float!
+  price: Float!
+  formulaList: [InputProductsProductFormulaDto!]
+}
+
+input InputProductsProductFormulaDto {
+  id: String!
+  qty: Float!
+  name: String
+}
