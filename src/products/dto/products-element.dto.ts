@@ -1,17 +1,17 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { IsBoolean, IsIn, IsInt, IsNumber, IsOptional, IsPositive, IsString, MaxLength } from "class-validator";
+import { IsBoolean, IsIn, IsInt, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength } from "class-validator";
 import { MeasuresEnum } from "../enum/measures.enum";
 
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
 export class BaseProductsElementDto {
   
-  @IsString()
+  @IsUUID()
   @IsOptional()
   @Field( () => String, { nullable: true } )
   id?: string;
 
-  @IsString()
+  @IsUUID()
   @Field( () => String )
   companyId: string;
 

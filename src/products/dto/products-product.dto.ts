@@ -7,12 +7,13 @@ import { InputProductsFormulaElementDto, ProductsFormulaElementDto } from "./pro
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
 export class BaseProductsProductDto {
+
   @IsUUID()
   @IsOptional()
   @Field( () => String, { nullable: true } )
   id?: string;
 
-  @IsString()
+  @IsUUID()
   @Field( () => String )
   companyId: string;
 

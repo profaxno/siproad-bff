@@ -6,6 +6,7 @@ import { ProductsProductDto } from "./products-product.dto";
 
 @ObjectType()
 export class ProductsResponseBaseDto {
+
   @Field( () => Number )
   internalCode: number;
 
@@ -21,6 +22,7 @@ export class ProductsResponseBaseDto {
 // * elements
 @ObjectType()
 export class ProductsElementResponseDto extends ProductsResponseBaseDto{
+
   @Field( () => [ProductsElementDto], {nullable: true})
   payload?: ProductsElementDto[];
 
@@ -29,30 +31,6 @@ export class ProductsElementResponseDto extends ProductsResponseBaseDto{
     this.payload = payload;
   }
 }
-
-// @ObjectType()
-// export class ProductsElementResponseDto extends ProductsResponseBaseDto{
-//   @Field( () => ProductsElementDto, { nullable: true } )
-//   payload?: ProductsElementDto;
-
-//   constructor(internalCode: number, message: string, payload?: ProductsElementDto){
-//     super(internalCode, message);
-//     this.payload = payload;
-//   }
-// }
-
-// @ObjectType()
-// export class ProductsElementSearchResponseDto extends ProductsResponseBaseDto{
-//   @Field( () => [ProductsElementDto], {nullable: true})
-//   payload?: ProductsElementDto[];
-
-//   constructor(internalCode: number, message: string, payload?: ProductsElementDto[]){
-//     super(internalCode, message);
-//     this.payload = payload;
-  
-//   }
-// }
-
 
 // * formulas
 @ObjectType()
@@ -66,29 +44,6 @@ export class ProductsFormulaResponseDto extends ProductsResponseBaseDto{
   
   }
 }
-
-// @ObjectType()
-// export class ProductsFormulaResponseDto extends ProductsResponseBaseDto{
-//   @Field( () => ProductsFormulaDto, { nullable: true } )
-//   payload?: ProductsFormulaDto;
-
-//   constructor(internalCode: number, message: string, payload?: ProductsFormulaDto){
-//     super(internalCode, message);
-//     this.payload = payload;
-//   }
-// }
-
-// @ObjectType()
-// export class ProductsFormulaSearchResponseDto extends ProductsResponseBaseDto{
-//   @Field( () => [ProductsFormulaDto], {nullable: true})
-//   payload?: ProductsFormulaDto[];
-
-//   constructor(internalCode: number, message: string, payload?: ProductsFormulaDto[]){
-//     super(internalCode, message);
-//     this.payload = payload;
-  
-//   }
-// }
 
 // * products
 @ObjectType()

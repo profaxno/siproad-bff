@@ -5,12 +5,13 @@ import { Type } from "class-transformer";
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
 export class BaseProductsFormulaDto {
+
   @IsUUID()
   @IsOptional()
   @Field( () => String, { nullable: true } )
   id?: string;
 
-  @IsString()
+  @IsUUID()
   @Field( () => String )
   companyId: string;
 
