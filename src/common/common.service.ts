@@ -140,12 +140,14 @@ export class CommonService {
   }
 
   private logErrorDetail(error){
-    if(error.response.data){
-      const statusCode = error.response.data.statusCode;
-      const messageError = error.response.data.error
-      const detail = JSON.stringify(error.response.data.message)
+    if(error.response){
+      if(error.response.data){
+        const statusCode = error.response.data.statusCode;
+        const messageError = error.response.data.error
+        const detail = JSON.stringify(error.response.data.message)
 
-      this.logger.error(JSON.stringify(`statusCode=${statusCode}, error=${messageError}, detail=${detail}`));
+        this.logger.error(JSON.stringify(`statusCode=${statusCode}, error=${messageError}, detail=${detail}`));
+      }
     }
   }
 

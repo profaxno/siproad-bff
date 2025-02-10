@@ -31,10 +31,20 @@ type ProductsProductDto {
   id: String
   companyId: String!
   name: String!
-  description: String!
+  description: String
   cost: Float!
   price: Float!
+  hasFormula: Boolean!
+  elementList: [ProductsProductElementDto!]
   formulaList: [ProductsProductFormulaDto!]
+}
+
+type ProductsProductElementDto {
+  id: String!
+  qty: Float!
+  name: String!
+  cost: Float!
+  unit: String!
 }
 
 type ProductsProductFormulaDto {
@@ -48,18 +58,21 @@ type ProductsProductFormulaDto {
 type ProductsElementResponseDto {
   internalCode: Float!
   message: String!
+  qty: Float
   payload: [ProductsElementDto!]
 }
 
 type ProductsFormulaResponseDto {
   internalCode: Float!
   message: String!
+  qty: Float
   payload: [ProductsFormulaDto!]
 }
 
 type ProductsProductResponseDto {
   internalCode: Float!
   message: String!
+  qty: Float
   payload: [ProductsProductDto!]
 }
 
@@ -130,10 +143,18 @@ input InputProductsProductDto {
   id: String
   companyId: String!
   name: String!
-  description: String!
+  description: String
   cost: Float!
   price: Float!
+  hasFormula: Boolean!
+  elementList: [InputProductsProductElementDto!]
   formulaList: [InputProductsProductFormulaDto!]
+}
+
+input InputProductsProductElementDto {
+  id: String!
+  qty: Float!
+  name: String
 }
 
 input InputProductsProductFormulaDto {

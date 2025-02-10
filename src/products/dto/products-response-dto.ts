@@ -13,9 +13,13 @@ export class ProductsResponseBaseDto {
   @Field( () => String )
   message: string;
 
-  constructor(internalCode: number, message: string){
+  @Field( () => Number, { nullable: true } )
+  qty?: number;
+
+  constructor(internalCode: number, message: string, qty?: number){
     this.internalCode = internalCode;
     this.message = message;
+    this.qty = qty;
   }
 }
 
@@ -26,8 +30,8 @@ export class ProductsElementResponseDto extends ProductsResponseBaseDto{
   @Field( () => [ProductsElementDto], {nullable: true})
   payload?: ProductsElementDto[];
 
-  constructor(internalCode: number, message: string, payload?: ProductsElementDto[]){
-    super(internalCode, message);
+  constructor(internalCode: number, message: string, qty?: number, payload?: ProductsElementDto[]){
+    super(internalCode, message, qty);
     this.payload = payload;
   }
 }
@@ -38,8 +42,8 @@ export class ProductsFormulaResponseDto extends ProductsResponseBaseDto{
   @Field( () => [ProductsFormulaDto], {nullable: true})
   payload?: ProductsFormulaDto[];
 
-  constructor(internalCode: number, message: string, payload?: ProductsFormulaDto[]){
-    super(internalCode, message);
+  constructor(internalCode: number, message: string, qty?: number, payload?: ProductsFormulaDto[]){
+    super(internalCode, message, qty);
     this.payload = payload;
   
   }
@@ -51,8 +55,8 @@ export class ProductsProductResponseDto extends ProductsResponseBaseDto{
   @Field( () => [ProductsProductDto], {nullable: true})
   payload?: ProductsProductDto[];
 
-  constructor(internalCode: number, message: string, payload?: ProductsProductDto[]){
-    super(internalCode, message);
+  constructor(internalCode: number, message: string, qty?: number, payload?: ProductsProductDto[]){
+    super(internalCode, message, qty);
     this.payload = payload;
   
   }

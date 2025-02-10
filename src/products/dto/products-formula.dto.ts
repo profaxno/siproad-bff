@@ -45,6 +45,7 @@ export class InputProductsFormulaDto extends BaseProductsFormulaDto {
   elementList?: InputProductsFormulaElementDto[];
 }
 
+// * ---
 @ObjectType()
 export class ProductsFormulaElementDto {
   @IsUUID()

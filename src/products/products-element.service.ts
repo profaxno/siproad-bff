@@ -40,7 +40,6 @@ export class ProductsElementService {
 
       if ( !(
         response.internalCode == HttpStatus.OK || 
-        response.internalCode == HttpStatus.CREATED || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
         throw new Error(`updateElement: Error, response=${JSON.stringify(response)}`);
