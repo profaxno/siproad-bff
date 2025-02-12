@@ -16,12 +16,13 @@ import { ProductsModule } from './products/products.module';
       load: [config]
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
-    driver: ApolloDriver,
-    autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-    playground: false, // TODO: set to false in production or when plugin apollo is enabled
-    plugins: [ApolloServerPluginLandingPageLocalDefault()]
-
-  }), ProductsModule,],
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      playground: false, // TODO: set to false in production or when plugin apollo is enabled
+      plugins: [ApolloServerPluginLandingPageLocalDefault()]
+    }),
+    ProductsModule
+  ],
   controllers: [],
   providers: [],
 })

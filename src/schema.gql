@@ -77,19 +77,19 @@ type ProductsProductResponseDto {
 }
 
 type Query {
-  """Find all elements"""
+  """Find all"""
   findElements(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseDto!
 
   """Find element by value"""
   findOneElementByValue(companyId: String!, value: String!): ProductsElementResponseDto!
 
-  """Find all formulas"""
+  """Find all"""
   findFormulas(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseDto!
 
   """Find formula by value"""
   findOneFormulaByValue(companyId: String!, value: String!): ProductsFormulaResponseDto!
 
-  """Find all products"""
+  """Find all"""
   findProducts(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseDto!
 
   """Find product by value"""

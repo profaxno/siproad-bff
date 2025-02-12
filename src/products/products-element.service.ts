@@ -1,10 +1,9 @@
+import { PfxHttpMethodEnum, PfxHttpService } from 'profaxnojs/axios';
+
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { PaginationArgs } from '../common/dto/args/pagination.args';
-import { SearchArgs } from 'src/common/dto/args/search.args';
-import { HttpMethodKey } from 'src/common/enum/http-method.enum';
-import { CommonService } from 'src/common/common.service';
+import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsElementResponseDto } from './dto/products-response-dto';
 import { ProductsElementDto } from './dto/products-element.dto';
@@ -19,7 +18,7 @@ export class ProductsElementService {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly commonService: CommonService
+    private readonly pfxHttpService: PfxHttpService
   ) { 
     this.siproadProductsHost = this.configService.get('siproadProductsHost');
     this.siproadProductsApiKey = this.configService.get('siproadProductsApiKey');
@@ -29,13 +28,13 @@ export class ProductsElementService {
     const start = performance.now();
 
     // * generate request values
-    const method  = HttpMethodKey.PATCH;
+    const method  = PfxHttpMethodEnum.PATCH;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_UPDATE);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = elementDto;
 
     // * send request
-    return this.commonService.request<ProductsElementResponseDto>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsElementResponseDto>(method, path, headers, body)
     .then(response => {
 
       if ( !(
@@ -54,16 +53,16 @@ export class ProductsElementService {
     })
   }
 
-  findElements(companyId: string, paginationArgs: PaginationArgs, searchArgs: SearchArgs): Promise<ProductsElementResponseDto>{
+  findElements(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsElementResponseDto>{
     const start = performance.now();
     
-    const method  = HttpMethodKey.GET;
+    const method  = PfxHttpMethodEnum.GET;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
-    const body    = searchArgs;
+    const body    = inputArgs;
     const params  = paginationArgs;
 
-    return this.commonService.request<ProductsElementResponseDto>(method, path, headers, body, params)
+    return this.pfxHttpService.request<ProductsElementResponseDto>(method, path, headers, body, params)
     .then(response => {
 
       if ( !(
@@ -73,11 +72,11 @@ export class ProductsElementService {
         throw new Error(`findElements: Error, response=${JSON.stringify(response)}`);
 
       // // * filter
-      // if(searchArgs.search)
-      //   response.payload = response.payload.filter(value => value.name.includes(searchArgs.search))
+      // if(inputArgs.search)
+      //   response.payload = response.payload.filter(value => value.name.includes(inputArgs.search))
 
-      // if(searchArgs.searchList)
-      //   response.payload = response.payload.filter(value => searchArgs.searchList.includes(value.name))
+      // if(inputArgs.searchList)
+      //   response.payload = response.payload.filter(value => inputArgs.searchList.includes(value.name))
       
       const end = performance.now();
       this.logger.log(`findElements: OK, runtime=${(end - start) / 1000} seconds`);
@@ -92,11 +91,11 @@ export class ProductsElementService {
   findOneElementByValue(companyId: string, value: string): Promise<ProductsElementResponseDto>{
     const start = performance.now();
     
-    const method  = HttpMethodKey.GET;
+    const method  = PfxHttpMethodEnum.GET;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     
-    return this.commonService.request<ProductsElementResponseDto>(method, path, headers)
+    return this.pfxHttpService.request<ProductsElementResponseDto>(method, path, headers)
     .then(response => {
 
       if ( !(
@@ -119,13 +118,13 @@ export class ProductsElementService {
     const start = performance.now();
 
     // * generate request values
-    const method  = HttpMethodKey.DELETE;
+    const method  = PfxHttpMethodEnum.DELETE;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_DELETE).concat(`/${id}`);;
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = {};
 
     // * send request
-    return this.commonService.request<ProductsElementResponseDto>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsElementResponseDto>(method, path, headers, body)
     .then(response => {
 
       if ( !(

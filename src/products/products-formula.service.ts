@@ -1,10 +1,9 @@
+import { PfxHttpMethodEnum, PfxHttpService } from 'profaxnojs/axios';
+
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { PaginationArgs } from '../common/dto/args/pagination.args';
-import { SearchArgs } from 'src/common/dto/args/search.args';
-import { HttpMethodKey } from 'src/common/enum/http-method.enum';
-import { CommonService } from 'src/common/common.service';
+import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsFormulaResponseDto } from './dto/products-response-dto';
 import { ProductsFormulaDto } from './dto/products-formula.dto';
@@ -19,7 +18,7 @@ export class ProductsFormulaService {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly commonService: CommonService
+    private readonly pfxHttpService: PfxHttpService
   ) { 
     this.siproadProductsHost = this.configService.get('siproadProductsHost');
     this.siproadProductsApiKey = this.configService.get('siproadProductsApiKey');
@@ -29,13 +28,13 @@ export class ProductsFormulaService {
     const start = performance.now();
 
     // * generate request values
-    const method  = HttpMethodKey.PATCH;
+    const method  = PfxHttpMethodEnum.PATCH;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_UPDATE);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = formulaDto;
 
     // * send request
-    return this.commonService.request<ProductsFormulaResponseDto>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers, body)
     .then(response => {
 
       if ( !(
@@ -54,16 +53,16 @@ export class ProductsFormulaService {
     })
   }
 
-  findFormulas(companyId: string, paginationArgs: PaginationArgs, searchArgs: SearchArgs): Promise<ProductsFormulaResponseDto>{
+  findFormulas(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsFormulaResponseDto>{
     const start = performance.now();
     
-    const method  = HttpMethodKey.GET;
+    const method  = PfxHttpMethodEnum.GET;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
-    const body    = searchArgs;
+    const body    = inputArgs;
     const params  = paginationArgs;
 
-    return this.commonService.request<ProductsFormulaResponseDto>(method, path, headers, body, params)
+    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers, body, params)
     .then(response => {
 
       if ( !(
@@ -85,11 +84,11 @@ export class ProductsFormulaService {
   findOneFormulaByValue(companyId: string, value: string): Promise<ProductsFormulaResponseDto>{
     const start = performance.now();
     
-    const method  = HttpMethodKey.GET;
+    const method  = PfxHttpMethodEnum.GET;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
 
-    return this.commonService.request<ProductsFormulaResponseDto>(method, path, headers)
+    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers)
     .then(response => {
 
       if ( !(
@@ -112,13 +111,13 @@ export class ProductsFormulaService {
     const start = performance.now();
 
     // * generate request values
-    const method  = HttpMethodKey.DELETE;
+    const method  = PfxHttpMethodEnum.DELETE;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_DELETE).concat(`/${id}`);;
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = {};
 
     // * send request
-    return this.commonService.request<ProductsFormulaResponseDto>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers, body)
     .then(response => {
 
       if ( !(

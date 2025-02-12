@@ -1,8 +1,7 @@
 import { HttpStatus, Logger } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { PaginationArgs } from 'src/common/dto/args/pagination.args';
-import { SearchArgs } from 'src/common/dto/args/search.args';
+import { SearchInputArgs, SearchPaginationArgs } from 'src/common/dto/args';
 
 import { InputProductsElementDto, ProductsElementDto } from './dto/products-element.dto';
 import { ProductsElementResponseDto } from './dto/products-response-dto';
@@ -34,12 +33,12 @@ export class ProductsElementResolver {
     })
   }
 
-  @Query(() => ProductsElementResponseDto, { name: 'findElements', description: 'Find all elements' })
-  findElements( @Args('companyId', { type: () => String }) companyId: string, @Args() paginationArgs: PaginationArgs, @Args() searchArgs: SearchArgs ): Promise<void | ProductsElementResponseDto> {
-    this.logger.log(`>>> findElements: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, searchArgs:${JSON.stringify(searchArgs)}`);
+  @Query(() => ProductsElementResponseDto, { name: 'findElements', description: 'Find all' })
+  findElements( @Args('companyId', { type: () => String }) companyId: string, @Args() paginationArgs: SearchPaginationArgs, @Args() inputArgs: SearchInputArgs ): Promise<void | ProductsElementResponseDto> {
+    this.logger.log(`>>> findElements: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
     const start = performance.now();
 
-    return this.productsElementService.findElements(companyId, paginationArgs, searchArgs)
+    return this.productsElementService.findElements(companyId, paginationArgs, inputArgs)
     .then( (response: ProductsElementResponseDto) => {
       const end = performance.now();
       this.logger.log(`<<< findElements: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);

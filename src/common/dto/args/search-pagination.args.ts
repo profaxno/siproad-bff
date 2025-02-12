@@ -3,7 +3,7 @@ import { Type } from "class-transformer";
 import { IsNumber, IsOptional, IsPositive, Min } from "class-validator";
 
 @ArgsType()
-export class PaginationArgs{
+export class SearchPaginationArgs{
     @IsOptional()
     @IsPositive()
     @Min(1)
