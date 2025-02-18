@@ -13,25 +13,25 @@ import { ProductsEnum } from './enum/products.enum';
 export class ProductsProductService {
   private readonly logger = new Logger(ProductsProductService.name);
 
-  private siproadProductsHost: string = null;
-  private siproadProductsApiKey: string = null;
+  private siproadHost: string = null;
+  private siproadApiKey: string = null;
 
   constructor(
     private readonly configService: ConfigService,
     private readonly pfxHttpService: PfxHttpService
   ) { 
-    this.siproadProductsHost = this.configService.get('siproadProductsHost');
-    this.siproadProductsApiKey = this.configService.get('siproadProductsApiKey');
+    this.siproadHost = this.configService.get('siproadHost');
+    this.siproadApiKey = this.configService.get('siproadApiKey');
   }
 
-  updateProduct(formulaDto: ProductsProductDto): Promise<ProductsProductResponseDto>{
+  updateProduct(dto: ProductsProductDto): Promise<ProductsProductResponseDto>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.PATCH;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_UPDATE);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
-    const body    = formulaDto;
+    const path    = this.siproadHost.concat(ProductsEnum.PATH_PRODUCTS_UPDATE);
+    const headers = { "x-api-key": this.siproadApiKey };
+    const body    = dto;
 
     // * send request
     return this.pfxHttpService.request<ProductsProductResponseDto>(method, path, headers, body)
@@ -57,8 +57,8 @@ export class ProductsProductService {
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH).concat(`/${companyId}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH).concat(`/${companyId}`);
+    const headers = { "x-api-key": this.siproadApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
 
@@ -85,8 +85,8 @@ export class ProductsProductService {
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
+    const headers = { "x-api-key": this.siproadApiKey };
 
     return this.pfxHttpService.request<ProductsProductResponseDto>(method, path, headers)
     .then(response => {
@@ -112,8 +112,8 @@ export class ProductsProductService {
 
     // * generate request values
     const method  = PfxHttpMethodEnum.DELETE;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_DELETE).concat(`/${id}`);;
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadHost.concat(ProductsEnum.PATH_PRODUCTS_DELETE).concat(`/${id}`);;
+    const headers = { "x-api-key": this.siproadApiKey };
     const body    = {};
 
     // * send request
