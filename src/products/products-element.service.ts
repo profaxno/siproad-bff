@@ -24,14 +24,14 @@ export class ProductsElementService {
     this.siproadApiKey = this.configService.get('siproadApiKey');
   }
 
-  updateElement(elementDto: ProductsElementDto): Promise<ProductsElementResponseDto>{
+  updateElement(dto: ProductsElementDto): Promise<ProductsElementResponseDto>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.PATCH;
     const path    = this.siproadHost.concat(ProductsEnum.PATH_ELEMENTS_UPDATE);
     const headers = { "x-api-key": this.siproadApiKey };
-    const body    = elementDto;
+    const body    = dto;
 
     // * send request
     return this.pfxHttpService.request<ProductsElementResponseDto>(method, path, headers, body)
