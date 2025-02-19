@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  siproad-bff-api:
+  siproad-bff:
     build: 
       context: .
       dockerfile: Dockerfile
@@ -18,7 +18,11 @@ services:
       EXECUTION_RETRIES: ${EXECUTION_RETRIES}
       EXECUTION_BASE_DELAY: ${EXECUTION_BASE_DELAY}
       DB_DEFAULT_LIMIT: 1000
-      SIPROAD_HOST: ${SIPROAD_HOST}
-      SIPROAD_API_KEY: xxxx
+      SIPROAD_ADMIN_HOST: ${SIPROAD_ADMIN_HOST}
+      SIPROAD_ADMIN_API_KEY: ${SIPROAD_ADMIN_API_KEY}
+      SIPROAD_PRODUCTS_HOST: ${SIPROAD_PRODUCTS_HOST}
+      SIPROAD_PRODUCTS_API_KEY: ${SIPROAD_PRODUCTS_API_KEY}
+      SIPROAD_ORDERS_HOST: ${SIPROAD_ORDERS_HOST}
+      SIPROAD_ORDERS_API_KEY: ${SIPROAD_ORDERS_API_KEY}
     # volumes:
     #   - ./:/var/www/pokedex
