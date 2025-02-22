@@ -7,7 +7,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { config } from './config/app.config';
+import { AdminModule } from './admin/admin.module';
 import { ProductsModule } from './products/products.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { ProductsModule } from './products/products.module';
       playground: false, // TODO: set to false in production or when plugin apollo is enabled
       plugins: [ApolloServerPluginLandingPageLocalDefault()]
     }),
-    ProductsModule
+    AdminModule,
+    ProductsModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],

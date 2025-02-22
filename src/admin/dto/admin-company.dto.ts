@@ -1,9 +1,9 @@
-import { IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import { IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
 
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
-export class BaseProductsElementDto {
+export class BaseAdminCompanyDto {
   
   @IsUUID()
   @IsOptional()
@@ -22,9 +22,5 @@ export class BaseProductsElementDto {
   @IsNumber()
   @Field( () => Number )
   cost: number;
-
-  @IsNumber()
-  @Field( () => Number )
-  stock: number;
 
 }

@@ -1,7 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { AdminCompanyType, AdminUserType } from "./types";
 
 @ObjectType()
-export class ProductsResponseBaseDto {
+export class AdminResponseBaseDto {
 
   @Field( () => Number )
   internalCode: number;
@@ -17,5 +18,4 @@ export class ProductsResponseBaseDto {
     this.message = message;
     this.qty = qty;
   }
-
 }

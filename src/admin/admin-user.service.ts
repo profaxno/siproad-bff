@@ -1,40 +1,49 @@
 import { PfxHttpMethodEnum, PfxHttpService } from 'profaxnojs/axios';
+import * as bcrypt from 'bcrypt';
 
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
-import { ProductsEnum } from './enum/products.enum';
-import { ProductsElementInput } from './dto/inputs/products-element.input';
-import { ProductsElementResponseType } from './dto/types/products-element-response.type';
+
+import { AdminUserInput } from './dto/inputs/admin-user.input';
+
+import { ProductsEnum } from './enums/admin.enum';
+import { AdminUserResponseType } from './dto/types/admin-user-response-type';
 
 @Injectable()
-export class ProductsElementService {
-  private readonly logger = new Logger(ProductsElementService.name);
+export class AdminUserService {
+  private readonly logger = new Logger(AdminUserService.name);
 
-  private siproadProductsHost: string = null;
-  private siproadProductsApiKey: string = null;
+  private siproadAdminHost: string = null;
+  private siproadAdminApiKey: string = null;
 
   constructor(
     private readonly configService: ConfigService,
     private readonly pfxHttpService: PfxHttpService
   ) { 
-    this.siproadProductsHost = this.configService.get('siproadProductsHost');
-    this.siproadProductsApiKey = this.configService.get('siproadProductsApiKey');
+    this.siproadAdminHost = this.configService.get('siproadAdminHost');
+    this.siproadAdminApiKey = this.configService.get('siproadAdminApiKey');
   }
 
-  update(dto: ProductsElementInput): Promise<ProductsElementResponseType>{
+  update(dto: AdminUserInput): Promise<AdminUserResponseType>{
     const start = performance.now();
+
+    // encrypt password
+    const newDto = {
+      ...dto,
+      password: bcrypt.hashSync(dto.password, 10)
+    }
 
     // * generate request values
     const method  = PfxHttpMethodEnum.PATCH;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_UPDATE);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
-    const body    = dto;
+    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_UPDATE);
+    const headers = { "x-api-key": this.siproadAdminApiKey };
+    const body    = newDto;
 
     // * send request
-    return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers, body)
+    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(
@@ -53,16 +62,16 @@ export class ProductsElementService {
     })
   }
 
-  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsElementResponseType>{
+  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<AdminUserResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH).concat(`/${companyId}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_SEARCH).concat(`/${companyId}`);
+    const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
 
-    return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers, body, params)
+    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers, body, params)
     .then(response => {
 
       if ( !(
@@ -88,14 +97,14 @@ export class ProductsElementService {
     })
   }
 
-  findOneByValue(companyId: string, value: string): Promise<ProductsElementResponseType>{
+  findOneByValue(companyId: string, value: string): Promise<AdminUserResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
+    const headers = { "x-api-key": this.siproadAdminApiKey };
     
-    return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers)
+    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers)
     .then(response => {
 
       if ( !(
@@ -114,17 +123,17 @@ export class ProductsElementService {
     })
   }
 
-  delete(id: string): Promise<ProductsElementResponseType>{
+  block(id: string): Promise<AdminUserResponseType>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.DELETE;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_DELETE).concat(`/${id}`);;
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_DELETE).concat(`/${id}`);;
+    const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = {};
 
     // * send request
-    return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers, body)
+    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(
@@ -132,16 +141,41 @@ export class ProductsElementService {
         response.internalCode == HttpStatus.CREATED || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`delete: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`block: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`delete: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`block: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`delete: ${error}`);
+      this.logger.error(`block: ${error}`);
       throw error;
     })
   }
 
+  findOneByEmail(email: string): Promise<AdminUserResponseType>{
+    const start = performance.now();
+    
+    const method  = PfxHttpMethodEnum.POST;
+    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_SEARCH_EMAIL).concat(`/${email}`);
+    const headers = { "x-api-key": this.siproadAdminApiKey };
+    
+    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers)
+    .then(response => {
+
+      if ( !(
+        response.internalCode == HttpStatus.OK || 
+        response.internalCode == HttpStatus.BAD_REQUEST || 
+        response.internalCode == HttpStatus.NOT_FOUND) )
+        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
+
+      const end = performance.now();
+      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds`);
+      return response;
+    })
+    .catch(error => {
+      this.logger.error(`findOneByValue: ${error}`);
+      throw error;
+    })
+  }
 }

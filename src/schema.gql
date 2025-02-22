@@ -2,7 +2,38 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ProductsElementDto {
+type AdminCompanyType {
+  id: String
+  companyId: String!
+  name: String!
+  cost: Float!
+  stock: Float!
+}
+
+type AdminCompanyResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [AdminCompanyType!]
+}
+
+type AdminUserType {
+  id: String
+  companyId: String!
+  fullName: String!
+  email: String!
+  password: String!
+  block: Boolean!
+}
+
+type AdminUserResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [AdminUserType!]
+}
+
+type ProductsElementType {
   id: String
   companyId: String!
   name: String!
@@ -11,15 +42,22 @@ type ProductsElementDto {
   unit: String!
 }
 
-type ProductsFormulaDto {
+type ProductsElementResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [ProductsElementType!]
+}
+
+type ProductsFormulaType {
   id: String
   companyId: String!
   name: String!
   cost: Float!
-  elementList: [ProductsFormulaElementDto!]
+  elementList: [ProductsFormulaElementType!]
 }
 
-type ProductsFormulaElementDto {
+type ProductsFormulaElementType {
   id: String!
   qty: Float!
   name: String!
@@ -27,7 +65,14 @@ type ProductsFormulaElementDto {
   unit: String!
 }
 
-type ProductsProductDto {
+type ProductsFormulaResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [ProductsFormulaType!]
+}
+
+type ProductsProductType {
   id: String
   companyId: String!
   name: String!
@@ -35,11 +80,11 @@ type ProductsProductDto {
   cost: Float!
   price: Float!
   hasFormula: Boolean!
-  elementList: [ProductsProductElementDto!]
-  formulaList: [ProductsProductFormulaDto!]
+  elementList: [ProductsProductElementType!]
+  formulaList: [ProductsProductFormulaType!]
 }
 
-type ProductsProductElementDto {
+type ProductsProductElementType {
   id: String!
   qty: Float!
   name: String!
@@ -47,76 +92,105 @@ type ProductsProductElementDto {
   unit: String!
 }
 
-type ProductsProductFormulaDto {
+type ProductsProductFormulaType {
   id: String!
   qty: Float!
   name: String!
   cost: Float!
-  elementList: [ProductsFormulaElementDto!]
+  elementList: [ProductsFormulaElementType!]
 }
 
-type ProductsElementResponseDto {
+type ProductsProductResponseType {
   internalCode: Float!
   message: String!
   qty: Float
-  payload: [ProductsElementDto!]
+  payload: [ProductsProductType!]
 }
 
-type ProductsFormulaResponseDto {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [ProductsFormulaDto!]
+type AuthDataResponseType {
+  token: String!
+  user: AdminUserType!
 }
 
-type ProductsProductResponseDto {
+type AuthResponseType {
   internalCode: Float!
   message: String!
-  qty: Float
-  payload: [ProductsProductDto!]
+  payload: AuthDataResponseType
 }
 
 type Query {
   """Find all"""
-  findElements(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseDto!
+  findCompanies(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): AdminCompanyResponseType!
+
+  """Find company by value"""
+  findOneCompanyByValue(companyId: String!, value: String!): AdminCompanyResponseType!
+
+  """Find all"""
+  findUsers(userId: String!, page: Float, limit: Float, search: String, searchList: [String!]): AdminUserResponseType!
+
+  """Find user by value"""
+  findOneUserByValue(userId: String!, value: String!): AdminUserResponseType!
+
+  """Find all"""
+  findElements(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseType!
 
   """Find element by value"""
-  findOneElementByValue(companyId: String!, value: String!): ProductsElementResponseDto!
+  findOneElementByValue(companyId: String!, value: String!): ProductsElementResponseType!
 
   """Find all"""
-  findFormulas(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseDto!
+  findFormulas(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseType!
 
   """Find formula by value"""
-  findOneFormulaByValue(companyId: String!, value: String!): ProductsFormulaResponseDto!
+  findOneFormulaByValue(companyId: String!, value: String!): ProductsFormulaResponseType!
 
   """Find all"""
-  findProducts(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseDto!
+  findProducts(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseType!
 
   """Find product by value"""
-  findOneProductByValue(companyId: String!, value: String!): ProductsProductResponseDto!
+  findOneProductByValue(companyId: String!, value: String!): ProductsProductResponseType!
+  revalidateToken: AuthResponseType!
 }
 
 type Mutation {
+  """Create/Update company"""
+  updateCompany(company: AdminCompanyInput!): AdminCompanyResponseType!
+
+  """Delete company"""
+  deleteCompany(id: String!): AdminCompanyResponseType!
+
+  """Block user"""
+  blockUser(id: String!): AdminUserResponseType!
+
   """Create/Update element"""
-  updateElement(element: InputProductsElementDto!): ProductsElementResponseDto!
+  updateElement(element: ProductsElementInput!): ProductsElementResponseType!
 
   """Delete element"""
-  deleteElement(id: String!): ProductsElementResponseDto!
+  deleteElement(id: String!): ProductsElementResponseType!
 
   """Create/Update formula"""
-  updateFormula(formula: InputProductsFormulaDto!): ProductsFormulaResponseDto!
+  updateFormula(formula: ProductsFormulaInput!): ProductsFormulaResponseType!
 
   """Delete formula"""
-  deleteFormula(id: String!): ProductsFormulaResponseDto!
+  deleteFormula(id: String!): ProductsFormulaResponseType!
 
   """Create/Update product"""
-  updateProduct(product: InputProductsProductDto!): ProductsProductResponseDto!
+  updateProduct(product: ProductsProductInput!): ProductsProductResponseType!
 
   """Delete product"""
-  deleteProduct(id: String!): ProductsProductResponseDto!
+  deleteProduct(id: String!): ProductsProductResponseType!
+  signup(signupInput: SignupInput!): AuthResponseType!
+  login(loginInput: LoginInput!): AuthResponseType!
 }
 
-input InputProductsElementDto {
+input AdminCompanyInput {
+  id: String
+  companyId: String!
+  name: String!
+  cost: Float!
+  stock: Float!
+}
+
+input ProductsElementInput {
   id: String
   companyId: String!
   name: String!
@@ -125,21 +199,21 @@ input InputProductsElementDto {
   unit: String!
 }
 
-input InputProductsFormulaDto {
+input ProductsFormulaInput {
   id: String
   companyId: String!
   name: String!
   cost: Float!
-  elementList: [InputProductsFormulaElementDto!]
+  elementList: [ProductsFormulaElementInput!]
 }
 
-input InputProductsFormulaElementDto {
+input ProductsFormulaElementInput {
   id: String!
   qty: Float!
   name: String
 }
 
-input InputProductsProductDto {
+input ProductsProductInput {
   id: String
   companyId: String!
   name: String!
@@ -147,18 +221,30 @@ input InputProductsProductDto {
   cost: Float!
   price: Float!
   hasFormula: Boolean!
-  elementList: [InputProductsProductElementDto!]
-  formulaList: [InputProductsProductFormulaDto!]
+  elementList: [ProductsProductElementInput!]
+  formulaList: [ProductsProductFormulaInput!]
 }
 
-input InputProductsProductElementDto {
+input ProductsProductElementInput {
   id: String!
   qty: Float!
   name: String
 }
 
-input InputProductsProductFormulaDto {
+input ProductsProductFormulaInput {
   id: String!
   qty: Float!
   name: String
+}
+
+input SignupInput {
+  companyId: String!
+  fullName: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }

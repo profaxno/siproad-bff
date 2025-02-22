@@ -5,9 +5,9 @@ import { ConfigService } from '@nestjs/config';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
-import { ProductsFormulaResponseDto } from './dto/products-response-dto';
-import { ProductsFormulaDto } from './dto/products-formula.dto';
 import { ProductsEnum } from './enum/products.enum';
+import { ProductsFormulaInput } from './dto/inputs/products-formula.input';
+import { ProductsFormulaResponseType } from './dto/types/products-formula-response.type';
 
 @Injectable()
 export class ProductsFormulaService {
@@ -24,7 +24,7 @@ export class ProductsFormulaService {
     this.siproadProductsApiKey = this.configService.get('siproadProductsApiKey');
   }
 
-  updateFormula(dto: ProductsFormulaDto): Promise<ProductsFormulaResponseDto>{
+  update(dto: ProductsFormulaInput): Promise<ProductsFormulaResponseType>{
     const start = performance.now();
 
     // * generate request values
@@ -34,26 +34,26 @@ export class ProductsFormulaService {
     const body    = dto;
 
     // * send request
-    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`updateFormula: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`update: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`updateFormula: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`update: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`updateFormula: ${error}`);
+      this.logger.error(`update: ${error}`);
       throw error;
     })
   }
 
-  findFormulas(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsFormulaResponseDto>{
+  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsFormulaResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
@@ -62,52 +62,52 @@ export class ProductsFormulaService {
     const body    = inputArgs;
     const params  = paginationArgs;
 
-    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers, body, params)
+    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body, params)
     .then(response => {
 
       if ( !(
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findFormulas: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`find: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`findFormulas: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`findFormulas: ${error}`);
+      this.logger.error(`find: ${error}`);
       throw error;
     })
   }
 
-  findOneFormulaByValue(companyId: string, value: string): Promise<ProductsFormulaResponseDto>{
+  findOneByValue(companyId: string, value: string): Promise<ProductsFormulaResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
 
-    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers)
+    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers)
     .then(response => {
 
       if ( !(
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findOneFormulaByValue: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`findOneFormulaByValue: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`findOneFormulaByValue: ${error}`);
+      this.logger.error(`findOneByValue: ${error}`);
       throw error;
     })
   }
 
-  deleteFormula(id: string): Promise<ProductsFormulaResponseDto>{
+  delete(id: string): Promise<ProductsFormulaResponseType>{
     const start = performance.now();
 
     // * generate request values
@@ -117,7 +117,7 @@ export class ProductsFormulaService {
     const body    = {};
 
     // * send request
-    return this.pfxHttpService.request<ProductsFormulaResponseDto>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(
@@ -125,14 +125,14 @@ export class ProductsFormulaService {
         response.internalCode == HttpStatus.CREATED || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`deleteFormula: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`delete: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`deleteFormula: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`delete: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`deleteFormula: ${error}`);
+      this.logger.error(`delete: ${error}`);
       throw error;
     })
   }

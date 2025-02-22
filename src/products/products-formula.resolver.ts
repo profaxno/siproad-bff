@@ -3,8 +3,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
-import { InputProductsFormulaDto, ProductsFormulaDto } from './dto/products-formula.dto';
-import { ProductsFormulaResponseDto } from './dto/products-response-dto';
+
+import { ProductsFormulaInput } from './dto/inputs/products-formula.input';
+import { ProductsFormulaResponseType } from './dto/types/products-formula-response.type';
 import { ProductsFormulaService } from './products-formula.service';
 
 @Resolver()
@@ -16,72 +17,72 @@ export class ProductsFormulaResolver {
     private readonly productsFormulaService: ProductsFormulaService,
   ) {}
 
-  @Mutation(() => ProductsFormulaResponseDto, { name: 'updateFormula', description: 'Create/Update formula' })
-  updateFormula( @Args('formula', { type: () => InputProductsFormulaDto }) formula: ProductsFormulaDto ): Promise<void | ProductsFormulaResponseDto> {
-    this.logger.log(`>>> updateFormula: formula=${JSON.stringify(formula)}`);
+  @Mutation(() => ProductsFormulaResponseType, { name: 'updateFormula', description: 'Create/Update formula' })
+  update( @Args('formula', { type: () => ProductsFormulaInput }) formula: ProductsFormulaInput ): Promise<void | ProductsFormulaResponseType> {
+    this.logger.log(`>>> update: formula=${JSON.stringify(formula)}`);
     const start = performance.now();
 
-    return this.productsFormulaService.updateFormula(formula)
-    .then( (response: ProductsFormulaResponseDto) => {
+    return this.productsFormulaService.update(formula)
+    .then( (response: ProductsFormulaResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< updateFormula: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< update: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
       this.logger.error(error.stack);
-      return new ProductsFormulaResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+      return new ProductsFormulaResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
     })
   }
 
-  @Query(() => ProductsFormulaResponseDto, { name: 'findFormulas', description: 'Find all' })
-  findFormulas( @Args('companyId', { type: () => String }) companyId: string, @Args() paginationArgs: SearchPaginationArgs, @Args() inputArgs: SearchInputArgs  ): Promise<void | ProductsFormulaResponseDto> {
-    this.logger.log(`>>> findFormulas: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
+  @Query(() => ProductsFormulaResponseType, { name: 'findFormulas', description: 'Find all' })
+  find( @Args('companyId', { type: () => String }) companyId: string, @Args() paginationArgs: SearchPaginationArgs, @Args() inputArgs: SearchInputArgs  ): Promise<void | ProductsFormulaResponseType> {
+    this.logger.log(`>>> find: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
     const start = performance.now();
 
-    return this.productsFormulaService.findFormulas(companyId, paginationArgs, inputArgs)
-    .then( (response: ProductsFormulaResponseDto) => {
+    return this.productsFormulaService.find(companyId, paginationArgs, inputArgs)
+    .then( (response: ProductsFormulaResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findFormulas: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< find: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
       this.logger.error(error.stack);
-      return new ProductsFormulaResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+      return new ProductsFormulaResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
     })
   }
 
-  @Query(() => ProductsFormulaResponseDto, { name: 'findOneFormulaByValue', description: 'Find formula by value' })
-  findOneFormulaByValue( @Args('companyId', { type: () => String }) companyId: string, @Args('value', { type: () => String }) value: string ): Promise<void | ProductsFormulaResponseDto> {
-    this.logger.log(`>>> findOneFormulaByValue: companyId=${companyId}, value=${value}`);
+  @Query(() => ProductsFormulaResponseType, { name: 'findOneFormulaByValue', description: 'Find formula by value' })
+  findOneByValue( @Args('companyId', { type: () => String }) companyId: string, @Args('value', { type: () => String }) value: string ): Promise<void | ProductsFormulaResponseType> {
+    this.logger.log(`>>> findOneByValue: companyId=${companyId}, value=${value}`);
     const start = performance.now();
 
-    return this.productsFormulaService.findOneFormulaByValue(companyId, value)
-    .then( (response: ProductsFormulaResponseDto) => {
+    return this.productsFormulaService.findOneByValue(companyId, value)
+    .then( (response: ProductsFormulaResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findOneFormulaByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findOneByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
       this.logger.error(error.stack);
-      return new ProductsFormulaResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+      return new ProductsFormulaResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
     })
   }
 
   // TODO: falta validar que el id sea un uuid valido
-  @Mutation(() => ProductsFormulaResponseDto, { name: 'deleteFormula', description: 'Delete formula' })
-  deleteFormula( @Args('id', { type: () => String }) id: string ): Promise<void | ProductsFormulaResponseDto> {
-    this.logger.log(`>>> deleteFormula: id=${JSON.stringify(id)}`);
+  @Mutation(() => ProductsFormulaResponseType, { name: 'deleteFormula', description: 'Delete formula' })
+  delete( @Args('id', { type: () => String }) id: string ): Promise<void | ProductsFormulaResponseType> {
+    this.logger.log(`>>> delete: id=${JSON.stringify(id)}`);
     const start = performance.now();
 
-    return this.productsFormulaService.deleteFormula(id)
-    .then( (response: ProductsFormulaResponseDto) => {
+    return this.productsFormulaService.delete(id)
+    .then( (response: ProductsFormulaResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< deleteFormula: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< delete: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
       this.logger.error(error.stack);
-      return new ProductsFormulaResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+      return new ProductsFormulaResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
     })
   }
 
