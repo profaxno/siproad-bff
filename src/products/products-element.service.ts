@@ -92,7 +92,7 @@ export class ProductsElementService {
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
+    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH_ID).concat(`/${companyId}`).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     
     return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers)

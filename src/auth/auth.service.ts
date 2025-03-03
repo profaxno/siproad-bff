@@ -11,6 +11,7 @@ import { LoginInput } from './dto/inputs';
 import { AdminUserInput } from 'src/admin/dto/inputs/admin-user.input';
 import { AdminUserType } from 'src/admin/dto/types/admin-user.type';
 import { AdminUserResponseType } from 'src/admin/dto/types/admin-user-response-type';
+import { UserStatusEnum } from 'src/admin/enums/user-status.enum';
 
 
 @Injectable()
@@ -27,7 +28,7 @@ export class AuthService {
     this.logger.log(`signup: ${JSON.stringify(signupInput)}`);
     
     // * map to input admin user dto
-    const inputAdminUserDto = new AdminUserInput(signupInput.companyId, signupInput.fullName, signupInput.email, signupInput.password);
+    const inputAdminUserDto = new AdminUserInput(signupInput.companyId, signupInput.name, signupInput.email, signupInput.password);
 
     // * create/update user
     return this.adminUserService.update(inputAdminUserDto)
@@ -65,17 +66,23 @@ export class AuthService {
 
         // * validate password
         if( !bcrypt.compareSync(password, userDto.password ) ) {
-          throw new BadRequestException('invalid credentianls');  
+          const msg = 'invalid credentianls';
+          this.logger.warn(`login: ${msg}, email=${loginInput.email}`);
+          throw new BadRequestException(msg);  
         }
         
         // * generate token
         const token = this.generateJwtToken(userDto);
 
         data = new AuthDataResponseType(token, userDto);
+        return new AuthResponseType(response.internalCode, response.message, data);
       }
 
       // * response
-      return new AuthResponseType(response.internalCode, response.message, data);
+      // return new AuthResponseType(response.internalCode, response.message, data);
+      const msg = 'invalid credentianls';
+      this.logger.warn(`login: ${msg}, response=${response.message}`);
+      throw new BadRequestException(msg);  
     })
 
   }
@@ -98,7 +105,7 @@ export class AuthService {
         const userDto: AdminUserType = response.payload[0];
         delete userDto.password;
 
-        if(userDto.block)
+        if(userDto.status == UserStatusEnum.BLOCKED)
           throw new UnauthorizedException(`inactive user, talk with an admin`);
 
         return userDto;

@@ -20,10 +20,21 @@ type AdminCompanyResponseType {
 type AdminUserType {
   id: String
   companyId: String!
-  fullName: String!
+  name: String!
   email: String!
   password: String!
-  block: Boolean!
+  roleList: UserRoleDto
+  permissionList: UserPermissionDto
+  status: Float!
+}
+
+type UserRoleDto {
+  id: String
+}
+
+type UserPermissionDto {
+  id: String
+  code: String
 }
 
 type AdminUserResponseType {
@@ -120,35 +131,35 @@ type AuthResponseType {
 
 type Query {
   """Find all"""
-  findCompanies(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): AdminCompanyResponseType!
+  findCompanies(page: Float, limit: Float, search: String, searchList: [String!]): AdminCompanyResponseType!
 
   """Find company by value"""
-  findOneCompanyByValue(companyId: String!, value: String!): AdminCompanyResponseType!
+  findOneCompanyByValue(value: String!): AdminCompanyResponseType!
 
   """Find all"""
-  findUsers(userId: String!, page: Float, limit: Float, search: String, searchList: [String!]): AdminUserResponseType!
+  findUsers(page: Float, limit: Float, search: String, searchList: [String!]): AdminUserResponseType!
 
   """Find user by value"""
-  findOneUserByValue(userId: String!, value: String!): AdminUserResponseType!
+  findOneUserByValue(value: String!): AdminUserResponseType!
+  revalidateToken: AuthResponseType!
 
   """Find all"""
-  findElements(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseType!
+  findElements(page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseType!
 
   """Find element by value"""
-  findOneElementByValue(companyId: String!, value: String!): ProductsElementResponseType!
+  findOneElementByValue(value: String!): ProductsElementResponseType!
 
   """Find all"""
-  findFormulas(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseType!
+  findFormulas(page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseType!
 
   """Find formula by value"""
-  findOneFormulaByValue(companyId: String!, value: String!): ProductsFormulaResponseType!
+  findOneFormulaByValue(value: String!): ProductsFormulaResponseType!
 
   """Find all"""
-  findProducts(companyId: String!, page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseType!
+  findProducts(page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseType!
 
   """Find product by value"""
-  findOneProductByValue(companyId: String!, value: String!): ProductsProductResponseType!
-  revalidateToken: AuthResponseType!
+  findOneProductByValue(value: String!): ProductsProductResponseType!
 }
 
 type Mutation {
@@ -158,8 +169,13 @@ type Mutation {
   """Delete company"""
   deleteCompany(id: String!): AdminCompanyResponseType!
 
+  """Create/Update user"""
+  updateUser(user: AdminUserInput!): AdminUserResponseType!
+
   """Block user"""
   blockUser(id: String!): AdminUserResponseType!
+  signup(signupInput: SignupInput!): AuthResponseType!
+  login(loginInput: LoginInput!): AuthResponseType!
 
   """Create/Update element"""
   updateElement(element: ProductsElementInput!): ProductsElementResponseType!
@@ -178,8 +194,6 @@ type Mutation {
 
   """Delete product"""
   deleteProduct(id: String!): ProductsProductResponseType!
-  signup(signupInput: SignupInput!): AuthResponseType!
-  login(loginInput: LoginInput!): AuthResponseType!
 }
 
 input AdminCompanyInput {
@@ -188,6 +202,27 @@ input AdminCompanyInput {
   name: String!
   cost: Float!
   stock: Float!
+}
+
+input AdminUserInput {
+  id: String
+  companyId: String!
+  name: String!
+  email: String!
+  password: String!
+  status: Float!
+}
+
+input SignupInput {
+  companyId: String!
+  name: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 input ProductsElementInput {
@@ -235,16 +270,4 @@ input ProductsProductFormulaInput {
   id: String!
   qty: Float!
   name: String
-}
-
-input SignupInput {
-  companyId: String!
-  fullName: String!
-  email: String!
-  password: String!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
 }

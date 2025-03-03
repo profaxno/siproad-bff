@@ -9,7 +9,7 @@ import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { AdminUserInput } from './dto/inputs/admin-user.input';
 
-import { ProductsEnum } from './enums/admin.enum';
+import { AdminEnum } from './enums/admin.enum';
 import { AdminUserResponseType } from './dto/types/admin-user-response-type';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class AdminUserService {
 
     // * generate request values
     const method  = PfxHttpMethodEnum.PATCH;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_UPDATE);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_UPDATE);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = newDto;
 
@@ -66,7 +66,7 @@ export class AdminUserService {
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_SEARCH).concat(`/${companyId}`);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_SEARCH).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
@@ -101,7 +101,7 @@ export class AdminUserService {
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_SEARCH_ID).concat(`/${companyId}`).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     
     return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers)
@@ -123,12 +123,38 @@ export class AdminUserService {
     })
   }
 
+  findOneByEmail(email: string): Promise<AdminUserResponseType>{
+    const start = performance.now();
+    
+    const method  = PfxHttpMethodEnum.GET;
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_SEARCH_EMAIL).concat(`/${email}`);
+    const headers = { "x-api-key": this.siproadAdminApiKey };
+    
+    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers)
+    .then(response => {
+
+      if ( !(
+        response.internalCode == HttpStatus.OK || 
+        response.internalCode == HttpStatus.BAD_REQUEST || 
+        response.internalCode == HttpStatus.NOT_FOUND) )
+        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
+
+      const end = performance.now();
+      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds, response=${response.qty}`);
+      return response;
+    })
+    .catch(error => {
+      this.logger.error(`findOneByValue: ${error}`);
+      throw error;
+    })
+  }
+
   block(id: string): Promise<AdminUserResponseType>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.DELETE;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_DELETE).concat(`/${id}`);;
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_DELETE).concat(`/${id}`);;
     const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = {};
 
@@ -149,32 +175,6 @@ export class AdminUserService {
     })
     .catch(error => {
       this.logger.error(`block: ${error}`);
-      throw error;
-    })
-  }
-
-  findOneByEmail(email: string): Promise<AdminUserResponseType>{
-    const start = performance.now();
-    
-    const method  = PfxHttpMethodEnum.POST;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_USERS_SEARCH_EMAIL).concat(`/${email}`);
-    const headers = { "x-api-key": this.siproadAdminApiKey };
-    
-    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers)
-    .then(response => {
-
-      if ( !(
-        response.internalCode == HttpStatus.OK || 
-        response.internalCode == HttpStatus.BAD_REQUEST || 
-        response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
-
-      const end = performance.now();
-      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds`);
-      return response;
-    })
-    .catch(error => {
-      this.logger.error(`findOneByValue: ${error}`);
       throw error;
     })
   }

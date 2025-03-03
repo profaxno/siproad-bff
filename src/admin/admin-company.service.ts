@@ -7,7 +7,7 @@ import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { AdminCompanyInput } from './dto/inputs/admin-company.input';
 import { AdminCompanyResponseType } from './dto/types/admin-company-response.type';
-import { ProductsEnum } from './enums/admin.enum';
+import { AdminEnum } from './enums/admin.enum';
 
 @Injectable()
 export class AdminCompanyService {
@@ -29,7 +29,7 @@ export class AdminCompanyService {
 
     // * generate request values
     const method  = PfxHttpMethodEnum.PATCH;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_COMPANIES_UPDATE);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_COMPANIES_UPDATE);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = dto;
 
@@ -53,11 +53,11 @@ export class AdminCompanyService {
     })
   }
 
-  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<AdminCompanyResponseType>{
+  find(paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<AdminCompanyResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_COMPANIES_SEARCH).concat(`/${companyId}`);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_COMPANIES_SEARCH);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
@@ -88,11 +88,11 @@ export class AdminCompanyService {
     })
   }
 
-  findOneByValue(companyId: string, value: string): Promise<AdminCompanyResponseType>{
+  findOneByValue(value: string): Promise<AdminCompanyResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_COMPANIES_SEARCH).concat(`/${companyId}`).concat(`/${value}`);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_COMPANIES_SEARCH_ID).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     
     return this.pfxHttpService.request<AdminCompanyResponseType>(method, path, headers)
@@ -119,7 +119,7 @@ export class AdminCompanyService {
 
     // * generate request values
     const method  = PfxHttpMethodEnum.DELETE;
-    const path    = this.siproadAdminHost.concat(ProductsEnum.PATH_COMPANIES_DELETE).concat(`/${id}`);;
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_COMPANIES_DELETE).concat(`/${id}`);;
     const headers = { "x-api-key": this.siproadAdminApiKey };
     const body    = {};
 

@@ -10,6 +10,8 @@ import { config } from './config/app.config';
 import { AdminModule } from './admin/admin.module';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
+import { SalesModule } from './sales/sales.module';
+import { ExpensesModule } from './expenses/expenses.module';
 
 @Module({
   imports: [
@@ -24,8 +26,10 @@ import { AuthModule } from './auth/auth.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()]
     }),
     AdminModule,
+    AuthModule,
     ProductsModule,
-    AuthModule
+    SalesModule,
+    ExpensesModule
   ],
   controllers: [],
   providers: [],

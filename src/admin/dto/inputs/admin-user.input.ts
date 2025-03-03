@@ -1,17 +1,18 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsBoolean, IsOptional } from "class-validator";
+import { IsIn, IsInt, IsOptional, IsPositive, IsString } from "class-validator";
 import { BaseAdminUserDto } from "../admin-user.dto";
 
 @InputType()
 export class AdminUserInput extends BaseAdminUserDto {
 
-  @IsBoolean()
+  @IsInt()
+  @IsPositive()
   @IsOptional()
-  @Field( () => Boolean )
-  block?: boolean;
+  @Field( () => Number )
+  status?: number;
 
-  constructor(companyId: string, fullName: string, email: string, password: string, block?: boolean){
-    super(companyId, fullName, email, password);
-    this.block = block;
+  constructor(companyId: string, name: string, email: string, password: string, status?: number){
+    super(companyId, name, email, password);
+    this.status = status;
   }
 }

@@ -15,12 +15,12 @@ export class BaseAdminUserDto {
   companyId: string;
 
   @IsString()
-  @MaxLength(100)
+  @MaxLength(90)
   @Field( () => String )
-  fullName: string;
+  name: string;
 
   @IsEmail()
-  @MaxLength(50)
+  @MaxLength(45)
   @Field( () => String )
   email: string;
 
@@ -29,9 +29,9 @@ export class BaseAdminUserDto {
   @Field( () => String )
   password: string;
 
-  constructor(companyId: string, fullName: string, email: string, password: string){
+  constructor(companyId: string, name: string, email: string, password: string){
     this.companyId = companyId;
-    this.fullName = fullName;
+    this.name = name;
     this.email = email;
     this.password = password;
   }

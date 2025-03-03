@@ -1,4 +1,4 @@
-import { HttpStatus, Logger } from '@nestjs/common';
+import { HttpStatus, Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
@@ -6,6 +6,10 @@ import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 import { ProductsProductInput } from './dto/inputs/products-product.input';
 import { ProductsProductResponseType } from './dto/types/products-product-response.type';
 import { ProductsProductService } from './products-product.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
+import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
+import { AdminUserType } from 'src/admin/dto/types';
 
 @Resolver()
 export class ProductsProductResolver {
@@ -17,7 +21,13 @@ export class ProductsProductResolver {
   ) {}
 
   @Mutation(() => ProductsProductResponseType, { name: 'updateProduct', description: 'Create/Update product' })
-  update( @Args('product', { type: () => ProductsProductInput }) product: ProductsProductInput ): Promise<void | ProductsProductResponseType> {
+  @UseGuards( JwtAuthGuard )
+  update(
+    @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_WRITE]) userDto: AdminUserType,
+    @Args('product', { type: () => ProductsProductInput }) product: ProductsProductInput
+  ): Promise<ProductsProductResponseType> {
+
+    product.companyId = userDto.companyId;
     this.logger.log(`>>> update: product=${JSON.stringify(product)}`);
     const start = performance.now();
 
@@ -34,7 +44,14 @@ export class ProductsProductResolver {
   }
 
   @Query(() => ProductsProductResponseType, { name: 'findProducts', description: 'Find all' })
-  find( @Args('companyId', { type: () => String }) companyId: string, @Args() paginationArgs: SearchPaginationArgs, @Args() inputArgs: SearchInputArgs  ): Promise<void | ProductsProductResponseType> {
+  @UseGuards( JwtAuthGuard )
+  find(
+    @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
+    @Args() paginationArgs: SearchPaginationArgs,
+    @Args() inputArgs: SearchInputArgs
+  ): Promise<ProductsProductResponseType> {
+
+    const companyId = userDto.companyId;
     this.logger.log(`>>> find: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
     const start = performance.now();
 
@@ -51,7 +68,13 @@ export class ProductsProductResolver {
   }
 
   @Query(() => ProductsProductResponseType, { name: 'findOneProductByValue', description: 'Find product by value' })
-  findOneByValue( @Args('companyId', { type: () => String }) companyId: string, @Args('value', { type: () => String }) value: string ): Promise<void | ProductsProductResponseType> {
+  @UseGuards( JwtAuthGuard )
+  findOneByValue(
+    @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
+    @Args('value', { type: () => String }) value: string
+  ): Promise<ProductsProductResponseType> {
+
+    const companyId = userDto.companyId;
     this.logger.log(`>>> findOneByValue: companyId=${companyId}, value=${value}`);
     const start = performance.now();
 
@@ -69,7 +92,12 @@ export class ProductsProductResolver {
 
   // TODO: falta validar que el id sea un uuid valido
   @Mutation(() => ProductsProductResponseType, { name: 'deleteProduct', description: 'Delete product' })
-  delete( @Args('id', { type: () => String }) id: string ): Promise<void | ProductsProductResponseType> {
+  @UseGuards( JwtAuthGuard )
+  delete(
+    @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_WRITE]) userDto: AdminUserType,
+    @Args('id', { type: () => String }) id: string
+  ): Promise<ProductsProductResponseType> {
+
     this.logger.log(`>>> delete: id=${JSON.stringify(id)}`);
     const start = performance.now();
 

@@ -11,7 +11,7 @@ export class SignupInput {
   @IsString()
   @IsNotEmpty()
   @Field( () => String )
-  fullName: string;
+  name: string;
 
   @IsEmail()
   @IsNotEmpty()

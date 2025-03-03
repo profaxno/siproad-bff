@@ -7,7 +7,7 @@ import { SignupInput, LoginInput } from './dto/inputs';
 import { AdminUserType } from 'src/admin/dto/types';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorators';
-import { Roles } from '../admin/enums/roles.enums';
+import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
 
 @Resolver()
 export class AuthResolver {
@@ -19,9 +19,11 @@ export class AuthResolver {
   ) {}
 
   @Mutation( () => AuthResponseType, { name: 'signup' })
-  signup( @Args('signupInput') signupInput: SignupInput): Promise<AuthResponseType> {
+  signup(
+    @Args('signupInput') signupInput: SignupInput
+  ): Promise<AuthResponseType> {
     
-    this.logger.log(`>>> signup: signupInput=${JSON.stringify(signupInput)}`);
+    this.logger.log(`>>> signup: email=${signupInput.email}`);
     const start = performance.now();
 
     return this.authService.signup(signupInput)
@@ -38,7 +40,9 @@ export class AuthResolver {
   }
 
   @Mutation( () => AuthResponseType, { name: 'login' } )
-  login( @Args('loginInput') loginInput: LoginInput ): Promise<AuthResponseType> {
+  login(
+    @Args('loginInput') loginInput: LoginInput
+  ): Promise<AuthResponseType> {
     
     this.logger.log(`>>> login: email=${loginInput.email}`);
     const start = performance.now();
@@ -61,7 +65,10 @@ export class AuthResolver {
 
   @Query( () => AuthResponseType, { name: 'revalidateToken' })
   @UseGuards( JwtAuthGuard )
-  revalidateToken(@CurrentUser([Roles.user]) userDto: AdminUserType): Promise<AuthResponseType> {
+  revalidateToken(
+    @CurrentUser([PermissionsEnum.ADMIN_AUTH_LOGIN]) userDto: AdminUserType
+  ): Promise<AuthResponseType> {
+
     this.logger.log(`>>> revalidateToken: user=${JSON.stringify(userDto)}`);
     const start = performance.now();
 
