@@ -1,13 +1,15 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BadRequestException, HttpStatus, Logger, UseGuards } from '@nestjs/common';
 
-import { AuthService } from './auth.service';
-import { AuthResponseType } from './dto/types/auth-response.type';
-import { SignupInput, LoginInput } from './dto/inputs';
-import { AdminUserType } from 'src/admin/dto/types';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorators';
+
+import { LoginInput, ResetPasswordInput } from './dto/inputs';
+import { AuthResponseType } from './dto/types/auth-response.type';
+import { AuthService } from './auth.service';
+
 import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
+import { AdminUserType } from 'src/admin/dto/types';
 
 @Resolver()
 export class AuthResolver {
@@ -17,27 +19,6 @@ export class AuthResolver {
   constructor(
     private readonly authService: AuthService
   ) {}
-
-  @Mutation( () => AuthResponseType, { name: 'signup' })
-  signup(
-    @Args('signupInput') signupInput: SignupInput
-  ): Promise<AuthResponseType> {
-    
-    this.logger.log(`>>> signup: email=${signupInput.email}`);
-    const start = performance.now();
-
-    return this.authService.signup(signupInput)
-    .then( (response: AuthResponseType) => {
-      const end = performance.now();
-      this.logger.log(`<<< signup: executed, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
-      return response;
-    })
-    .catch( (error) => {
-      this.logger.error(error.stack);
-      return new AuthResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
-    })
-
-  }
 
   @Mutation( () => AuthResponseType, { name: 'login' } )
   login(
@@ -79,6 +60,30 @@ export class AuthResolver {
       return response;
     })
     .catch((error) => {
+      this.logger.error(error.stack);
+      return new AuthResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+    })
+
+  }
+
+  @Mutation( () => AuthResponseType, { name: 'resetPassword' })
+  resetPassword(
+    @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput
+  ): Promise<AuthResponseType> {
+    
+    this.logger.log(`>>> resetPassword: email=${resetPasswordInput.email}`);
+    const start = performance.now();
+
+    return this.authService.resetPassword(resetPasswordInput)
+    .then( (response: AuthResponseType) => {
+      const end = performance.now();
+      this.logger.log(`<<< resetPassword: executed, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      return response;
+    })
+    .catch( (error) => {
+      if(error instanceof BadRequestException)
+        return new AuthResponseType(HttpStatus.BAD_REQUEST, error.message);
+
       this.logger.error(error.stack);
       return new AuthResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
     })

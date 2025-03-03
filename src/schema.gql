@@ -133,33 +133,33 @@ type Query {
   """Find all"""
   findCompanies(page: Float, limit: Float, search: String, searchList: [String!]): AdminCompanyResponseType!
 
-  """Find company by value"""
-  findOneCompanyByValue(value: String!): AdminCompanyResponseType!
+  """Find all by value"""
+  findCompaniesByValue(value: String!): AdminCompanyResponseType!
 
   """Find all"""
   findUsers(page: Float, limit: Float, search: String, searchList: [String!]): AdminUserResponseType!
 
-  """Find user by value"""
-  findOneUserByValue(value: String!): AdminUserResponseType!
+  """Find all by value"""
+  findUsersByValue(value: String!): AdminUserResponseType!
   revalidateToken: AuthResponseType!
 
   """Find all"""
   findElements(page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseType!
 
-  """Find element by value"""
-  findOneElementByValue(value: String!): ProductsElementResponseType!
+  """Find all by value"""
+  findElementsByValue(value: String!): ProductsElementResponseType!
 
   """Find all"""
   findFormulas(page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseType!
 
-  """Find formula by value"""
-  findOneFormulaByValue(value: String!): ProductsFormulaResponseType!
+  """Find all by value"""
+  findFormulasByValue(value: String!): ProductsFormulaResponseType!
 
   """Find all"""
   findProducts(page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseType!
 
-  """Find product by value"""
-  findOneProductByValue(value: String!): ProductsProductResponseType!
+  """Find all by value"""
+  findProductsByValue(value: String!): ProductsProductResponseType!
 }
 
 type Mutation {
@@ -169,27 +169,27 @@ type Mutation {
   """Delete company"""
   deleteCompany(id: String!): AdminCompanyResponseType!
 
-  """Create/Update user"""
+  """Create/update user"""
   updateUser(user: AdminUserInput!): AdminUserResponseType!
 
   """Block user"""
   blockUser(id: String!): AdminUserResponseType!
-  signup(signupInput: SignupInput!): AuthResponseType!
   login(loginInput: LoginInput!): AuthResponseType!
+  resetPassword(resetPasswordInput: ResetPasswordInput!): AuthResponseType!
 
-  """Create/Update element"""
+  """Create/update element"""
   updateElement(element: ProductsElementInput!): ProductsElementResponseType!
 
   """Delete element"""
   deleteElement(id: String!): ProductsElementResponseType!
 
-  """Create/Update formula"""
+  """Create/update formula"""
   updateFormula(formula: ProductsFormulaInput!): ProductsFormulaResponseType!
 
   """Delete formula"""
   deleteFormula(id: String!): ProductsFormulaResponseType!
 
-  """Create/Update product"""
+  """Create/update product"""
   updateProduct(product: ProductsProductInput!): ProductsProductResponseType!
 
   """Delete product"""
@@ -210,17 +210,15 @@ input AdminUserInput {
   name: String!
   email: String!
   password: String!
-  status: Float!
+  status: Float
 }
 
-input SignupInput {
-  companyId: String!
-  name: String!
+input LoginInput {
   email: String!
   password: String!
 }
 
-input LoginInput {
+input ResetPasswordInput {
   email: String!
   password: String!
 }

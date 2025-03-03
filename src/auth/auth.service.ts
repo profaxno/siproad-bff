@@ -3,16 +3,12 @@ import * as bcrypt from 'bcrypt';
 
 import { JwtService } from '@nestjs/jwt';
 
-import { SignupInput } from './dto/inputs/signup.input';
+import { LoginInput, ResetPasswordInput } from './dto/inputs';
 import { AuthDataResponseType, AuthResponseType } from './dto/types/auth-response.type';
 import { AdminUserService } from '../admin/admin-user.service';
 
-import { LoginInput } from './dto/inputs';
-import { AdminUserInput } from 'src/admin/dto/inputs/admin-user.input';
-import { AdminUserType } from 'src/admin/dto/types/admin-user.type';
-import { AdminUserResponseType } from 'src/admin/dto/types/admin-user-response-type';
 import { UserStatusEnum } from 'src/admin/enums/user-status.enum';
-
+import { AdminUserType, AdminUserResponseType } from 'src/admin/dto/types';
 
 @Injectable()
 export class AuthService {
@@ -24,30 +20,6 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  signup(signupInput: SignupInput): Promise<AuthResponseType> {
-    this.logger.log(`signup: ${JSON.stringify(signupInput)}`);
-    
-    // * map to input admin user dto
-    const inputAdminUserDto = new AdminUserInput(signupInput.companyId, signupInput.name, signupInput.email, signupInput.password);
-
-    // * create/update user
-    return this.adminUserService.update(inputAdminUserDto)
-    .then( (response: AdminUserResponseType) => {
-      
-      // * generate response
-      let data = undefined;
-      if(response.internalCode == HttpStatus.OK){
-        const userDto: AdminUserType = response.payload[0]; // * get user
-        const token = this.generateJwtToken(userDto); // * generate token
-        data = new AuthDataResponseType(token, userDto);
-      }
-
-      // * response
-      return new AuthResponseType(response.internalCode, response.message, data);
-    })
-
-  }
-
   login(loginInput: LoginInput): Promise<AuthResponseType> {
     this.logger.log(`login: email=${loginInput.email}`);
     
@@ -58,7 +30,6 @@ export class AuthService {
     .then( (response: AdminUserResponseType) => {
 
       // * generate response
-      let data = undefined;
       if(response.internalCode == HttpStatus.OK){
         
         // * get user
@@ -66,23 +37,19 @@ export class AuthService {
 
         // * validate password
         if( !bcrypt.compareSync(password, userDto.password ) ) {
-          const msg = 'invalid credentianls';
-          this.logger.warn(`login: ${msg}, email=${loginInput.email}`);
-          throw new BadRequestException(msg);  
+          this.logger.warn(`login: wrong password, email=${email}`);
+          throw new BadRequestException('invalid credentianls');  
         }
         
         // * generate token
         const token = this.generateJwtToken(userDto);
 
-        data = new AuthDataResponseType(token, userDto);
+        const data = new AuthDataResponseType(token, userDto);
         return new AuthResponseType(response.internalCode, response.message, data);
       }
-
-      // * response
-      // return new AuthResponseType(response.internalCode, response.message, data);
-      const msg = 'invalid credentianls';
-      this.logger.warn(`login: ${msg}, response=${response.message}`);
-      throw new BadRequestException(msg);  
+      
+      this.logger.warn(`login: user not found, response=${response.message}, email=${email}`);
+      throw new BadRequestException('invalid credentianls');  
     })
 
   }
@@ -95,25 +62,55 @@ export class AuthService {
     return Promise.resolve(new AuthResponseType(HttpStatus.OK, 'executed', data));
   }
 
-  validateUser(companyId: string, id: string): Promise<AdminUserType>{
+  validateUser(id: string): Promise<AdminUserType>{
     
-    return this.adminUserService.findOneByValue(companyId, id)
+    return this.adminUserService.findById(id)
     .then( (response: AdminUserResponseType) => {
 
       if(response.internalCode == HttpStatus.OK){
         
+        // * get user
         const userDto: AdminUserType = response.payload[0];
-        delete userDto.password;
 
-        if(userDto.status == UserStatusEnum.BLOCKED)
+        // * validate status
+        if(userDto.status == UserStatusEnum.BLOCKED){
+          this.logger.warn(`validateUser: blocked user, id=${id}`);
           throw new UnauthorizedException(`inactive user, talk with an admin`);
+        }
 
+        delete userDto.password;
         return userDto;
       }
 
-      throw new UnauthorizedException(`user not authorized`);
+      this.logger.error(`validateUser: user not found, response=${response.message}, id=${id}`);
+      throw new UnauthorizedException('user not authorized');
     })
 
+  }
+
+  resetPassword(resetPasswordInput: ResetPasswordInput): Promise<AuthResponseType> {
+    const email = resetPasswordInput.email;
+    this.logger.log(`resetPassword: email=${email}`);
+    
+    // * create/update user
+    return this.adminUserService.findOneByEmail(email)
+    .then( (response: AdminUserResponseType) => {
+
+      if(response.internalCode == HttpStatus.OK){
+
+        // * get user
+        const userDto: AdminUserType = response.payload[0];
+        
+        // * update user
+        userDto.password = resetPasswordInput.password;
+
+        return this.adminUserService.update(userDto)
+        .then( () => new AuthResponseType(response.internalCode, response.message) )
+      }
+
+      this.logger.warn(`resetPassword: user not found, response=${response.message}, email=${email}`);
+      throw new BadRequestException('user not found')
+    })
 
   }
 

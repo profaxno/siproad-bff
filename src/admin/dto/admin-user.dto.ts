@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { IsBoolean, IsEmail, IsIn, IsInt, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength } from "class-validator";
+import { IsBoolean, IsEmail, IsIn, IsInt, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, MinLength } from "class-validator";
 
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
@@ -25,7 +25,8 @@ export class BaseAdminUserDto {
   email: string;
 
   @IsString()
-  @MaxLength(255)
+  @MinLength(6)
+  @MaxLength(20)
   @Field( () => String )
   password: string;
 

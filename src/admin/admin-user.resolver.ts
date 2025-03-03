@@ -1,14 +1,15 @@
-import { HttpStatus, Logger, UseGuards } from '@nestjs/common';
+import { HttpStatus, Logger, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { SearchInputArgs, SearchPaginationArgs } from 'src/common/dto/args';
-import { AdminUserResponseType } from './dto/types/admin-user-response-type';
-import { AdminUserService } from './admin-user.service';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
-import { PermissionsEnum } from './enums/permissions.enum';
-import { AdminUserType } from './dto/types';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
+
 import { AdminUserInput } from './dto/inputs/admin-user.input';
+import { AdminUserType, AdminUserResponseType } from './dto/types';
+import { PermissionsEnum } from './enums/permissions.enum';
+import { AdminUserService } from './admin-user.service';
+
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
 
 @Resolver()
 export class AdminUserResolver {
@@ -19,7 +20,7 @@ export class AdminUserResolver {
     private readonly adminUserService: AdminUserService,
   ) {}
 
-  @Mutation(() => AdminUserResponseType, { name: 'updateUser', description: 'Create/Update user' })
+  @Mutation(() => AdminUserResponseType, { name: 'updateUser', description: 'Create/update user' })
   update( @Args('user', { type: () => AdminUserInput }) user: AdminUserInput ): Promise<AdminUserResponseType> {
     this.logger.log(`>>> update: user=${JSON.stringify(user)}`);
     const start = performance.now();
@@ -60,21 +61,21 @@ export class AdminUserResolver {
     })
   }
 
-  @Query(() => AdminUserResponseType, { name: 'findOneUserByValue', description: 'Find user by value' })
+  @Query(() => AdminUserResponseType, { name: 'findUsersByValue', description: 'Find all by value' })
   @UseGuards( JwtAuthGuard )
-  findOneByValue(
+  findByValue(
     @CurrentUser([PermissionsEnum.ADMIN_USER_READ]) userDto: AdminUserType,
     @Args('value', { type: () => String }) value: string
   ): Promise<AdminUserResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> findOneByValue: companyId=${companyId}, value=${value}`);
+    this.logger.log(`>>> findByValue: companyId=${companyId}, value=${value}`);
     const start = performance.now();
 
-    return this.adminUserService.findOneByValue(companyId, value)
+    return this.adminUserService.findByValue(companyId, value)
     .then( (response: AdminUserResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findOneByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -87,10 +88,10 @@ export class AdminUserResolver {
   @UseGuards( JwtAuthGuard )
   block(
     @CurrentUser([PermissionsEnum.ADMIN_USER_WRITE]) userDto: AdminUserType,
-    @Args('id', { type: () => String }) id: string
+    @Args('id', { type: () => String }, new ParseUUIDPipe()) id: string
   ): Promise<AdminUserResponseType> {
 
-    this.logger.log(`>>> block: id=${JSON.stringify(id)}`);
+    this.logger.log(`>>> block: id=${id}`);
     const start = performance.now();
 
     return this.adminUserService.block(id)

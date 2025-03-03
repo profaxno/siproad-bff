@@ -97,11 +97,11 @@ export class AdminUserService {
     })
   }
 
-  findOneByValue(companyId: string, value: string): Promise<AdminUserResponseType>{
+  findById(id: string): Promise<AdminUserResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_SEARCH_ID).concat(`/${companyId}`).concat(`/${value}`);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_SEARCH_ID).concat(`/${id}`);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     
     return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers)
@@ -111,14 +111,40 @@ export class AdminUserService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`findById: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`findById: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`findOneByValue: ${error}`);
+      this.logger.error(`findById: ${error}`);
+      throw error;
+    })
+  }
+
+  findByValue(companyId: string, value: string): Promise<AdminUserResponseType>{
+    const start = performance.now();
+    
+    const method  = PfxHttpMethodEnum.GET;
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_USERS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
+    const headers = { "x-api-key": this.siproadAdminApiKey };
+    
+    return this.pfxHttpService.request<AdminUserResponseType>(method, path, headers)
+    .then(response => {
+
+      if ( !(
+        response.internalCode == HttpStatus.OK || 
+        response.internalCode == HttpStatus.BAD_REQUEST || 
+        response.internalCode == HttpStatus.NOT_FOUND) )
+        throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
+
+      const end = performance.now();
+      this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
+      return response;
+    })
+    .catch(error => {
+      this.logger.error(`findByValue: ${error}`);
       throw error;
     })
   }
@@ -137,14 +163,14 @@ export class AdminUserService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`findOneByEmail: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds, response=${response.qty}`);
+      this.logger.log(`findOneByEmail: OK, runtime=${(end - start) / 1000} seconds, response=${response.qty}`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`findOneByValue: ${error}`);
+      this.logger.error(`findOneByEmail: ${error}`);
       throw error;
     })
   }

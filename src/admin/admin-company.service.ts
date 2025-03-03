@@ -88,11 +88,11 @@ export class AdminCompanyService {
     })
   }
 
-  findOneByValue(value: string): Promise<AdminCompanyResponseType>{
+  findByValue(value: string): Promise<AdminCompanyResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_COMPANIES_SEARCH_ID).concat(`/${value}`);
+    const path    = this.siproadAdminHost.concat(AdminEnum.PATH_COMPANIES_SEARCH_VALUE).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadAdminApiKey };
     
     return this.pfxHttpService.request<AdminCompanyResponseType>(method, path, headers)
@@ -102,14 +102,14 @@ export class AdminCompanyService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`findOneByValue: ${error}`);
+      this.logger.error(`findByValue: ${error}`);
       throw error;
     })
   }

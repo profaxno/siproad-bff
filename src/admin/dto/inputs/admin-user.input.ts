@@ -8,7 +8,7 @@ export class AdminUserInput extends BaseAdminUserDto {
   @IsInt()
   @IsPositive()
   @IsOptional()
-  @Field( () => Number )
+  @Field( () => Number, { nullable: true } )
   status?: number;
 
   constructor(companyId: string, name: string, email: string, password: string, status?: number){

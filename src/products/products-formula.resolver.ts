@@ -1,16 +1,17 @@
-import { HttpStatus, Logger, UseGuards } from '@nestjs/common';
+import { HttpStatus, Logger, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
-
 import { ProductsFormulaInput } from './dto/inputs/products-formula.input';
 import { ProductsFormulaResponseType } from './dto/types/products-formula-response.type';
 import { ProductsFormulaService } from './products-formula.service';
+
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
-import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
+
 import { AdminUserType } from 'src/admin/dto/types';
+import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
 
 @Resolver()
 export class ProductsFormulaResolver {
@@ -21,7 +22,7 @@ export class ProductsFormulaResolver {
     private readonly productsFormulaService: ProductsFormulaService,
   ) {}
 
-  @Mutation(() => ProductsFormulaResponseType, { name: 'updateFormula', description: 'Create/Update formula' })
+  @Mutation(() => ProductsFormulaResponseType, { name: 'updateFormula', description: 'Create/update formula' })
   @UseGuards( JwtAuthGuard )
   update(
     @CurrentUser([PermissionsEnum.PRODUCTS_FORMULA_WRITE]) userDto: AdminUserType,
@@ -68,21 +69,21 @@ export class ProductsFormulaResolver {
     })
   }
 
-  @Query(() => ProductsFormulaResponseType, { name: 'findOneFormulaByValue', description: 'Find formula by value' })
+  @Query(() => ProductsFormulaResponseType, { name: 'findFormulasByValue', description: 'Find all by value' })
   @UseGuards( JwtAuthGuard )
-  findOneByValue(
+  findByValue(
     @CurrentUser([PermissionsEnum.PRODUCTS_FORMULA_READ]) userDto: AdminUserType, 
     @Args('value', { type: () => String }) value: string
   ): Promise<ProductsFormulaResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> findOneByValue: companyId=${companyId}, value=${value}`);
+    this.logger.log(`>>> findByValue: companyId=${companyId}, value=${value}`);
     const start = performance.now();
 
-    return this.productsFormulaService.findOneByValue(companyId, value)
+    return this.productsFormulaService.findByValue(companyId, value)
     .then( (response: ProductsFormulaResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findOneByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -91,15 +92,14 @@ export class ProductsFormulaResolver {
     })
   }
 
-  // TODO: falta validar que el id sea un uuid valido
   @Mutation(() => ProductsFormulaResponseType, { name: 'deleteFormula', description: 'Delete formula' })
   @UseGuards( JwtAuthGuard )
   delete(
     @CurrentUser([PermissionsEnum.PRODUCTS_FORMULA_WRITE]) userDto: AdminUserType, 
-    @Args('id', { type: () => String }) id: string
+    @Args('id', { type: () => String }, new ParseUUIDPipe()) id: string
   ): Promise<ProductsFormulaResponseType> {
 
-    this.logger.log(`>>> delete: id=${JSON.stringify(id)}`);
+    this.logger.log(`>>> delete: id=${id}`);
     const start = performance.now();
 
     return this.productsFormulaService.delete(id)

@@ -26,9 +26,9 @@ export class JwtStrategy extends PassportStrategy( Strategy ) {
   validate(payload: JwtPayload): Promise<AdminUserType> {
     //this.logger.log(`validate: ${payload}`);
 
-    const { companyId, id } = payload;
+    const { id } = payload;
 
-    return this.authService.validateUser(companyId, id)
+    return this.authService.validateUser(id)
   }
   
 }

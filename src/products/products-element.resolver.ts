@@ -1,15 +1,17 @@
 import { HttpStatus, Logger, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { SearchInputArgs, SearchPaginationArgs } from 'src/common/dto/args';
+import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsElementInput } from './dto/inputs/products-element.input';
 import { ProductsElementResponseType } from './dto/types/products-element-response.type';
 import { ProductsElementService } from './products-element.service';
+
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
-import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
+
 import { AdminUserType } from 'src/admin/dto/types';
+import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
 
 @Resolver()
 export class ProductsElementResolver {
@@ -20,7 +22,7 @@ export class ProductsElementResolver {
     private readonly productsElementService: ProductsElementService,
   ) {}
 
-  @Mutation(() => ProductsElementResponseType, { name: 'updateElement', description: 'Create/Update element' })
+  @Mutation(() => ProductsElementResponseType, { name: 'updateElement', description: 'Create/update element' })
   @UseGuards( JwtAuthGuard )
   update(
     @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_WRITE]) userDto: AdminUserType, 
@@ -67,21 +69,21 @@ export class ProductsElementResolver {
     })
   }
 
-  @Query(() => ProductsElementResponseType, { name: 'findOneElementByValue', description: 'Find element by value' })
+  @Query(() => ProductsElementResponseType, { name: 'findElementsByValue', description: 'Find all by value' })
   @UseGuards( JwtAuthGuard )
-  findOneByValue(
+  findByValue(
     @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_READ]) userDto: AdminUserType,
     @Args('value', { type: () => String }) value: string
   ): Promise<ProductsElementResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> findOneByValue: companyId=${companyId}, value=${value}`);
+    this.logger.log(`>>> findByValue: companyId=${companyId}, value=${value}`);
     const start = performance.now();
 
-    return this.productsElementService.findOneByValue(companyId, value)
+    return this.productsElementService.findByValue(companyId, value)
     .then( (response: ProductsElementResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findOneByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -89,16 +91,15 @@ export class ProductsElementResolver {
       return new ProductsElementResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
     })
   }
-
-  // TODO: falta validar que el id sea un uuid valido
+  
   @Mutation(() => ProductsElementResponseType, { name: 'deleteElement', description: 'Delete element' })
   @UseGuards( JwtAuthGuard )
   delete(
     @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_WRITE]) userDto: AdminUserType,
-    @Args('id', { type: () => String }) id: string
+    @Args('id', { type: () => String }, new ParseUUIDPipe()) id: string
   ): Promise<ProductsElementResponseType> {
 
-    this.logger.log(`>>> delete: id=${JSON.stringify(id)}`);
+    this.logger.log(`>>> delete: id=${id}`);
     const start = performance.now();
 
     return this.productsElementService.delete(id)

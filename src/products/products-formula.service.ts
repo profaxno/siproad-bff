@@ -81,11 +81,11 @@ export class ProductsFormulaService {
     })
   }
 
-  findOneByValue(companyId: string, value: string): Promise<ProductsFormulaResponseType>{
+  findByValue(companyId: string, value: string): Promise<ProductsFormulaResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH_ID).concat(`/${companyId}`).concat(`/${value}`);
+    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
 
     return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers)
@@ -95,14 +95,14 @@ export class ProductsFormulaService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findOneByValue: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`findOneByValue: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`findOneByValue: ${error}`);
+      this.logger.error(`findByValue: ${error}`);
       throw error;
     })
   }

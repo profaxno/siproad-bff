@@ -1,15 +1,15 @@
-import { HttpStatus, Logger, UseGuards } from '@nestjs/common';
+import { HttpStatus, Logger, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { SearchInputArgs, SearchPaginationArgs } from 'src/common/dto/args';
+import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { AdminCompanyInput } from './dto/inputs/admin-company.input';
-import { AdminCompanyResponseType } from './dto/types/admin-company-response.type';
+import { AdminUserType, AdminCompanyResponseType } from './dto/types';
+import { PermissionsEnum } from './enums/permissions.enum';
 import { AdminCompanyService } from './admin-company.service';
+
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
-import { PermissionsEnum } from './enums/permissions.enum';
-import { AdminUserType } from './dto/types';
 
 @Resolver()
 export class AdminCompanyResolver {
@@ -64,20 +64,20 @@ export class AdminCompanyResolver {
     })
   }
 
-  @Query(() => AdminCompanyResponseType, { name: 'findOneCompanyByValue', description: 'Find company by value' })
+  @Query(() => AdminCompanyResponseType, { name: 'findCompaniesByValue', description: 'Find all by value' })
   @UseGuards( JwtAuthGuard )
-  findOneByValue(
+  findByValue(
     @CurrentUser([PermissionsEnum.ADMIN_COMPANY_READ]) userDto: AdminUserType,
     @Args('value', { type: () => String }) value: string
   ): Promise<AdminCompanyResponseType> {
 
-    this.logger.log(`>>> findOneByValue: value=${value}`);
+    this.logger.log(`>>> findByValue: value=${value}`);
     const start = performance.now();
 
-    return this.adminCompanyService.findOneByValue(value)
+    return this.adminCompanyService.findByValue(value)
     .then( (response: AdminCompanyResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findOneByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -86,15 +86,14 @@ export class AdminCompanyResolver {
     })
   }
 
-  // TODO: falta validar que el id sea un uuid valido
   @Mutation(() => AdminCompanyResponseType, { name: 'deleteCompany', description: 'Delete company' })
   @UseGuards( JwtAuthGuard )
   delete(
     @CurrentUser([PermissionsEnum.ADMIN_COMPANY_WRITE]) userDto: AdminUserType,
-    @Args('id', { type: () => String }) id: string
+    @Args('id', { type: () => String }, new ParseUUIDPipe()) id: string
   ): Promise<AdminCompanyResponseType> {
 
-    this.logger.log(`>>> delete: id=${JSON.stringify(id)}`);
+    this.logger.log(`>>> delete: id=${id}`);
     const start = performance.now();
 
     return this.adminCompanyService.delete(id)
