@@ -23,4 +23,4 @@ Api central del sistema siproad que coordina la comunicación hacia las apis adm
 
 ### Configuración de la api
 * Apuntar el archivo .env a las variables de staging.
-* Crear contenedor de api ```docker-compose -p siproad up -d```
+* Crear contenedor de api ```docker-compose -p stg-siproad up -d```

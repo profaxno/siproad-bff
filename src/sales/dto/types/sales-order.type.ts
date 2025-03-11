@@ -14,7 +14,10 @@ export class SalesOrderType {
 
   @Field( () => String, { nullable: true } )
   comment?: string;
-  
+ 
+  @Field( () => Number )
+  price: number;
+
   @Field( () => Number )
   cost: number;
   
