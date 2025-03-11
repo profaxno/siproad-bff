@@ -1,9 +1,9 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { AdminResponseBaseDto } from "../admin-response-dto";
 import { AdminCompanyType } from "./admin-company.type";
+import { ResponseType } from "src/common/dto/types/response.type";
 
 @ObjectType()
-export class AdminCompanyResponseType extends AdminResponseBaseDto{
+export class AdminCompanyResponseType extends ResponseType{
 
   @Field( () => [AdminCompanyType], {nullable: true})
   payload?: AdminCompanyType[];

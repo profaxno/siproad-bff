@@ -1,9 +1,9 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { ProductsResponseBaseDto } from "../products-response-dto";
 import { ProductsElementType } from "./products-element.type";
+import { ResponseType } from "src/common/dto/types/response.type";
 
 @ObjectType()
-export class ProductsElementResponseType extends ProductsResponseBaseDto{
+export class ProductsElementResponseType extends ResponseType{
 
   @Field( () => [ProductsElementType], {nullable: true})
   payload?: ProductsElementType[];

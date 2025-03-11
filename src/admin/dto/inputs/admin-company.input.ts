@@ -1,10 +1,15 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsNumber } from "class-validator";
-import { BaseAdminCompanyDto } from "../admin-company.dto";
+import { IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
 
 @InputType()
-export class AdminCompanyInput extends BaseAdminCompanyDto {
-  @IsNumber()
-  @Field( () => Number )
-  stock: number;
+export class AdminCompanyInput {
+  @IsUUID()
+  @IsOptional()
+  @Field( () => String, { nullable: true } )
+  id?: string;
+ 
+  @IsString()
+  @MaxLength(45)
+  @Field( () => String )
+  name: string;
 }

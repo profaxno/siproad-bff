@@ -22,7 +22,7 @@ export class ProductsElementResolver {
     private readonly productsElementService: ProductsElementService,
   ) {}
 
-  @Mutation(() => ProductsElementResponseType, { name: 'updateElement', description: 'Create/update element' })
+  @Mutation(() => ProductsElementResponseType, { name: 'productsElementUpdate', description: 'Create/update element' })
   @UseGuards( JwtAuthGuard )
   update(
     @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_WRITE]) userDto: AdminUserType, 
@@ -45,7 +45,7 @@ export class ProductsElementResolver {
     })
   }
 
-  @Query(() => ProductsElementResponseType, { name: 'findElements', description: 'Find all' })
+  @Query(() => ProductsElementResponseType, { name: 'productsElementFind', description: 'Find all' })
   @UseGuards( JwtAuthGuard )
   find(
     @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_READ]) userDto: AdminUserType,
@@ -69,21 +69,21 @@ export class ProductsElementResolver {
     })
   }
 
-  @Query(() => ProductsElementResponseType, { name: 'findElementsByValue', description: 'Find all by value' })
+  @Query(() => ProductsElementResponseType, { name: 'productsElementfindOneById', description: 'Find one by id' })
   @UseGuards( JwtAuthGuard )
-  findByValue(
+  findOneById(
     @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_READ]) userDto: AdminUserType,
     @Args('value', { type: () => String }) value: string
   ): Promise<ProductsElementResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> findByValue: companyId=${companyId}, value=${value}`);
+    this.logger.log(`>>> findOneById: companyId=${companyId}, value=${value}`);
     const start = performance.now();
 
     return this.productsElementService.findByValue(companyId, value)
     .then( (response: ProductsElementResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findOneById: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -92,7 +92,7 @@ export class ProductsElementResolver {
     })
   }
   
-  @Mutation(() => ProductsElementResponseType, { name: 'deleteElement', description: 'Delete element' })
+  @Mutation(() => ProductsElementResponseType, { name: 'productsElementDelete', description: 'Delete element' })
   @UseGuards( JwtAuthGuard )
   delete(
     @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_WRITE]) userDto: AdminUserType,

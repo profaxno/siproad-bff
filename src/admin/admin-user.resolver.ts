@@ -20,7 +20,7 @@ export class AdminUserResolver {
     private readonly adminUserService: AdminUserService,
   ) {}
 
-  @Mutation(() => AdminUserResponseType, { name: 'updateUser', description: 'Create/update user' })
+  @Mutation(() => AdminUserResponseType, { name: 'adminUserUpdate', description: 'Create/update user' })
   update( @Args('user', { type: () => AdminUserInput }) user: AdminUserInput ): Promise<AdminUserResponseType> {
     this.logger.log(`>>> update: user=${JSON.stringify(user)}`);
     const start = performance.now();
@@ -37,7 +37,7 @@ export class AdminUserResolver {
     })
   }
 
-  @Query(() => AdminUserResponseType, { name: 'findUsers', description: 'Find all' })
+  @Query(() => AdminUserResponseType, { name: 'adminUserFind', description: 'Find all' })
   @UseGuards( JwtAuthGuard )
   find(
     @CurrentUser([PermissionsEnum.ADMIN_USER_READ]) userDto: AdminUserType,
@@ -61,21 +61,21 @@ export class AdminUserResolver {
     })
   }
 
-  @Query(() => AdminUserResponseType, { name: 'findUsersByValue', description: 'Find all by value' })
+  @Query(() => AdminUserResponseType, { name: 'adminUserFindOneById', description: 'Find one by id' })
   @UseGuards( JwtAuthGuard )
-  findByValue(
+  findOneById(
     @CurrentUser([PermissionsEnum.ADMIN_USER_READ]) userDto: AdminUserType,
     @Args('value', { type: () => String }) value: string
   ): Promise<AdminUserResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> findByValue: companyId=${companyId}, value=${value}`);
+    this.logger.log(`>>> findOneById: companyId=${companyId}, id=${value}`);
     const start = performance.now();
 
     return this.adminUserService.findByValue(companyId, value)
     .then( (response: AdminUserResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findOneById: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -84,7 +84,7 @@ export class AdminUserResolver {
     })
   }
   
-  @Mutation(() => AdminUserResponseType, { name: 'blockUser', description: 'Block user' })
+  @Mutation(() => AdminUserResponseType, { name: 'adminUserBlock', description: 'Block user' })
   @UseGuards( JwtAuthGuard )
   block(
     @CurrentUser([PermissionsEnum.ADMIN_USER_WRITE]) userDto: AdminUserType,

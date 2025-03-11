@@ -20,6 +20,6 @@ export const CurrentUser = createParamDecorator( (validPermissionList: Permissio
 
   // TODO: ver como utilizar el logger de nest
   // console.warn(`user need a valid role=[${JSON.stringify(validPermissionList)}]`)
-  throw new ForbiddenException(`user need a valid`)
+  throw new ForbiddenException('user without permissions for the resource')
 
 });

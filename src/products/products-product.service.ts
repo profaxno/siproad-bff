@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
-import { ProductsEnum } from './enum/products.enum';
+import { ProductsEnum } from './enums/products.enum';
 import { ProductsProductResponseType } from './dto/types/products-product-response.type';
 import { ProductsProductInput } from './dto/inputs/products-product.input';
 

@@ -1,45 +1,36 @@
 import { IsArray, IsBoolean, IsIn, IsInt, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { Field, ObjectType } from "@nestjs/graphql";
 import { BaseAdminUserDto } from "../admin-user.dto";
-import { Type } from "class-transformer";
 
 @ObjectType()
 export class AdminUserType extends BaseAdminUserDto {
   
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type( () => UserRoleDto)
-  @Field(() => UserRoleDto, { nullable: true } )
-  roleList?: UserRoleDto[];
+  @Field(() => [UserRoleType], { nullable: true } )
+  roleList: UserRoleType[];
 
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type( () => UserPermissionDto)
-  @Field(() => UserPermissionDto, { nullable: true } )
-  permissionList?: UserPermissionDto[];
+  @Field(() => [UserPermissionType], { nullable: true } )
+  permissionList?: UserPermissionType[];
 
-  @IsInt()
-  @IsOptional()
+  password: string;
+
   @Field( () => Number )
   status?: number;
 }
 
 @ObjectType()
-export class UserRoleDto {
-  @IsUUID()
-  @Field( () => String, { nullable: true } )
+export class UserRoleType {
+  @Field( () => String )
   id: string;
+
+  @Field( () => String )
+  name: string;
 }
 
 @ObjectType()
-export class UserPermissionDto {
-  @IsUUID()
-  @Field( () => String, { nullable: true } )
+export class UserPermissionType {
+  @Field( () => String )
   id: string;
-
-  @IsString()
-  @Field( () => String, { nullable: true } )
+  
+  @Field( () => String )
   code: string
 }

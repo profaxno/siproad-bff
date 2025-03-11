@@ -13,14 +13,14 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT);
   
-  const env = process.env.ENV.padEnd(18, ' ');
+  const env = process.env.ENV.padEnd(20, ' ');
 
   console.log(`
-╔══════════════════════════╗
-║ @org: Profaxno Company   ║
-║ @app: siproad-bff        ║
+╔════════════════════════════╗
+║ @org: Profaxno Company     ║
+║ @app: siproad-bff          ║
 ║ @env: ${env} ║
-╚══════════════════════════╝
+╚════════════════════════════╝
 
 running at PORT: ${process.env.PORT}...`
   );

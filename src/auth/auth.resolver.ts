@@ -20,7 +20,7 @@ export class AuthResolver {
     private readonly authService: AuthService
   ) {}
 
-  @Mutation( () => AuthResponseType, { name: 'login' } )
+  @Mutation( () => AuthResponseType, { name: 'authLogin' } )
   login(
     @Args('loginInput') loginInput: LoginInput
   ): Promise<AuthResponseType> {
@@ -44,7 +44,7 @@ export class AuthResolver {
 
   }
 
-  @Query( () => AuthResponseType, { name: 'revalidateToken' })
+  @Query( () => AuthResponseType, { name: 'authRevalidateToken' })
   @UseGuards( JwtAuthGuard )
   revalidateToken(
     @CurrentUser([PermissionsEnum.ADMIN_AUTH_LOGIN]) userDto: AdminUserType
@@ -66,7 +66,7 @@ export class AuthResolver {
 
   }
 
-  @Mutation( () => AuthResponseType, { name: 'resetPassword' })
+  @Mutation( () => AuthResponseType, { name: 'authResetPassword' })
   resetPassword(
     @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput
   ): Promise<AuthResponseType> {

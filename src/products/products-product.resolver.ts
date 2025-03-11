@@ -22,7 +22,7 @@ export class ProductsProductResolver {
     private readonly productsProductService: ProductsProductService,
   ) {}
 
-  @Mutation(() => ProductsProductResponseType, { name: 'updateProduct', description: 'Create/update product' })
+  @Mutation(() => ProductsProductResponseType, { name: 'productsProductUpdate', description: 'Create/update product' })
   @UseGuards( JwtAuthGuard )
   update(
     @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_WRITE]) userDto: AdminUserType,
@@ -45,7 +45,7 @@ export class ProductsProductResolver {
     })
   }
 
-  @Query(() => ProductsProductResponseType, { name: 'findProducts', description: 'Find all' })
+  @Query(() => ProductsProductResponseType, { name: 'productsProductFind', description: 'Find all' })
   @UseGuards( JwtAuthGuard )
   find(
     @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
@@ -69,7 +69,7 @@ export class ProductsProductResolver {
     })
   }
 
-  @Query(() => ProductsProductResponseType, { name: 'findProductsByValue', description: 'Find all by value' })
+  @Query(() => ProductsProductResponseType, { name: 'productsProductFindOneById', description: 'Find one by id' })
   @UseGuards( JwtAuthGuard )
   findByValue(
     @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
@@ -92,7 +92,7 @@ export class ProductsProductResolver {
     })
   }
 
-  @Mutation(() => ProductsProductResponseType, { name: 'deleteProduct', description: 'Delete product' })
+  @Mutation(() => ProductsProductResponseType, { name: 'productsProductDelete', description: 'Delete product' })
   @UseGuards( JwtAuthGuard )
   delete(
     @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_WRITE]) userDto: AdminUserType,

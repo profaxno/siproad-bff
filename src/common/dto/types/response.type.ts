@@ -1,15 +1,15 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType, Query } from '@nestjs/graphql';
 
 @ObjectType()
-export class ProductsResponseBaseDto {
+export class ResponseType {
 
-  @Field( () => Number )
+  @Field( () => Number)
   internalCode: number;
-
-  @Field( () => String )
+  
+  @Field( () => String)
   message: string;
 
-  @Field( () => Number, { nullable: true } )
+  @Field( () => Number)
   qty?: number;
 
   constructor(internalCode: number, message: string, qty?: number){
@@ -17,5 +17,5 @@ export class ProductsResponseBaseDto {
     this.message = message;
     this.qty = qty;
   }
-
 }
+

@@ -20,7 +20,7 @@ export class AdminCompanyResolver {
     private readonly adminCompanyService: AdminCompanyService,
   ) {}
 
-  @Mutation(() => AdminCompanyResponseType, { name: 'updateCompany', description: 'Create/Update company' })
+  @Mutation(() => AdminCompanyResponseType, { name: 'adminCompanyUpdate', description: 'Create/update company' })
   @UseGuards( JwtAuthGuard )
   update(
     @CurrentUser([PermissionsEnum.ADMIN_COMPANY_WRITE]) userDto: AdminUserType,
@@ -42,7 +42,7 @@ export class AdminCompanyResolver {
     })
   }
 
-  @Query(() => AdminCompanyResponseType, { name: 'findCompanies', description: 'Find all' })
+  @Query(() => AdminCompanyResponseType, { name: 'adminCompanyFind', description: 'Find all' })
   @UseGuards( JwtAuthGuard )
   find(
     @CurrentUser([PermissionsEnum.ADMIN_COMPANY_READ]) userDto: AdminUserType,
@@ -64,20 +64,20 @@ export class AdminCompanyResolver {
     })
   }
 
-  @Query(() => AdminCompanyResponseType, { name: 'findCompaniesByValue', description: 'Find all by value' })
+  @Query(() => AdminCompanyResponseType, { name: 'adminCompanyfindOneById', description: 'Find one by id' })
   @UseGuards( JwtAuthGuard )
-  findByValue(
+  findOneById(
     @CurrentUser([PermissionsEnum.ADMIN_COMPANY_READ]) userDto: AdminUserType,
     @Args('value', { type: () => String }) value: string
   ): Promise<AdminCompanyResponseType> {
 
-    this.logger.log(`>>> findByValue: value=${value}`);
+    this.logger.log(`>>> findOneById: value=${value}`);
     const start = performance.now();
 
     return this.adminCompanyService.findByValue(value)
     .then( (response: AdminCompanyResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< findByValue: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< findOneById: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -86,7 +86,7 @@ export class AdminCompanyResolver {
     })
   }
 
-  @Mutation(() => AdminCompanyResponseType, { name: 'deleteCompany', description: 'Delete company' })
+  @Mutation(() => AdminCompanyResponseType, { name: 'adminCompanyDelete', description: 'Delete company' })
   @UseGuards( JwtAuthGuard )
   delete(
     @CurrentUser([PermissionsEnum.ADMIN_COMPANY_WRITE]) userDto: AdminUserType,

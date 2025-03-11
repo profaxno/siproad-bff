@@ -3,17 +3,14 @@
 # ------------------------------------------------------
 
 type AdminCompanyType {
-  id: String
-  companyId: String!
+  id: String!
   name: String!
-  cost: Float!
-  stock: Float!
 }
 
 type AdminCompanyResponseType {
   internalCode: Float!
   message: String!
-  qty: Float
+  qty: Float!
   payload: [AdminCompanyType!]
 }
 
@@ -22,25 +19,25 @@ type AdminUserType {
   companyId: String!
   name: String!
   email: String!
-  password: String!
-  roleList: UserRoleDto
-  permissionList: UserPermissionDto
+  roleList: [UserRoleType!]
+  permissionList: [UserPermissionType!]
   status: Float!
 }
 
-type UserRoleDto {
-  id: String
+type UserRoleType {
+  id: String!
+  name: String!
 }
 
-type UserPermissionDto {
-  id: String
-  code: String
+type UserPermissionType {
+  id: String!
+  code: String!
 }
 
 type AdminUserResponseType {
   internalCode: Float!
   message: String!
-  qty: Float
+  qty: Float!
   payload: [AdminUserType!]
 }
 
@@ -56,7 +53,7 @@ type ProductsElementType {
 type ProductsElementResponseType {
   internalCode: Float!
   message: String!
-  qty: Float
+  qty: Float!
   payload: [ProductsElementType!]
 }
 
@@ -79,7 +76,7 @@ type ProductsFormulaElementType {
 type ProductsFormulaResponseType {
   internalCode: Float!
   message: String!
-  qty: Float
+  qty: Float!
   payload: [ProductsFormulaType!]
 }
 
@@ -114,7 +111,7 @@ type ProductsProductFormulaType {
 type ProductsProductResponseType {
   internalCode: Float!
   message: String!
-  qty: Float
+  qty: Float!
   payload: [ProductsProductType!]
 }
 
@@ -129,79 +126,119 @@ type AuthResponseType {
   payload: AuthDataResponseType
 }
 
+type SalesOrderType {
+  id: String!
+  companyId: String!
+  userId: String!
+  comment: String
+  cost: Float!
+  discount: Float
+  discountPct: Float
+  status: Float
+  productList: [SalesOrderProductType!]
+}
+
+type SalesOrderProductType {
+  id: String!
+  qty: Float!
+  comment: String
+  name: String!
+  cost: Float!
+  price: Float!
+  discount: Float
+  discountPct: Float
+  status: Float
+}
+
+type SalesOrderResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float!
+  payload: [SalesOrderType!]
+}
+
 type Query {
   """Find all"""
-  findCompanies(page: Float, limit: Float, search: String, searchList: [String!]): AdminCompanyResponseType!
+  adminCompanyFind(page: Float, limit: Float, searchList: [String!]): AdminCompanyResponseType!
 
-  """Find all by value"""
-  findCompaniesByValue(value: String!): AdminCompanyResponseType!
-
-  """Find all"""
-  findUsers(page: Float, limit: Float, search: String, searchList: [String!]): AdminUserResponseType!
-
-  """Find all by value"""
-  findUsersByValue(value: String!): AdminUserResponseType!
-  revalidateToken: AuthResponseType!
+  """Find one by id"""
+  adminCompanyfindOneById(value: String!): AdminCompanyResponseType!
 
   """Find all"""
-  findElements(page: Float, limit: Float, search: String, searchList: [String!]): ProductsElementResponseType!
+  adminUserFind(page: Float, limit: Float, searchList: [String!]): AdminUserResponseType!
 
-  """Find all by value"""
-  findElementsByValue(value: String!): ProductsElementResponseType!
-
-  """Find all"""
-  findFormulas(page: Float, limit: Float, search: String, searchList: [String!]): ProductsFormulaResponseType!
-
-  """Find all by value"""
-  findFormulasByValue(value: String!): ProductsFormulaResponseType!
+  """Find one by id"""
+  adminUserFindOneById(value: String!): AdminUserResponseType!
+  authRevalidateToken: AuthResponseType!
 
   """Find all"""
-  findProducts(page: Float, limit: Float, search: String, searchList: [String!]): ProductsProductResponseType!
+  productsElementFind(page: Float, limit: Float, searchList: [String!]): ProductsElementResponseType!
 
-  """Find all by value"""
-  findProductsByValue(value: String!): ProductsProductResponseType!
+  """Find one by id"""
+  productsElementfindOneById(value: String!): ProductsElementResponseType!
+
+  """Find all"""
+  productsFormulaFind(page: Float, limit: Float, searchList: [String!]): ProductsFormulaResponseType!
+
+  """Find one by id"""
+  productsFormulaFindOneById(value: String!): ProductsFormulaResponseType!
+
+  """Find all"""
+  productsProductFind(page: Float, limit: Float, searchList: [String!]): ProductsProductResponseType!
+
+  """Find one by id"""
+  productsProductFindOneById(value: String!): ProductsProductResponseType!
+
+  """Find all"""
+  salesOrderFind(page: Float, limit: Float, searchList: [String!]): SalesOrderResponseType!
+
+  """Find one by id"""
+  salesOrderFindOneById(value: String!): SalesOrderResponseType!
 }
 
 type Mutation {
-  """Create/Update company"""
-  updateCompany(company: AdminCompanyInput!): AdminCompanyResponseType!
+  """Create/update company"""
+  adminCompanyUpdate(company: AdminCompanyInput!): AdminCompanyResponseType!
 
   """Delete company"""
-  deleteCompany(id: String!): AdminCompanyResponseType!
+  adminCompanyDelete(id: String!): AdminCompanyResponseType!
 
   """Create/update user"""
-  updateUser(user: AdminUserInput!): AdminUserResponseType!
+  adminUserUpdate(user: AdminUserInput!): AdminUserResponseType!
 
   """Block user"""
-  blockUser(id: String!): AdminUserResponseType!
-  login(loginInput: LoginInput!): AuthResponseType!
-  resetPassword(resetPasswordInput: ResetPasswordInput!): AuthResponseType!
+  adminUserBlock(id: String!): AdminUserResponseType!
+  authLogin(loginInput: LoginInput!): AuthResponseType!
+  authResetPassword(resetPasswordInput: ResetPasswordInput!): AuthResponseType!
 
   """Create/update element"""
-  updateElement(element: ProductsElementInput!): ProductsElementResponseType!
+  productsElementUpdate(element: ProductsElementInput!): ProductsElementResponseType!
 
   """Delete element"""
-  deleteElement(id: String!): ProductsElementResponseType!
+  productsElementDelete(id: String!): ProductsElementResponseType!
 
   """Create/update formula"""
-  updateFormula(formula: ProductsFormulaInput!): ProductsFormulaResponseType!
+  productsFormulaUpdate(formula: ProductsFormulaInput!): ProductsFormulaResponseType!
 
   """Delete formula"""
-  deleteFormula(id: String!): ProductsFormulaResponseType!
+  productsFormulaDelete(id: String!): ProductsFormulaResponseType!
 
   """Create/update product"""
-  updateProduct(product: ProductsProductInput!): ProductsProductResponseType!
+  productsProductUpdate(product: ProductsProductInput!): ProductsProductResponseType!
 
   """Delete product"""
-  deleteProduct(id: String!): ProductsProductResponseType!
+  productsProductDelete(id: String!): ProductsProductResponseType!
+
+  """Create/update order"""
+  salesOrderUpdate(order: SalesOrderInput!): SalesOrderResponseType!
+
+  """Delete order"""
+  salesOrderDelete(id: String!): SalesOrderResponseType!
 }
 
 input AdminCompanyInput {
   id: String
-  companyId: String!
   name: String!
-  cost: Float!
-  stock: Float!
 }
 
 input AdminUserInput {
@@ -211,6 +248,12 @@ input AdminUserInput {
   email: String!
   password: String!
   status: Float
+  roleList: [UserRoleInput!]
+}
+
+input UserRoleInput {
+  id: String!
+  name: String
 }
 
 input LoginInput {
@@ -268,4 +311,25 @@ input ProductsProductFormulaInput {
   id: String!
   qty: Float!
   name: String
+}
+
+input SalesOrderInput {
+  id: String
+  comment: String
+  discount: Float
+  discountPct: Float
+  status: Float
+  productList: [SalesOrderProductInput!]
+}
+
+input SalesOrderProductInput {
+  id: String!
+  qty: Float!
+  comment: String
+  name: String!
+  cost: Float!
+  price: Float!
+  discount: Float
+  discountPct: Float
+  status: Float
 }

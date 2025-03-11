@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
+import { IsArray, IsNumber, IsOptional, IsPositive, IsString, IsUUID, ValidateNested } from "class-validator";
 import { Field, InputType } from "@nestjs/graphql";
 import { BaseProductsProductDto } from "../products-product.dto";
 
@@ -27,6 +27,7 @@ export class ProductsProductElementInput {
   id: string;
 
   @IsNumber()
+  @IsPositive()
   @Field( () => Number )
   qty: number;
 
@@ -44,6 +45,7 @@ export class ProductsProductFormulaInput {
   id: string;
 
   @IsNumber()
+  @IsPositive()
   @Field( () => Number )
   qty: number;
 

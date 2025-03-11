@@ -5,36 +5,36 @@ import { ConfigService } from '@nestjs/config';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
-import { ProductsEnum } from './enums/products.enum';
-import { ProductsFormulaInput } from './dto/inputs/products-formula.input';
-import { ProductsFormulaResponseType } from './dto/types/products-formula-response.type';
+import { SalesEnum } from './enums/sales.enum';
+import { SalesOrderInput } from './dto/inputs/sales-order.input';
+import { SalesOrderResponseType } from './dto/types/sales-order-response.type';
 
 @Injectable()
-export class ProductsFormulaService {
-  private readonly logger = new Logger(ProductsFormulaService.name);
+export class SalesOrderService {
+  private readonly logger = new Logger(SalesOrderService.name);
 
-  private siproadProductsHost: string = null;
-  private siproadProductsApiKey: string = null;
+  private siproadSalesHost: string = null;
+  private siproadSalesApiKey: string = null;
 
   constructor(
     private readonly configService: ConfigService,
     private readonly pfxHttpService: PfxHttpService
   ) { 
-    this.siproadProductsHost = this.configService.get('siproadProductsHost');
-    this.siproadProductsApiKey = this.configService.get('siproadProductsApiKey');
+    this.siproadSalesHost = this.configService.get('siproadSalesHost');
+    this.siproadSalesApiKey = this.configService.get('siproadSalesApiKey');
   }
 
-  update(dto: ProductsFormulaInput): Promise<ProductsFormulaResponseType>{
+  update(dto: SalesOrderInput): Promise<SalesOrderResponseType>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.PATCH;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_UPDATE);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_UPDATE);
+    const headers = { "x-api-key": this.siproadSalesApiKey };
     const body    = dto;
 
     // * send request
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body)
+    return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(
@@ -53,16 +53,16 @@ export class ProductsFormulaService {
     })
   }
 
-  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsFormulaResponseType>{
+  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<SalesOrderResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH).concat(`/${companyId}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_SEARCH).concat(`/${companyId}`);
+    const headers = { "x-api-key": this.siproadSalesApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
 
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body, params)
+    return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers, body, params)
     .then(response => {
 
       if ( !(
@@ -81,14 +81,14 @@ export class ProductsFormulaService {
     })
   }
 
-  findByValue(companyId: string, value: string): Promise<ProductsFormulaResponseType>{
+  findByValue(companyId: string, value: string): Promise<SalesOrderResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
+    const headers = { "x-api-key": this.siproadSalesApiKey };
 
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers)
+    return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers)
     .then(response => {
 
       if ( !(
@@ -107,17 +107,17 @@ export class ProductsFormulaService {
     })
   }
 
-  delete(id: string): Promise<ProductsFormulaResponseType>{
+  delete(id: string): Promise<SalesOrderResponseType>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.DELETE;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_DELETE).concat(`/${id}`);;
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_DELETE).concat(`/${id}`);;
+    const headers = { "x-api-key": this.siproadSalesApiKey };
     const body    = {};
 
     // * send request
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body)
+    return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(
