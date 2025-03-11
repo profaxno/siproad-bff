@@ -6,6 +6,9 @@ WORKDIR /app
 
 # Copia package.json e instala dependencias
 COPY package*.json ./
+
+# Instala las dependencias dentro del contenedor (aquí se instala bcrypt correctamente)
+RUN npm install
 RUN npm prune --production
 
 # Copia todo el código de la app al contenedor

@@ -131,6 +131,7 @@ type SalesOrderType {
   companyId: String!
   userId: String!
   comment: String
+  price: Float!
   cost: Float!
   discount: Float
   discountPct: Float
@@ -155,6 +156,23 @@ type SalesOrderResponseType {
   message: String!
   qty: Float!
   payload: [SalesOrderType!]
+}
+
+type SalesProductType {
+  id: String
+  companyId: String!
+  name: String!
+  description: String
+  cost: Float!
+  price: Float!
+  hasFormula: Boolean!
+}
+
+type SalesProductResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float!
+  payload: [SalesProductType!]
 }
 
 type Query {
@@ -188,6 +206,12 @@ type Query {
 
   """Find one by id"""
   productsProductFindOneById(value: String!): ProductsProductResponseType!
+
+  """Find all"""
+  salesProductFind(page: Float, limit: Float, searchList: [String!]): SalesProductResponseType!
+
+  """Find one by id"""
+  salesProductFindOneById(value: String!): SalesProductResponseType!
 
   """Find all"""
   salesOrderFind(page: Float, limit: Float, searchList: [String!]): SalesOrderResponseType!

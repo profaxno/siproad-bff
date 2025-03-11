@@ -73,7 +73,7 @@ export class SalesOrderResolver {
 
   @Query(() => SalesOrderResponseType, { name: 'salesOrderFindOneById', description: 'Find one by id' })
   @UseGuards( JwtAuthGuard )
-  FindOneById(
+  findOneById(
     @CurrentUser([PermissionsEnum.SALES_ORDER_READ]) userDto: AdminUserType, 
     @Args('value', { type: () => String }) value: string
   ): Promise<SalesOrderResponseType> {
