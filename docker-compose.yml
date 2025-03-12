@@ -24,5 +24,7 @@ services:
       SIPROAD_PRODUCTS_API_KEY: ${SIPROAD_PRODUCTS_API_KEY}
       SIPROAD_SALES_HOST: ${SIPROAD_SALES_HOST}
       SIPROAD_SALES_API_KEY: ${SIPROAD_SALES_API_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRE_IN: ${JWT_EXPIRE_IN}
     # volumes:
     #   - ./:/var/www/pokedex
