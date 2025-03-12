@@ -176,6 +176,8 @@ type SalesProductResponseType {
 }
 
 type Query {
+  authRevalidateToken: AuthResponseType!
+
   """Find all"""
   adminCompanyFind(page: Float, limit: Float, searchList: [String!]): AdminCompanyResponseType!
 
@@ -187,7 +189,6 @@ type Query {
 
   """Find one by id"""
   adminUserFindOneById(value: String!): AdminUserResponseType!
-  authRevalidateToken: AuthResponseType!
 
   """Find all"""
   productsElementFind(page: Float, limit: Float, searchList: [String!]): ProductsElementResponseType!
@@ -221,6 +222,9 @@ type Query {
 }
 
 type Mutation {
+  authLogin(loginInput: LoginInput!): AuthResponseType!
+  authResetPassword(resetPasswordInput: ResetPasswordInput!): AuthResponseType!
+
   """Create/update company"""
   adminCompanyUpdate(company: AdminCompanyInput!): AdminCompanyResponseType!
 
@@ -232,8 +236,6 @@ type Mutation {
 
   """Block user"""
   adminUserBlock(id: String!): AdminUserResponseType!
-  authLogin(loginInput: LoginInput!): AuthResponseType!
-  authResetPassword(resetPasswordInput: ResetPasswordInput!): AuthResponseType!
 
   """Create/update element"""
   productsElementUpdate(element: ProductsElementInput!): ProductsElementResponseType!
@@ -260,6 +262,16 @@ type Mutation {
   salesOrderDelete(id: String!): SalesOrderResponseType!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input ResetPasswordInput {
+  email: String!
+  password: String!
+}
+
 input AdminCompanyInput {
   id: String
   name: String!
@@ -278,16 +290,6 @@ input AdminUserInput {
 input UserRoleInput {
   id: String!
   name: String
-}
-
-input LoginInput {
-  email: String!
-  password: String!
-}
-
-input ResetPasswordInput {
-  email: String!
-  password: String!
 }
 
 input ProductsElementInput {
