@@ -222,9 +222,6 @@ type Query {
 }
 
 type Mutation {
-  authLogin(loginInput: LoginInput!): AuthResponseType!
-  authResetPassword(resetPasswordInput: ResetPasswordInput!): AuthResponseType!
-
   """Create/update company"""
   adminCompanyUpdate(company: AdminCompanyInput!): AdminCompanyResponseType!
 
@@ -260,16 +257,6 @@ type Mutation {
 
   """Delete order"""
   salesOrderDelete(id: String!): SalesOrderResponseType!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
-}
-
-input ResetPasswordInput {
-  email: String!
-  password: String!
 }
 
 input AdminCompanyInput {

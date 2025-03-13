@@ -18,6 +18,8 @@ Api central del sistema siproad que coordina la comunicación hacia las apis adm
 * Clonar el archivo __.env.template__ y renombrar la copia a ```.env```
 * Configurar los valores de las variables de entornos correspondientes ```.env```
 * Actualizar node_modules ```npm install```
+* Abrir Docker Desktop (configuración del docker se encuentra en el README del repo siproad-admin-api)
+* Crear contenedor de api ```docker-compose -p dev-siproad up -d```
 
 ## Configuración ambiente stg
 

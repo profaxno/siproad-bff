@@ -30,13 +30,12 @@ import { JwtService } from '@nestjs/jwt';
           playground: false, // * TIPS: set to false in production or when plugin apollo is enabled
           plugins: [ApolloServerPluginLandingPageLocalDefault()],
           context({ req }){
-            // TODO: descomentar cuando este listo el servicio de login y se haya quitado el login del bff
-            // // * validations
-            // const token = req.headers.authorization?.replace('Bearer ', '');
-            // if(!token) throw Error('token required');
+            // * validations
+            const token = req.headers.authorization?.replace('Bearer ', '');
+            if(!token) throw Error('token required');
             
-            // const payload = jwsService.decode(token);
-            // if(!payload) throw Error('token not valid');
+            const payload = jwsService.decode(token);
+            if(!payload) throw Error('token not valid');
           }
         }
       }
