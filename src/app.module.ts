@@ -36,10 +36,6 @@ import { JwtService } from '@nestjs/jwt';
             
             const payload = jwsService.decode(token);
             if(!payload) throw Error('token not valid');
-          },
-          cors: {
-            origin: ['*'], // 🔹 Asegura CORS en GraphQL
-            credentials: true
           }
         }
       }
