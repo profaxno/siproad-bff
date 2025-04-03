@@ -11,10 +11,46 @@ export class SalesOrderInput {
   id?: string;
 
   @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  code?: string;
+
+  @IsOptional()
   companyId?: string;
 
   @IsOptional()
   userId?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  customerIdDoc?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  customerName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  customerEmail?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  customerPhone?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  @Field( () => String, { nullable: true } )
+  customerAddress?: string;
 
   @IsOptional()
   @IsString()
@@ -36,7 +72,7 @@ export class SalesOrderInput {
   
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @Field( () => Number, { nullable: true } )
   status?: number;
 
@@ -95,7 +131,7 @@ export class SalesOrderProductInput {
 
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @Field( () => Number, { nullable: true} )
   status?: number;
   

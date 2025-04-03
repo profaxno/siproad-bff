@@ -15,9 +15,15 @@ export class BaseProductsFormulaDto {
   companyId: string;
 
   @IsString()
-  @MaxLength(45)
+  @MaxLength(50)
   @Field( () => String )
   name: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  @Field( () => String )
+  code: string;
 
   @IsNumber()
   @Field( () => Number )

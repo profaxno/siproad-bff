@@ -15,9 +15,15 @@ export class BaseSalesProductDto {
   companyId: string;
 
   @IsString()
-  @MaxLength(45)
+  @MaxLength(50)
   @Field( () => String )
   name: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true })
+  code: string;
 
   @IsOptional()
   @IsString()
