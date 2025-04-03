@@ -11,6 +11,11 @@ async function bootstrap() {
     })
   )
 
+  app.enableCors({
+    origin: 'http://localhost:5173', // Permitir solicitudes desde el frontend
+    credentials: true, // Permitir autenticación con cookies o headers
+  });
+  
   await app.listen(process.env.PORT);
   
   const env = process.env.ENV.padEnd(20, ' ');

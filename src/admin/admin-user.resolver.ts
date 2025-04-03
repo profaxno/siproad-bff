@@ -21,7 +21,12 @@ export class AdminUserResolver {
   ) {}
 
   @Mutation(() => AdminUserResponseType, { name: 'adminUserUpdate', description: 'Create/update user' })
-  update( @Args('user', { type: () => AdminUserInput }) user: AdminUserInput ): Promise<AdminUserResponseType> {
+  @UseGuards( JwtAuthGuard )
+  update(
+    @CurrentUser([PermissionsEnum.ADMIN_USER_WRITE]) userDto: AdminUserType,
+    @Args('user', { type: () => AdminUserInput }) user: AdminUserInput
+  ): Promise<AdminUserResponseType> {
+
     this.logger.log(`>>> update: user=${JSON.stringify(user)}`);
     const start = performance.now();
 

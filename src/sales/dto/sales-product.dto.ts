@@ -1,9 +1,9 @@
-import { IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import { IsBoolean, IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
 
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
-export class BaseProductsFormulaDto {
+export class BaseSalesProductDto {
 
   @IsUUID()
   @IsOptional()
@@ -19,14 +19,28 @@ export class BaseProductsFormulaDto {
   @Field( () => String )
   name: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   @MaxLength(50)
-  @Field( () => String )
+  @Field( () => String, { nullable: true })
   code: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  @Field( () => String, { nullable: true })
+  description: string;
 
   @IsNumber()
   @Field( () => Number )
   cost: number;
-  
+
+  @IsNumber()
+  @Field( () => Number )
+  price: number;
+
+  @IsBoolean()
+  @Field( () => Boolean )
+  hasFormula: boolean;
+
 }

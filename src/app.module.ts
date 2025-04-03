@@ -12,6 +12,7 @@ import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
 import { SalesModule } from './sales/sales.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,12 +20,32 @@ import { ExpensesModule } from './expenses/expenses.module';
       envFilePath: '.env',
       load: [config]
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: false, // TODO: set to false in production or when plugin apollo is enabled
-      plugins: [ApolloServerPluginLandingPageLocalDefault()]
+      imports: [AuthModule],
+      inject: [JwtService],
+      useFactory: async(jwsService: JwtService) => {
+        return {
+          autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+          playground: false, // * TIPS: set to false in production or when plugin apollo is enabled
+          plugins: [ApolloServerPluginLandingPageLocalDefault()],
+          context({ req }){
+            // * validations
+            const token = req.headers.authorization?.replace('Bearer ', '');
+            if(!token) throw Error('token required');
+            
+            const payload = jwsService.decode(token);
+            if(!payload) throw Error('token not valid');
+          }
+        }
+      }
     }),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   driver: ApolloDriver,
+    //   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    //   playground: false, // * TIPS: set to false in production or when plugin apollo is enabled
+    //   plugins: [ApolloServerPluginLandingPageLocalDefault()]
+    // }),
     AdminModule,
     AuthModule,
     ProductsModule,

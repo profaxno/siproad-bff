@@ -7,13 +7,6 @@ type AdminCompanyType {
   name: String!
 }
 
-type AdminCompanyResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float!
-  payload: [AdminCompanyType!]
-}
-
 type AdminUserType {
   id: String
   companyId: String!
@@ -61,6 +54,7 @@ type ProductsFormulaType {
   id: String
   companyId: String!
   name: String!
+  code: String!
   cost: Float!
   elementList: [ProductsFormulaElementType!]
 }
@@ -84,6 +78,7 @@ type ProductsProductType {
   id: String
   companyId: String!
   name: String!
+  code: String!
   description: String
   cost: Float!
   price: Float!
@@ -128,13 +123,21 @@ type AuthResponseType {
 
 type SalesOrderType {
   id: String!
+  code: String!
   companyId: String!
   userId: String!
+  customerIdDoc: String
+  customerName: String
+  customerEmail: String
+  customerPhone: String
+  customerAddress: String
   comment: String
+  price: Float!
   cost: Float!
   discount: Float
   discountPct: Float
-  status: Float
+  createdAt: String!
+  status: Float!
   productList: [SalesOrderProductType!]
 }
 
@@ -143,6 +146,7 @@ type SalesOrderProductType {
   qty: Float!
   comment: String
   name: String!
+  code: String
   cost: Float!
   price: Float!
   discount: Float
@@ -157,19 +161,32 @@ type SalesOrderResponseType {
   payload: [SalesOrderType!]
 }
 
-type Query {
-  """Find all"""
-  adminCompanyFind(page: Float, limit: Float, searchList: [String!]): AdminCompanyResponseType!
+type SalesProductType {
+  id: String
+  companyId: String!
+  name: String!
+  code: String
+  description: String
+  cost: Float!
+  price: Float!
+  hasFormula: Boolean!
+}
 
-  """Find one by id"""
-  adminCompanyfindOneById(value: String!): AdminCompanyResponseType!
+type SalesProductResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float!
+  payload: [SalesProductType!]
+}
+
+type Query {
+  authRevalidateToken: AuthResponseType!
 
   """Find all"""
   adminUserFind(page: Float, limit: Float, searchList: [String!]): AdminUserResponseType!
 
   """Find one by id"""
   adminUserFindOneById(value: String!): AdminUserResponseType!
-  authRevalidateToken: AuthResponseType!
 
   """Find all"""
   productsElementFind(page: Float, limit: Float, searchList: [String!]): ProductsElementResponseType!
@@ -190,6 +207,12 @@ type Query {
   productsProductFindOneById(value: String!): ProductsProductResponseType!
 
   """Find all"""
+  salesProductFind(page: Float, limit: Float, searchList: [String!]): SalesProductResponseType!
+
+  """Find one by id"""
+  salesProductFindOneById(value: String!): SalesProductResponseType!
+
+  """Find all"""
   salesOrderFind(page: Float, limit: Float, searchList: [String!]): SalesOrderResponseType!
 
   """Find one by id"""
@@ -197,19 +220,11 @@ type Query {
 }
 
 type Mutation {
-  """Create/update company"""
-  adminCompanyUpdate(company: AdminCompanyInput!): AdminCompanyResponseType!
-
-  """Delete company"""
-  adminCompanyDelete(id: String!): AdminCompanyResponseType!
-
   """Create/update user"""
   adminUserUpdate(user: AdminUserInput!): AdminUserResponseType!
 
   """Block user"""
   adminUserBlock(id: String!): AdminUserResponseType!
-  authLogin(loginInput: LoginInput!): AuthResponseType!
-  authResetPassword(resetPasswordInput: ResetPasswordInput!): AuthResponseType!
 
   """Create/update element"""
   productsElementUpdate(element: ProductsElementInput!): ProductsElementResponseType!
@@ -236,11 +251,6 @@ type Mutation {
   salesOrderDelete(id: String!): SalesOrderResponseType!
 }
 
-input AdminCompanyInput {
-  id: String
-  name: String!
-}
-
 input AdminUserInput {
   id: String
   companyId: String!
@@ -256,16 +266,6 @@ input UserRoleInput {
   name: String
 }
 
-input LoginInput {
-  email: String!
-  password: String!
-}
-
-input ResetPasswordInput {
-  email: String!
-  password: String!
-}
-
 input ProductsElementInput {
   id: String
   companyId: String!
@@ -279,6 +279,7 @@ input ProductsFormulaInput {
   id: String
   companyId: String!
   name: String!
+  code: String!
   cost: Float!
   elementList: [ProductsFormulaElementInput!]
 }
@@ -293,6 +294,7 @@ input ProductsProductInput {
   id: String
   companyId: String!
   name: String!
+  code: String!
   description: String
   cost: Float!
   price: Float!
@@ -315,6 +317,12 @@ input ProductsProductFormulaInput {
 
 input SalesOrderInput {
   id: String
+  code: String
+  customerIdDoc: String
+  customerName: String
+  customerEmail: String
+  customerPhone: String
+  customerAddress: String
   comment: String
   discount: Float
   discountPct: Float

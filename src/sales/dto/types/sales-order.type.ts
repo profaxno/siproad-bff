@@ -7,14 +7,35 @@ export class SalesOrderType {
   id: string;
 
   @Field( () => String )
+  code: string;
+
+  @Field( () => String )
   companyId: string;
 
   @Field( () => String )
   userId: string;
 
   @Field( () => String, { nullable: true } )
+  customerIdDoc?: string;
+
+  @Field( () => String, { nullable: true } )
+  customerName?: string;
+
+  @Field( () => String, { nullable: true } )
+  customerEmail?: string;
+
+  @Field( () => String, { nullable: true } )
+  customerPhone?: string;
+
+  @Field( () => String, { nullable: true } )
+  customerAddress?: string;
+
+  @Field( () => String, { nullable: true } )
   comment?: string;
-  
+ 
+  @Field( () => Number )
+  price: number;
+
   @Field( () => Number )
   cost: number;
   
@@ -24,7 +45,10 @@ export class SalesOrderType {
   @Field( () => Number, { nullable: true } )
   discountPct?: number;
   
-  @Field( () => Number, { nullable: true } )
+  @Field( () => String )
+  createdAt: string;
+
+  @Field( () => Number )
   status?: number;
 
   @Field( () => [SalesOrderProductType], { nullable: true} )
@@ -45,6 +69,9 @@ export class SalesOrderProductType {
 
   @Field( () => String)
   name: string;
+
+  @Field( () => String, { nullable: true})
+  code: string;
 
   @Field( () => Number )
   cost: number;
