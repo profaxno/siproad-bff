@@ -14,7 +14,7 @@ export class AdminUserType extends BaseAdminUserDto {
   password: string;
 
   @Field( () => Number )
-  status?: number;
+  status: number;
 }
 
 @ObjectType()

@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsArray, IsInt, IsOptional, IsPositive, IsString, MaxLength, MinLength, ValidateNested } from "class-validator";
+import { IsArray, IsInt, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength, ValidateNested } from "class-validator";
 import { BaseAdminUserDto } from "../admin-user.dto";
 import { Type } from "class-transformer";
 
@@ -13,10 +13,9 @@ export class AdminUserInput extends BaseAdminUserDto {
   password: string;
   
   @IsInt()
-  @IsPositive()
-  @IsOptional()
-  @Field( () => Number, { nullable: true } )
-  status?: number;
+  @Min(0)
+  @Field( () => Number )
+  status: number;
 
   @IsArray()
   @IsOptional()
