@@ -5,6 +5,9 @@ import { BaseProductsProductDto } from "../products-product.dto";
 
 @InputType()
 export class ProductsProductInput extends BaseProductsProductDto {
+  
+  companyId?: string;
+
   @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })

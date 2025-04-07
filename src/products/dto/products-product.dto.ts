@@ -10,10 +10,6 @@ export class BaseProductsProductDto {
   @Field( () => String, { nullable: true } )
   id?: string;
 
-  @IsUUID()
-  @Field( () => String )
-  companyId: string;
-
   @IsString()
   @MaxLength(50)
   @Field( () => String )
