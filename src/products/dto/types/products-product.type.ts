@@ -6,6 +6,10 @@ import { ProductsFormulaElementType } from "./products-formula.type";
 
 @ObjectType()
 export class ProductsProductType extends BaseProductsProductDto {
+  
+  @Field( () => String )
+  companyId: string;
+
   @Field( () => [ProductsProductElementType], {nullable: true})
   elementList?: ProductsProductElementType[];
 

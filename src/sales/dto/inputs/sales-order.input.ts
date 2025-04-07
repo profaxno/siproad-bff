@@ -16,10 +16,8 @@ export class SalesOrderInput {
   @Field( () => String, { nullable: true } )
   code?: string;
 
-  @IsOptional()
   companyId?: string;
 
-  @IsOptional()
   userId?: string;
 
   @IsOptional()
