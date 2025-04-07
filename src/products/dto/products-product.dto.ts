@@ -22,13 +22,13 @@ export class BaseProductsProductDto {
   @IsOptional()
   @IsString()
   @MaxLength(50)
-  @Field( () => String )
+  @Field( () => String, { nullable: true } )
   code: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(255)
-  @Field( () => String, { nullable: true })
+  @Field( () => String, { nullable: true } )
   description: string;
 
   @IsNumber()
