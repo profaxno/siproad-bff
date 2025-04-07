@@ -43,4 +43,7 @@ export class BaseProductsProductDto {
   @Field( () => Boolean )
   hasFormula: boolean;
 
+  @IsBoolean()
+  @Field( () => Boolean )
+  active: boolean;
 }
