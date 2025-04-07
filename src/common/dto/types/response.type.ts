@@ -9,7 +9,7 @@ export class ResponseType {
   @Field( () => String)
   message: string;
 
-  @Field( () => Number)
+  @Field( () => Number, { nullable: true } )
   qty?: number;
 
   constructor(internalCode: number, message: string, qty?: number){
