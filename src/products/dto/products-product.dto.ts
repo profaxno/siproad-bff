@@ -11,7 +11,7 @@ export class BaseProductsProductDto {
   id?: string;
 
   @IsString()
-  @MaxLength(50)
+  @MaxLength(100)
   @Field( () => String )
   name: string;
 
