@@ -25,7 +25,7 @@ export class SalesProductService {
     this.siproadSalesApiKey = this.configService.get('siproadSalesApiKey');
   }
 
-  salesProductSearchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SalesProductSearchInputArgs): Promise<SalesProductResponseType>{
+  searchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SalesProductSearchInputArgs): Promise<SalesProductResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
@@ -41,14 +41,14 @@ export class SalesProductService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`salesProductSearchByValues: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`searchByValues: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`salesProductSearchByValues: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`searchByValues: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`salesProductSearchByValues: ${error}`);
+      this.logger.error(`searchByValues: ${error}`);
       throw error;
     })
   }

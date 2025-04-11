@@ -51,20 +51,20 @@ export class SalesOrderResolver {
 
   @Query(() => SalesOrderResponseType, { name: 'salesOrderSearchByValues', description: 'Search all' })
   @UseGuards( JwtAuthGuard )
-  salesOrderSearchByValues(
+  searchByValues(
     @CurrentUser([PermissionsEnum.SALES_ORDER_READ]) userDto: AdminUserType, 
     @Args() paginationArgs: SearchPaginationArgs,
     @Args() inputArgs: SalesOrderSearchInputArgs
   ): Promise<SalesOrderResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> salesOrderSearchByValues: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
+    this.logger.log(`>>> searchByValues: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
     const start = performance.now();
 
-    return this.salesOrderService.salesOrderSearchByValues(companyId, paginationArgs, inputArgs)
+    return this.salesOrderService.searchByValues(companyId, paginationArgs, inputArgs)
     .then( (response: SalesOrderResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< salesOrderSearchByValues: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< searchByValues: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
