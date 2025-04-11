@@ -39,8 +39,4 @@ export class BaseSalesProductDto {
   @Field( () => Number )
   price: number;
 
-  @IsBoolean()
-  @Field( () => Boolean )
-  hasFormula: boolean;
-
 }

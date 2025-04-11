@@ -3,10 +3,11 @@ import { PfxHttpMethodEnum, PfxHttpService } from 'profaxnojs/axios';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
+import { SearchPaginationArgs } from '../common/dto/args';
 
 import { SalesEnum } from './enums/sales.enum';
 import { SalesOrderInput } from './dto/inputs/sales-order.input';
+import { SalesOrderSearchInputArgs } from './dto/args/sales-order-search-input.args';
 import { SalesOrderResponseType } from './dto/types/sales-order-response.type';
 
 @Injectable()
@@ -53,11 +54,11 @@ export class SalesOrderService {
     })
   }
 
-  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<SalesOrderResponseType>{
+  salesOrderSearchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SalesOrderSearchInputArgs): Promise<SalesOrderResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_SEARCH).concat(`/${companyId}`);
+    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_SEARCH_BY_VALUES).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadSalesApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
@@ -81,60 +82,88 @@ export class SalesOrderService {
     })
   }
 
-  findByValue(companyId: string, value: string): Promise<SalesOrderResponseType>{
-    const start = performance.now();
+  // find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<SalesOrderResponseType>{
+  //   const start = performance.now();
     
-    const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
-    const headers = { "x-api-key": this.siproadSalesApiKey };
+  //   const method  = PfxHttpMethodEnum.GET;
+  //   const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_SEARCH).concat(`/${companyId}`);
+  //   const headers = { "x-api-key": this.siproadSalesApiKey };
+  //   const body    = inputArgs;
+  //   const params  = paginationArgs;
 
-    return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers)
-    .then(response => {
+  //   return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers, body, params)
+  //   .then(response => {
 
-      if ( !(
-        response.internalCode == HttpStatus.OK || 
-        response.internalCode == HttpStatus.BAD_REQUEST || 
-        response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
+  //     if ( !(
+  //       response.internalCode == HttpStatus.OK || 
+  //       response.internalCode == HttpStatus.BAD_REQUEST || 
+  //       response.internalCode == HttpStatus.NOT_FOUND) )
+  //       throw new Error(`find: Error, response=${JSON.stringify(response)}`);
 
-      const end = performance.now();
-      this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
-      return response;
-    })
-    .catch(error => {
-      this.logger.error(`findByValue: ${error}`);
-      throw error;
-    })
-  }
+  //     const end = performance.now();
+  //     this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
+  //     return response;
+  //   })
+  //   .catch(error => {
+  //     this.logger.error(`find: ${error}`);
+  //     throw error;
+  //   })
+  // }
 
-  delete(id: string): Promise<SalesOrderResponseType>{
-    const start = performance.now();
+  // findByValue(companyId: string, value: string): Promise<SalesOrderResponseType>{
+  //   const start = performance.now();
+    
+  //   const method  = PfxHttpMethodEnum.GET;
+  //   const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
+  //   const headers = { "x-api-key": this.siproadSalesApiKey };
 
-    // * generate request values
-    const method  = PfxHttpMethodEnum.DELETE;
-    const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_DELETE).concat(`/${id}`);;
-    const headers = { "x-api-key": this.siproadSalesApiKey };
-    const body    = {};
+  //   return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers)
+  //   .then(response => {
 
-    // * send request
-    return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers, body)
-    .then(response => {
+  //     if ( !(
+  //       response.internalCode == HttpStatus.OK || 
+  //       response.internalCode == HttpStatus.BAD_REQUEST || 
+  //       response.internalCode == HttpStatus.NOT_FOUND) )
+  //       throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
 
-      if ( !(
-        response.internalCode == HttpStatus.OK || 
-        response.internalCode == HttpStatus.CREATED || 
-        response.internalCode == HttpStatus.BAD_REQUEST || 
-        response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`delete: Error, response=${JSON.stringify(response)}`);
+  //     const end = performance.now();
+  //     this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
+  //     return response;
+  //   })
+  //   .catch(error => {
+  //     this.logger.error(`findByValue: ${error}`);
+  //     throw error;
+  //   })
+  // }
 
-      const end = performance.now();
-      this.logger.log(`delete: OK, runtime=${(end - start) / 1000} seconds`);
-      return response;
-    })
-    .catch(error => {
-      this.logger.error(`delete: ${error}`);
-      throw error;
-    })
-  }
+  // delete(id: string): Promise<SalesOrderResponseType>{
+  //   const start = performance.now();
+
+  //   // * generate request values
+  //   const method  = PfxHttpMethodEnum.DELETE;
+  //   const path    = this.siproadSalesHost.concat(SalesEnum.PATH_ORDERS_DELETE).concat(`/${id}`);;
+  //   const headers = { "x-api-key": this.siproadSalesApiKey };
+  //   const body    = {};
+
+  //   // * send request
+  //   return this.pfxHttpService.request<SalesOrderResponseType>(method, path, headers, body)
+  //   .then(response => {
+
+  //     if ( !(
+  //       response.internalCode == HttpStatus.OK || 
+  //       response.internalCode == HttpStatus.CREATED || 
+  //       response.internalCode == HttpStatus.BAD_REQUEST || 
+  //       response.internalCode == HttpStatus.NOT_FOUND) )
+  //       throw new Error(`delete: Error, response=${JSON.stringify(response)}`);
+
+  //     const end = performance.now();
+  //     this.logger.log(`delete: OK, runtime=${(end - start) / 1000} seconds`);
+  //     return response;
+  //   })
+  //   .catch(error => {
+  //     this.logger.error(`delete: ${error}`);
+  //     throw error;
+  //   })
+  // }
 
 }
