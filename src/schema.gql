@@ -30,7 +30,7 @@ type UserPermissionType {
 type AdminUserResponseType {
   internalCode: Float!
   message: String!
-  qty: Float!
+  qty: Float
   payload: [AdminUserType!]
 }
 
@@ -46,7 +46,7 @@ type ProductsElementType {
 type ProductsElementResponseType {
   internalCode: Float!
   message: String!
-  qty: Float!
+  qty: Float
   payload: [ProductsElementType!]
 }
 
@@ -70,19 +70,20 @@ type ProductsFormulaElementType {
 type ProductsFormulaResponseType {
   internalCode: Float!
   message: String!
-  qty: Float!
+  qty: Float
   payload: [ProductsFormulaType!]
 }
 
 type ProductsProductType {
   id: String
-  companyId: String!
   name: String!
-  code: String!
+  code: String
   description: String
   cost: Float!
   price: Float!
   hasFormula: Boolean!
+  active: Boolean!
+  companyId: String!
   elementList: [ProductsProductElementType!]
   formulaList: [ProductsProductFormulaType!]
 }
@@ -106,7 +107,7 @@ type ProductsProductFormulaType {
 type ProductsProductResponseType {
   internalCode: Float!
   message: String!
-  qty: Float!
+  qty: Float
   payload: [ProductsProductType!]
 }
 
@@ -157,7 +158,7 @@ type SalesOrderProductType {
 type SalesOrderResponseType {
   internalCode: Float!
   message: String!
-  qty: Float!
+  qty: Float
   payload: [SalesOrderType!]
 }
 
@@ -169,13 +170,12 @@ type SalesProductType {
   description: String
   cost: Float!
   price: Float!
-  hasFormula: Boolean!
 }
 
 type SalesProductResponseType {
   internalCode: Float!
   message: String!
-  qty: Float!
+  qty: Float
   payload: [SalesProductType!]
 }
 
@@ -206,17 +206,11 @@ type Query {
   """Find one by id"""
   productsProductFindOneById(value: String!): ProductsProductResponseType!
 
-  """Find all"""
-  salesProductFind(page: Float, limit: Float, searchList: [String!]): SalesProductResponseType!
+  """Search all"""
+  salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeId: String): SalesProductResponseType!
 
-  """Find one by id"""
-  salesProductFindOneById(value: String!): SalesProductResponseType!
-
-  """Find all"""
-  salesOrderFind(page: Float, limit: Float, searchList: [String!]): SalesOrderResponseType!
-
-  """Find one by id"""
-  salesOrderFindOneById(value: String!): SalesOrderResponseType!
+  """Search all"""
+  salesOrderSearchByValues(page: Float, limit: Float, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
 }
 
 type Mutation {
@@ -246,9 +240,6 @@ type Mutation {
 
   """Create/update order"""
   salesOrderUpdate(order: SalesOrderInput!): SalesOrderResponseType!
-
-  """Delete order"""
-  salesOrderDelete(id: String!): SalesOrderResponseType!
 }
 
 input AdminUserInput {
@@ -257,7 +248,7 @@ input AdminUserInput {
   name: String!
   email: String!
   password: String!
-  status: Float
+  status: Float!
   roleList: [UserRoleInput!]
 }
 
@@ -292,13 +283,13 @@ input ProductsFormulaElementInput {
 
 input ProductsProductInput {
   id: String
-  companyId: String!
   name: String!
-  code: String!
+  code: String
   description: String
   cost: Float!
   price: Float!
   hasFormula: Boolean!
+  active: Boolean!
   elementList: [ProductsProductElementInput!]
   formulaList: [ProductsProductFormulaInput!]
 }

@@ -101,7 +101,7 @@ export class SalesOrderProductInput {
   comment?: string;
 
   @IsString()
-  @MaxLength(45)
+  @MaxLength(100)
   @Field( () => String )
   name: string;
 
