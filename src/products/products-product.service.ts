@@ -3,11 +3,12 @@ import { PfxHttpMethodEnum, PfxHttpService } from 'profaxnojs/axios';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
+import { SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsEnum } from './enums/products.enum';
 import { ProductsProductResponseType } from './dto/types/products-product-response.type';
 import { ProductsProductInput } from './dto/inputs/products-product.input';
+import { ProductsProductSearchInputArgs } from './dto/args/products-product-search-input.args';
 
 @Injectable()
 export class ProductsProductService {
@@ -53,11 +54,11 @@ export class ProductsProductService {
     })
   }
 
-  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsProductResponseType>{
+  searchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: ProductsProductSearchInputArgs): Promise<ProductsProductResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH).concat(`/${companyId}`);
+    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH_BY_VALUES).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
@@ -69,43 +70,71 @@ export class ProductsProductService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`find: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`searchByValues: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`searchByValues: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`find: ${error}`);
+      this.logger.error(`searchByValues: ${error}`);
       throw error;
     })
   }
 
-  findByValue(companyId: string, value: string): Promise<ProductsProductResponseType>{
-    const start = performance.now();
+  // find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsProductResponseType>{
+  //   const start = performance.now();
     
-    const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+  //   const method  = PfxHttpMethodEnum.GET;
+  //   const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH).concat(`/${companyId}`);
+  //   const headers = { "x-api-key": this.siproadProductsApiKey };
+  //   const body    = inputArgs;
+  //   const params  = paginationArgs;
 
-    return this.pfxHttpService.request<ProductsProductResponseType>(method, path, headers)
-    .then(response => {
+  //   return this.pfxHttpService.request<ProductsProductResponseType>(method, path, headers, body, params)
+  //   .then(response => {
 
-      if ( !(
-        response.internalCode == HttpStatus.OK || 
-        response.internalCode == HttpStatus.BAD_REQUEST || 
-        response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
+  //     if ( !(
+  //       response.internalCode == HttpStatus.OK || 
+  //       response.internalCode == HttpStatus.BAD_REQUEST || 
+  //       response.internalCode == HttpStatus.NOT_FOUND) )
+  //       throw new Error(`find: Error, response=${JSON.stringify(response)}`);
 
-      const end = performance.now();
-      this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
-      return response;
-    })
-    .catch(error => {
-      this.logger.error(`findByValue: ${error}`);
-      throw error;
-    })
-  }
+  //     const end = performance.now();
+  //     this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
+  //     return response;
+  //   })
+  //   .catch(error => {
+  //     this.logger.error(`find: ${error}`);
+  //     throw error;
+  //   })
+  // }
+
+  // findByValue(companyId: string, value: string): Promise<ProductsProductResponseType>{
+  //   const start = performance.now();
+    
+  //   const method  = PfxHttpMethodEnum.GET;
+  //   const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
+  //   const headers = { "x-api-key": this.siproadProductsApiKey };
+
+  //   return this.pfxHttpService.request<ProductsProductResponseType>(method, path, headers)
+  //   .then(response => {
+
+  //     if ( !(
+  //       response.internalCode == HttpStatus.OK || 
+  //       response.internalCode == HttpStatus.BAD_REQUEST || 
+  //       response.internalCode == HttpStatus.NOT_FOUND) )
+  //       throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
+
+  //     const end = performance.now();
+  //     this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
+  //     return response;
+  //   })
+  //   .catch(error => {
+  //     this.logger.error(`findByValue: ${error}`);
+  //     throw error;
+  //   })
+  // }
 
   delete(id: string): Promise<ProductsProductResponseType>{
     const start = performance.now();

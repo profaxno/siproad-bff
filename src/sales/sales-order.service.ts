@@ -54,7 +54,7 @@ export class SalesOrderService {
     })
   }
 
-  salesOrderSearchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SalesOrderSearchInputArgs): Promise<SalesOrderResponseType>{
+  searchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SalesOrderSearchInputArgs): Promise<SalesOrderResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
@@ -70,14 +70,14 @@ export class SalesOrderService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`find: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`searchByValues: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`searchByValues: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`find: ${error}`);
+      this.logger.error(`searchByValues: ${error}`);
       throw error;
     })
   }

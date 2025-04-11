@@ -200,11 +200,8 @@ type Query {
   """Find one by id"""
   productsFormulaFindOneById(value: String!): ProductsFormulaResponseType!
 
-  """Find all"""
-  productsProductFind(page: Float, limit: Float, searchList: [String!]): ProductsProductResponseType!
-
-  """Find one by id"""
-  productsProductFindOneById(value: String!): ProductsProductResponseType!
+  """Search all"""
+  productProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeId: String): ProductsProductResponseType!
 
   """Search all"""
   salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeId: String): SalesProductResponseType!

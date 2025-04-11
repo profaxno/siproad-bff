@@ -9,8 +9,9 @@ export enum ProductsEnum {
     PATH_FORMULAS_SEARCH_VALUE  = '/siproad-products/formulas/findByValue',
     PATH_FORMULAS_DELETE        = '/siproad-products/formulas',
     
-    PATH_PRODUCTS_UPDATE        = '/siproad-products/products/update',
-    PATH_PRODUCTS_SEARCH        = '/siproad-products/products/find',
-    PATH_PRODUCTS_SEARCH_VALUE  = '/siproad-products/products/findByValue',
-    PATH_PRODUCTS_DELETE        = '/siproad-products/products'
+    PATH_PRODUCTS_UPDATE            = '/siproad-products/products/update',
+    PATH_PRODUCTS_SEARCH_BY_VALUES  = '/siproad-products/products/searchByValues',
+    // PATH_PRODUCTS_SEARCH        = '/siproad-products/products/find',
+    // PATH_PRODUCTS_SEARCH_VALUE  = '/siproad-products/products/findByValue',
+    PATH_PRODUCTS_DELETE            = '/siproad-products/products'
 }
