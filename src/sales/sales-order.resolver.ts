@@ -45,7 +45,7 @@ export class SalesOrderResolver {
     })
     .catch((error) => {
       this.logger.error(error.stack);
-      return new SalesOrderResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+      return new SalesOrderResponseType(HttpStatus.INTERNAL_SERVER_ERROR, `${error.code} - ${error.message}`);
     })
   }
 

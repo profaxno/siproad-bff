@@ -207,7 +207,7 @@ type Query {
   salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeId: String): SalesProductResponseType!
 
   """Search all"""
-  salesOrderSearchByValues(page: Float, limit: Float, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
+  salesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
 }
 
 type Mutation {
