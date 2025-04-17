@@ -105,10 +105,11 @@ export class SalesOrderProductInput {
   @Field( () => String )
   name: string;
 
+  @IsOptional()
   @IsString()
   @MaxLength(50)
-  @Field( () => String )
-  code: string;
+  @Field( () => String, { nullable: true} )
+  code?: string;
 
   @IsNumber()
   @Min(0)

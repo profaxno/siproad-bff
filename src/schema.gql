@@ -323,7 +323,7 @@ input SalesOrderProductInput {
   qty: Float!
   comment: String
   name: String!
-  code: String!
+  code: String
   cost: Float!
   price: Float!
   discount: Float
