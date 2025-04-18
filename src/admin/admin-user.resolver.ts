@@ -30,6 +30,8 @@ export class AdminUserResolver {
     this.logger.log(`>>> update: user=${JSON.stringify(user)}`);
     const start = performance.now();
 
+    user.companyId = userDto.companyId;
+
     return this.adminUserService.update(user)
     .then( (response: AdminUserResponseType) => {
       const end = performance.now();
