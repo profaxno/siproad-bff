@@ -6,6 +6,8 @@ import { Type } from "class-transformer";
 @InputType()
 export class AdminUserInput extends BaseAdminUserDto {
 
+  companyId: string;
+
   @IsString()
   @MinLength(6)
   @MaxLength(20)
