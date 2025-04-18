@@ -23,14 +23,20 @@ export class AdminUserResolver {
   @Mutation(() => AdminUserResponseType, { name: 'adminUserUpdate', description: 'Create/update user' })
   @UseGuards( JwtAuthGuard )
   update(
-    @CurrentUser([PermissionsEnum.ADMIN_USER_WRITE]) userDto: AdminUserType,
+    @CurrentUser([PermissionsEnum.SIPROAD_ADMIN, PermissionsEnum.ADMIN_USER_WRITE]) userDto: AdminUserType,
     @Args('user', { type: () => AdminUserInput }) user: AdminUserInput
   ): Promise<AdminUserResponseType> {
 
     this.logger.log(`>>> update: user=${JSON.stringify(user)}`);
     const start = performance.now();
 
-    user.companyId = userDto.companyId;
+    // * validate companyId if user is SIPROAD_ADMIN and companyId is not set
+    const found = userDto.permissionList.find( (permission) => permission.code === PermissionsEnum.SIPROAD_ADMIN );
+    if (found && !user.companyId) {
+      return Promise.resolve(new AdminUserResponseType(HttpStatus.BAD_REQUEST, 'CompanyId is required'));
+    }
+
+    user.companyId = found ? user.companyId: userDto.companyId;
 
     return this.adminUserService.update(user)
     .then( (response: AdminUserResponseType) => {

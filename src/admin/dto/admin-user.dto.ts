@@ -5,10 +5,15 @@ import { IsEmail, IsOptional, IsString, IsUUID, MaxLength, MinLength } from "cla
 @InputType({isAbstract: true})
 export class BaseAdminUserDto {
   
-  @IsUUID()
   @IsOptional()
+  @IsUUID()
   @Field( () => String, { nullable: true } )
   id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true } )
+  companyId?: string;
 
   @IsString()
   @MaxLength(50)

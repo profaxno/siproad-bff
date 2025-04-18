@@ -9,9 +9,9 @@ type AdminCompanyType {
 
 type AdminUserType {
   id: String
+  companyId: String
   name: String!
   email: String!
-  companyId: String!
   roleList: [UserRoleType!]
   permissionList: [UserPermissionType!]
   status: Float!
@@ -241,6 +241,7 @@ type Mutation {
 
 input AdminUserInput {
   id: String
+  companyId: String
   name: String!
   email: String!
   password: String!
