@@ -5,9 +5,6 @@ import { BaseAdminUserDto } from "../admin-user.dto";
 @ObjectType()
 export class AdminUserType extends BaseAdminUserDto {
 
-  @Field( () => String )
-  companyId: string;
-
   @Field(() => [UserRoleType], { nullable: true } )
   roleList: UserRoleType[];
 
