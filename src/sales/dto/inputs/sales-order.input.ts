@@ -96,7 +96,7 @@ export class SalesOrderProductInput {
 
   @IsOptional()
   @IsString()
-  @MaxLength(100)
+  @MaxLength(250)
   @Field( () => String, { nullable: true} )
   comment?: string;
 
