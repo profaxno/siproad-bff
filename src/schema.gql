@@ -82,7 +82,6 @@ type ProductsProductType {
   cost: Float!
   price: Float!
   hasFormula: Boolean!
-  active: Boolean!
   companyId: String!
   elementList: [ProductsProductElementType!]
   formulaList: [ProductsProductFormulaType!]
@@ -188,11 +187,8 @@ type Query {
   """Find one by id"""
   adminUserFindOneById(value: String!): AdminUserResponseType!
 
-  """Find all"""
-  productsElementFind(page: Float, limit: Float, searchList: [String!]): ProductsElementResponseType!
-
-  """Find one by id"""
-  productsElementfindOneById(value: String!): ProductsElementResponseType!
+  """Search all"""
+  productsElementSearchByValues(page: Float, limit: Float, name: String, elementTypeId: String): ProductsElementResponseType!
 
   """Find all"""
   productsFormulaFind(page: Float, limit: Float, searchList: [String!]): ProductsFormulaResponseType!
@@ -201,7 +197,7 @@ type Query {
   productsFormulaFindOneById(value: String!): ProductsFormulaResponseType!
 
   """Search all"""
-  productProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeId: String): ProductsProductResponseType!
+  productsProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeId: String): ProductsProductResponseType!
 
   """Search all"""
   salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeId: String): SalesProductResponseType!
@@ -286,7 +282,6 @@ input ProductsProductInput {
   cost: Float!
   price: Float!
   hasFormula: Boolean!
-  active: Boolean!
   elementList: [ProductsProductElementInput!]
   formulaList: [ProductsProductFormulaInput!]
 }

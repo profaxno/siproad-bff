@@ -5,6 +5,7 @@ import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsElementInput } from './dto/inputs/products-element.input';
 import { ProductsElementResponseType } from './dto/types/products-element-response.type';
+import { ProductsElementSearchInputArgs } from './dto/args/products-element-search-input.args';
 import { ProductsElementService } from './products-element.service';
 
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -45,22 +46,22 @@ export class ProductsElementResolver {
     })
   }
 
-  @Query(() => ProductsElementResponseType, { name: 'productsElementFind', description: 'Find all' })
+  @Query(() => ProductsElementResponseType, { name: 'productsElementSearchByValues', description: 'Search all' })
   @UseGuards( JwtAuthGuard )
-  find(
-    @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_READ]) userDto: AdminUserType,
+  searchByValues(
+    @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
     @Args() paginationArgs: SearchPaginationArgs,
-    @Args() inputArgs: SearchInputArgs
+    @Args() inputArgs: ProductsElementSearchInputArgs
   ): Promise<ProductsElementResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> find: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
+    this.logger.log(`>>> searchByValues: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
     const start = performance.now();
 
-    return this.productsElementService.find(companyId, paginationArgs, inputArgs)
+    return this.productsElementService.searchByValues(companyId, paginationArgs, inputArgs)
     .then( (response: ProductsElementResponseType) => {
       const end = performance.now();
-      this.logger.log(`<<< find: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+      this.logger.log(`<<< searchByValues: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
       return response;
     })
     .catch((error) => {
@@ -69,28 +70,52 @@ export class ProductsElementResolver {
     })
   }
 
-  @Query(() => ProductsElementResponseType, { name: 'productsElementfindOneById', description: 'Find one by id' })
-  @UseGuards( JwtAuthGuard )
-  findOneById(
-    @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_READ]) userDto: AdminUserType,
-    @Args('value', { type: () => String }) value: string
-  ): Promise<ProductsElementResponseType> {
+  // @Query(() => ProductsElementResponseType, { name: 'productsElementFind', description: 'Find all' })
+  // @UseGuards( JwtAuthGuard )
+  // find(
+  //   @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_READ]) userDto: AdminUserType,
+  //   @Args() paginationArgs: SearchPaginationArgs,
+  //   @Args() inputArgs: SearchInputArgs
+  // ): Promise<ProductsElementResponseType> {
 
-    const companyId = userDto.companyId;
-    this.logger.log(`>>> findOneById: companyId=${companyId}, value=${value}`);
-    const start = performance.now();
+  //   const companyId = userDto.companyId;
+  //   this.logger.log(`>>> find: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
+  //   const start = performance.now();
 
-    return this.productsElementService.findByValue(companyId, value)
-    .then( (response: ProductsElementResponseType) => {
-      const end = performance.now();
-      this.logger.log(`<<< findOneById: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
-      return response;
-    })
-    .catch((error) => {
-      this.logger.error(error.stack);
-      return new ProductsElementResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
-    })
-  }
+  //   return this.productsElementService.find(companyId, paginationArgs, inputArgs)
+  //   .then( (response: ProductsElementResponseType) => {
+  //     const end = performance.now();
+  //     this.logger.log(`<<< find: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+  //     return response;
+  //   })
+  //   .catch((error) => {
+  //     this.logger.error(error.stack);
+  //     return new ProductsElementResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+  //   })
+  // }
+
+  // @Query(() => ProductsElementResponseType, { name: 'productsElementfindOneById', description: 'Find one by id' })
+  // @UseGuards( JwtAuthGuard )
+  // findOneById(
+  //   @CurrentUser([PermissionsEnum.PRODUCTS_ELEMENT_READ]) userDto: AdminUserType,
+  //   @Args('value', { type: () => String }) value: string
+  // ): Promise<ProductsElementResponseType> {
+
+  //   const companyId = userDto.companyId;
+  //   this.logger.log(`>>> findOneById: companyId=${companyId}, value=${value}`);
+  //   const start = performance.now();
+
+  //   return this.productsElementService.findByValue(companyId, value)
+  //   .then( (response: ProductsElementResponseType) => {
+  //     const end = performance.now();
+  //     this.logger.log(`<<< findOneById: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);
+  //     return response;
+  //   })
+  //   .catch((error) => {
+  //     this.logger.error(error.stack);
+  //     return new ProductsElementResponseType(HttpStatus.INTERNAL_SERVER_ERROR, error.message);
+  //   })
+  // }
   
   @Mutation(() => ProductsElementResponseType, { name: 'productsElementDelete', description: 'Delete element' })
   @UseGuards( JwtAuthGuard )
