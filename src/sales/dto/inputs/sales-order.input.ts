@@ -58,13 +58,13 @@ export class SalesOrderInput {
   
   @IsOptional()
   @IsNumber()
-  @Min(1)
+  @Min(0)
   @Field( () => Number, { nullable: true } )
   discount?: number;
   
   @IsOptional()
   @IsNumber()
-  @Min(1)
+  @Min(0)
   @Field( () => Number, { nullable: true } )
   discountPct?: number;
   

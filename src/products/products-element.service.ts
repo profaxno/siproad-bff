@@ -7,6 +7,7 @@ import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsEnum } from './enums/products.enum';
 import { ProductsElementInput } from './dto/inputs/products-element.input';
+import { ProductsElementSearchInputArgs } from './dto/args/products-element-search-input.args';
 import { ProductsElementResponseType } from './dto/types/products-element-response.type';
 
 @Injectable()
@@ -53,11 +54,11 @@ export class ProductsElementService {
     })
   }
 
-  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsElementResponseType>{
+  searchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: ProductsElementSearchInputArgs): Promise<ProductsElementResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH).concat(`/${companyId}`);
+    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH_BY_VALUES).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
@@ -69,50 +70,78 @@ export class ProductsElementService {
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`find: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`searchByValues: Error, response=${JSON.stringify(response)}`);
 
-      // // * filter
-      // if(inputArgs.search)
-      //   response.payload = response.payload.filter(value => value.name.includes(inputArgs.search))
+      const end = performance.now();
+      this.logger.log(`searchByValues: OK, runtime=${(end - start) / 1000} seconds`);
+      return response;
+    })
+    .catch(error => {
+      this.logger.error(`searchByValues: ${error}`);
+      throw error;
+    })
+  }
 
-      // if(inputArgs.searchList)
-      //   response.payload = response.payload.filter(value => inputArgs.searchList.includes(value.name))
+  // find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsElementResponseType>{
+  //   const start = performance.now();
+    
+  //   const method  = PfxHttpMethodEnum.GET;
+  //   const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH).concat(`/${companyId}`);
+  //   const headers = { "x-api-key": this.siproadProductsApiKey };
+  //   const body    = inputArgs;
+  //   const params  = paginationArgs;
+
+  //   return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers, body, params)
+  //   .then(response => {
+
+  //     if ( !(
+  //       response.internalCode == HttpStatus.OK || 
+  //       response.internalCode == HttpStatus.BAD_REQUEST || 
+  //       response.internalCode == HttpStatus.NOT_FOUND) )
+  //       throw new Error(`find: Error, response=${JSON.stringify(response)}`);
+
+  //     // // * filter
+  //     // if(inputArgs.search)
+  //     //   response.payload = response.payload.filter(value => value.name.includes(inputArgs.search))
+
+  //     // if(inputArgs.searchList)
+  //     //   response.payload = response.payload.filter(value => inputArgs.searchList.includes(value.name))
       
-      const end = performance.now();
-      this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
-      return response;
-    })
-    .catch(error => {
-      this.logger.error(`find: ${error}`);
-      throw error;
-    })
-  }
+  //     const end = performance.now();
+  //     this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
+  //     return response;
+  //   })
+  //   .catch(error => {
+  //     this.logger.error(`find: ${error}`);
+  //     throw error;
+  //   })
+  // }
 
-  findByValue(companyId: string, value: string): Promise<ProductsElementResponseType>{
-    const start = performance.now();
+  // findByValue(companyId: string, value: string): Promise<ProductsElementResponseType>{
+  //   const start = performance.now();
     
-    const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
+  //   const method  = PfxHttpMethodEnum.GET;
+  //   const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_ELEMENTS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
+  //   const headers = { "x-api-key": this.siproadProductsApiKey };
     
-    return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers)
-    .then(response => {
+  //   return this.pfxHttpService.request<ProductsElementResponseType>(method, path, headers)
+  //   .then(response => {
 
-      if ( !(
-        response.internalCode == HttpStatus.OK || 
-        response.internalCode == HttpStatus.BAD_REQUEST || 
-        response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
+  //     if ( !(
+  //       response.internalCode == HttpStatus.OK || 
+  //       response.internalCode == HttpStatus.BAD_REQUEST || 
+  //       response.internalCode == HttpStatus.NOT_FOUND) )
+  //       throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
 
-      const end = performance.now();
-      this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
-      return response;
-    })
-    .catch(error => {
-      this.logger.error(`findByValue: ${error}`);
-      throw error;
-    })
-  }
+  //     const end = performance.now();
+  //     this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
+  //     return response;
+  //   })
+  //   .catch(error => {
+  //     this.logger.error(`findByValue: ${error}`);
+  //     throw error;
+  //   })
+  // }
 
   delete(id: string): Promise<ProductsElementResponseType>{
     const start = performance.now();

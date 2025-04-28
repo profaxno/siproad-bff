@@ -46,7 +46,7 @@ export class ProductsProductResolver {
     })
   }
 
-  @Query(() => ProductsProductResponseType, { name: 'productProductSearchByValues', description: 'Search all' })
+  @Query(() => ProductsProductResponseType, { name: 'productsProductSearchByValues', description: 'Search all' })
   @UseGuards( JwtAuthGuard )
   searchByValues(
     @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
@@ -55,7 +55,7 @@ export class ProductsProductResolver {
   ): Promise<ProductsProductResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> salesProductSearchByValues: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
+    this.logger.log(`>>> searchByValues: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
     const start = performance.now();
 
     return this.productsProductService.searchByValues(companyId, paginationArgs, inputArgs)
