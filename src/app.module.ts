@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { SalesModule } from './sales/sales.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { JwtService } from '@nestjs/jwt';
+import { InventoryModule } from './inventory/inventory.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { JwtService } from '@nestjs/jwt';
     AdminModule,
     AuthModule,
     ProductsModule,
+    InventoryModule,
     SalesModule,
     ExpensesModule
   ],

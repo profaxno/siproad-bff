@@ -169,6 +169,8 @@ type SalesProductType {
   description: String
   cost: Float!
   price: Float!
+  type: Float!
+  enable4Sale: Boolean!
 }
 
 type SalesProductResponseType {
@@ -176,6 +178,33 @@ type SalesProductResponseType {
   message: String!
   qty: Float
   payload: [SalesProductType!]
+}
+
+type InventoryProductType {
+  companyId: String
+  id: String
+  productCategoryId: String
+  name: String!
+  code: String
+  description: String
+  unit: String
+  cost: Float!
+  price: Float
+  type: Float!
+  enable4Sale: Boolean!
+  elementList: [InventoryProductElementType!]
+}
+
+type InventoryProductElementType {
+  element: InventoryProductType!
+  qty: Float!
+}
+
+type InventoryProductResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [InventoryProductType!]
 }
 
 type Query {
@@ -200,7 +229,10 @@ type Query {
   productsProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeId: String): ProductsProductResponseType!
 
   """Search all"""
-  salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeId: String): SalesProductResponseType!
+  inventoryProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeList: [Float!], productCategoryId: String): InventoryProductResponseType!
+
+  """Search all"""
+  salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], enable4Sale: Boolean, productCategoryId: String): SalesProductResponseType!
 
   """Search all"""
   salesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
@@ -230,6 +262,12 @@ type Mutation {
 
   """Delete product"""
   productsProductDelete(id: String!): ProductsProductResponseType!
+
+  """Create/update product"""
+  inventoryProductUpdate(product: InventoryProductInput!): InventoryProductResponseType!
+
+  """Delete product"""
+  inventoryProductDelete(id: String!): InventoryProductResponseType!
 
   """Create/update order"""
   salesOrderUpdate(order: SalesOrderInput!): SalesOrderResponseType!
@@ -296,6 +334,26 @@ input ProductsProductFormulaInput {
   id: String!
   qty: Float!
   name: String
+}
+
+input InventoryProductInput {
+  companyId: String
+  id: String
+  productCategoryId: String
+  name: String!
+  code: String
+  description: String
+  unit: String
+  cost: Float!
+  price: Float
+  type: Float!
+  enable4Sale: Boolean!
+  elementList: [InventoryProductElementInput!]
+}
+
+input InventoryProductElementInput {
+  element: InventoryProductInput!
+  qty: Float!
 }
 
 input SalesOrderInput {

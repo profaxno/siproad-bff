@@ -1,0 +1,20 @@
+import { ArgsType, Field, InputType, ObjectType } from "@nestjs/graphql";
+import { IsArray, IsOptional, IsString } from "class-validator";
+
+@ArgsType()
+export class InventoryProductSearchInputArgs{
+    @IsOptional()
+    @IsString()
+    @Field( () => String, { nullable: true } )
+    nameCode?: string;
+
+    @IsOptional()
+    @IsArray()
+    @Field( () => [Number], { nullable: true } )
+    productTypeList?: number[];
+
+    @IsOptional()
+    @IsString()
+    @Field( () => String, { nullable: true } )
+    productCategoryId?: string;
+}

@@ -39,4 +39,11 @@ export class BaseSalesProductDto {
   @Field( () => Number )
   price: number;
 
+  @IsNumber()
+  @Field( () => Number )
+  type: number;
+
+  @IsBoolean()
+  @Field( () => Boolean )
+  enable4Sale: boolean;
 }
