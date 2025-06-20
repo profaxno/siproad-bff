@@ -11,10 +11,10 @@ export class SalesOrderInput {
   id?: string;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  @Field( () => String, { nullable: true } )
-  code?: string;
+  @IsNumber()
+  @Min(1)
+  @Field( () => Number, { nullable: true } )
+  code?: number;
 
   companyId?: string;
 

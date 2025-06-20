@@ -6,8 +6,8 @@ export class SalesOrderType {
   @Field( () => String )
   id: string;
 
-  @Field( () => String )
-  code: string;
+  @Field( () => Number )
+  code: number;
 
   @Field( () => String )
   companyId: string;

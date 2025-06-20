@@ -115,9 +115,9 @@ export class PurchasesOrderProductInput {
   name: string;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  @Field( () => String, { nullable: true} )
+  @IsNumber()
+  @Min(1)
+  @Field( () => Number, { nullable: true } )
   code?: string;
 
   @IsNumber()
