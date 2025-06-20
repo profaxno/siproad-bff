@@ -3,7 +3,7 @@
 </p>
 
 # siproad-bff
-Api central del sistema siproad que coordina la comunicación hacia las apis admin, products, sales, expenses.
+Api central del sistema siproad que coordina la comunicación hacia las apis admin, products, sales, purchases.
 
 ```
 - Lenguaje: Nodejs (Nest), typescript.

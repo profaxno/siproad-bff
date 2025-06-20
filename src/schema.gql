@@ -34,82 +34,6 @@ type AdminUserResponseType {
   payload: [AdminUserType!]
 }
 
-type ProductsElementType {
-  id: String
-  companyId: String!
-  name: String!
-  cost: Float!
-  stock: Float!
-  unit: String!
-}
-
-type ProductsElementResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [ProductsElementType!]
-}
-
-type ProductsFormulaType {
-  id: String
-  companyId: String!
-  name: String!
-  code: String!
-  cost: Float!
-  elementList: [ProductsFormulaElementType!]
-}
-
-type ProductsFormulaElementType {
-  id: String!
-  qty: Float!
-  name: String!
-  cost: Float!
-  unit: String!
-}
-
-type ProductsFormulaResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [ProductsFormulaType!]
-}
-
-type ProductsProductType {
-  id: String
-  name: String!
-  code: String
-  description: String
-  cost: Float!
-  price: Float!
-  hasFormula: Boolean!
-  companyId: String!
-  elementList: [ProductsProductElementType!]
-  formulaList: [ProductsProductFormulaType!]
-}
-
-type ProductsProductElementType {
-  id: String!
-  qty: Float!
-  name: String!
-  cost: Float!
-  unit: String!
-}
-
-type ProductsProductFormulaType {
-  id: String!
-  qty: Float!
-  name: String!
-  cost: Float!
-  elementList: [ProductsFormulaElementType!]
-}
-
-type ProductsProductResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [ProductsProductType!]
-}
-
 type AuthDataResponseType {
   token: String!
   user: AdminUserType!
@@ -180,7 +104,77 @@ type SalesProductResponseType {
   payload: [SalesProductType!]
 }
 
-type InventoryProductType {
+type PurchasesOrderType {
+  id: String!
+  code: Float!
+  companyId: String!
+  userId: String
+  purchaseTypeId: String!
+  documentTypeId: String
+  providerIdDoc: String
+  providerName: String
+  providerEmail: String
+  providerPhone: String
+  providerAddress: String
+  comment: String
+  amount: Float!
+  documentNumber: String
+  createdAt: String!
+  status: Float!
+  productList: [PurchasesOrderProductType!]
+}
+
+type PurchasesOrderProductType {
+  id: String!
+  qty: Float!
+  comment: String
+  name: String!
+  code: String
+  cost: Float!
+  amount: Float!
+  status: Float
+}
+
+type PurchasesOrderResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [PurchasesOrderType!]
+}
+
+type PurchasesProductType {
+  id: String
+  companyId: String!
+  name: String!
+  code: String
+  description: String
+  cost: Float!
+  price: Float!
+  type: Float!
+  enable4Sale: Boolean!
+}
+
+type PurchasesProductResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [PurchasesProductType!]
+}
+
+type PurchasesTypeType {
+  id: String!
+  companyId: String!
+  name: String!
+}
+
+type PurchasesTypeResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [PurchasesTypeType!]
+}
+
+type ProductsProductType {
   companyId: String
   id: String
   productCategoryId: String
@@ -192,19 +186,19 @@ type InventoryProductType {
   price: Float
   type: Float!
   enable4Sale: Boolean!
-  elementList: [InventoryProductElementType!]
+  elementList: [ProductsProductElementType!]
 }
 
-type InventoryProductElementType {
-  element: InventoryProductType!
+type ProductsProductElementType {
+  element: ProductsProductType!
   qty: Float!
 }
 
-type InventoryProductResponseType {
+type ProductsProductResponseType {
   internalCode: Float!
   message: String!
   qty: Float
-  payload: [InventoryProductType!]
+  payload: [ProductsProductType!]
 }
 
 type Query {
@@ -217,25 +211,22 @@ type Query {
   adminUserFindOneById(value: String!): AdminUserResponseType!
 
   """Search all"""
-  productsElementSearchByValues(page: Float, limit: Float, name: String, elementTypeId: String): ProductsElementResponseType!
-
-  """Find all"""
-  productsFormulaFind(page: Float, limit: Float, searchList: [String!]): ProductsFormulaResponseType!
-
-  """Find one by id"""
-  productsFormulaFindOneById(value: String!): ProductsFormulaResponseType!
-
-  """Search all"""
-  productsProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeId: String): ProductsProductResponseType!
-
-  """Search all"""
-  inventoryProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeList: [Float!], productCategoryId: String): InventoryProductResponseType!
+  productsProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeList: [Float!], productCategoryId: String): ProductsProductResponseType!
 
   """Search all"""
   salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], enable4Sale: Boolean, productCategoryId: String): SalesProductResponseType!
 
   """Search all"""
   salesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
+
+  """Search all"""
+  purchasesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeList: [Float!], productCategoryId: String): PurchasesProductResponseType!
+
+  """Search all"""
+  purchasesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, providerNameIdDoc: String, comment: String): PurchasesOrderResponseType!
+
+  """Search all"""
+  purchasesTypeSearchByValues(page: Float, limit: Float, name: String): PurchasesTypeResponseType!
 }
 
 type Mutation {
@@ -245,32 +236,17 @@ type Mutation {
   """Block user"""
   adminUserBlock(id: String!): AdminUserResponseType!
 
-  """Create/update element"""
-  productsElementUpdate(element: ProductsElementInput!): ProductsElementResponseType!
-
-  """Delete element"""
-  productsElementDelete(id: String!): ProductsElementResponseType!
-
-  """Create/update formula"""
-  productsFormulaUpdate(formula: ProductsFormulaInput!): ProductsFormulaResponseType!
-
-  """Delete formula"""
-  productsFormulaDelete(id: String!): ProductsFormulaResponseType!
-
   """Create/update product"""
   productsProductUpdate(product: ProductsProductInput!): ProductsProductResponseType!
 
   """Delete product"""
   productsProductDelete(id: String!): ProductsProductResponseType!
 
-  """Create/update product"""
-  inventoryProductUpdate(product: InventoryProductInput!): InventoryProductResponseType!
-
-  """Delete product"""
-  inventoryProductDelete(id: String!): InventoryProductResponseType!
-
   """Create/update order"""
   salesOrderUpdate(order: SalesOrderInput!): SalesOrderResponseType!
+
+  """Create/update order"""
+  purchasesOrderUpdate(order: PurchasesOrderInput!): PurchasesOrderResponseType!
 }
 
 input AdminUserInput {
@@ -288,55 +264,7 @@ input UserRoleInput {
   name: String
 }
 
-input ProductsElementInput {
-  id: String
-  companyId: String!
-  name: String!
-  cost: Float!
-  stock: Float!
-  unit: String!
-}
-
-input ProductsFormulaInput {
-  id: String
-  companyId: String!
-  name: String!
-  code: String!
-  cost: Float!
-  elementList: [ProductsFormulaElementInput!]
-}
-
-input ProductsFormulaElementInput {
-  id: String!
-  qty: Float!
-  name: String
-}
-
 input ProductsProductInput {
-  id: String
-  name: String!
-  code: String
-  description: String
-  cost: Float!
-  price: Float!
-  hasFormula: Boolean!
-  elementList: [ProductsProductElementInput!]
-  formulaList: [ProductsProductFormulaInput!]
-}
-
-input ProductsProductElementInput {
-  id: String!
-  qty: Float!
-  name: String
-}
-
-input ProductsProductFormulaInput {
-  id: String!
-  qty: Float!
-  name: String
-}
-
-input InventoryProductInput {
   companyId: String
   id: String
   productCategoryId: String
@@ -348,11 +276,11 @@ input InventoryProductInput {
   price: Float
   type: Float!
   enable4Sale: Boolean!
-  elementList: [InventoryProductElementInput!]
+  elementList: [ProductsProductElementInput!]
 }
 
-input InventoryProductElementInput {
-  element: InventoryProductInput!
+input ProductsProductElementInput {
+  element: ProductsProductInput!
   qty: Float!
 }
 
@@ -381,5 +309,34 @@ input SalesOrderProductInput {
   price: Float!
   discount: Float
   discountPct: Float
+  status: Float
+}
+
+input PurchasesOrderInput {
+  id: String
+  code: Float
+  purchaseTypeId: String!
+  documentTypeId: String
+  providerIdDoc: String
+  providerName: String
+  providerEmail: String
+  providerPhone: String
+  providerAddress: String
+  comment: String
+  amount: Float
+  documentNumber: String
+  status: Float
+  productList: [PurchasesOrderProductInput!]
+}
+
+input PurchasesOrderProductInput {
+  id: String!
+  qty: Float!
+  comment: String
+  name: String!
+  code: String
+  cost: Float!
+  amount: Float!
+  updateProductCost: Boolean!
   status: Float
 }

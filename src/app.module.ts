@@ -8,12 +8,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { config } from './config/app.config';
 import { AdminModule } from './admin/admin.module';
-import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
 import { SalesModule } from './sales/sales.module';
-import { ExpensesModule } from './expenses/expenses.module';
+import { PurchasesModule } from './purchases/purchases.module';
 import { JwtService } from '@nestjs/jwt';
-import { InventoryModule } from './inventory/inventory.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -47,12 +46,11 @@ import { InventoryModule } from './inventory/inventory.module';
     //   playground: false, // * TIPS: set to false in production or when plugin apollo is enabled
     //   plugins: [ApolloServerPluginLandingPageLocalDefault()]
     // }),
-    AdminModule,
     AuthModule,
+    AdminModule,
     ProductsModule,
-    InventoryModule,
     SalesModule,
-    ExpensesModule
+    PurchasesModule
   ],
   controllers: [],
   providers: [],

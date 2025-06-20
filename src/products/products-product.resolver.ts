@@ -14,6 +14,7 @@ import { AdminUserType } from 'src/admin/dto/types';
 import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
 import { ProductsProductSearchInputArgs } from './dto/args/products-product-search-input.args';
 
+
 @Resolver()
 export class ProductsProductResolver {
 

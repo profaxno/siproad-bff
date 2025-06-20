@@ -9,7 +9,12 @@ export class ProductsProductSearchInputArgs{
     nameCode?: string;
 
     @IsOptional()
+    @IsArray()
+    @Field( () => [Number], { nullable: true } )
+    productTypeList?: number[];
+
+    @IsOptional()
     @IsString()
     @Field( () => String, { nullable: true } )
-    productTypeId?: string;
+    productCategoryId?: string;
 }
