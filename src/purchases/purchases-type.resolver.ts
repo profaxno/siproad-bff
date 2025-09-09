@@ -3,14 +3,14 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 
 import { SearchPaginationArgs } from '../common/dto/args';
 
-import { PurchasesTypeResponseType } from './dto/types/purchases-type-response.type';
 import { PurchasesTypeSearchInputArgs } from './dto/args/purchases-type-search-input.args';
+import { PurchasesTypeResponseType } from './dto/types/purchases-type.type';
 import { PurchasesTypeService } from './purchases-type.service';
 
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
 
-import { AdminUserType } from 'src/admin/dto/types';
+import { AdminUserType } from 'src/admin/dto/types/admin-user.type';
 import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
 
 @Resolver()

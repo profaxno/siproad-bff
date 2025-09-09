@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext, ForbiddenException, InternalServerErrorException } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
-import { AdminUserType } from "src/admin/dto/types";
+import { AdminUserType } from "src/admin/dto/types/admin-user.type";
 import { PermissionsEnum } from "src/admin/enums/permissions.enum";
 
 export const CurrentUser = createParamDecorator( (validPermissionList: PermissionsEnum[] = [], context: ExecutionContext) => {

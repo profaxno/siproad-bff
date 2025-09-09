@@ -6,8 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import { SearchPaginationArgs } from '../common/dto/args';
 
 import { PurchasesEnum } from './enums/purchases.enum';
-import { PurchasesTypeResponseType } from './dto/types/purchases-type-response.type';
 import { PurchasesTypeSearchInputArgs } from './dto/args/purchases-type-search-input.args';
+import { PurchasesTypeResponseType } from './dto/types/purchases-type.type';
 
 
 @Injectable()

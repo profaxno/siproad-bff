@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type AdminCompanyType {
-  id: String!
-  name: String!
-}
-
 type AdminUserType {
   id: String
   companyId: String
@@ -47,7 +42,7 @@ type AuthResponseType {
 
 type SalesOrderType {
   id: String!
-  code: String!
+  code: Float!
   companyId: String!
   userId: String!
   customerIdDoc: String
@@ -83,25 +78,6 @@ type SalesOrderResponseType {
   message: String!
   qty: Float
   payload: [SalesOrderType!]
-}
-
-type SalesProductType {
-  id: String
-  companyId: String!
-  name: String!
-  code: String
-  description: String
-  cost: Float!
-  price: Float!
-  type: Float!
-  enable4Sale: Boolean!
-}
-
-type SalesProductResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [SalesProductType!]
 }
 
 type PurchasesOrderType {
@@ -174,10 +150,18 @@ type PurchasesTypeResponseType {
   payload: [PurchasesTypeType!]
 }
 
+type ProductsMovementType {
+  id: String!
+  type: Float!
+  reason: Float!
+  qty: Float!
+  relatedId: String!
+  productId: String!
+  userId: String!
+}
+
 type ProductsProductType {
-  companyId: String
   id: String
-  productCategoryId: String
   name: String!
   code: String
   description: String
@@ -186,7 +170,11 @@ type ProductsProductType {
   price: Float
   type: Float!
   enable4Sale: Boolean!
+  companyId: String
+  productCategoryId: String
+  productUnitId: String
   elementList: [ProductsProductElementType!]
+  movementList: [ProductsMovementType!]
 }
 
 type ProductsProductElementType {
@@ -201,6 +189,19 @@ type ProductsProductResponseType {
   payload: [ProductsProductType!]
 }
 
+type ProductsProductUnitType {
+  id: String!
+  companyId: String!
+  name: String!
+}
+
+type ProductsProductUnitResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [ProductsProductUnitType!]
+}
+
 type Query {
   authRevalidateToken: AuthResponseType!
 
@@ -211,10 +212,10 @@ type Query {
   adminUserFindOneById(value: String!): AdminUserResponseType!
 
   """Search all"""
-  productsProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeList: [Float!], productCategoryId: String): ProductsProductResponseType!
+  productsProductSearchByValues(page: Float, limit: Float, withMovements: Boolean, nameCode: String, productTypeList: [Float!], productCategoryId: String, enable4Sale: Boolean): ProductsProductResponseType!
 
   """Search all"""
-  salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], enable4Sale: Boolean, productCategoryId: String): SalesProductResponseType!
+  productsProductUnitSearchByValues(page: Float, limit: Float, name: String): ProductsProductUnitResponseType!
 
   """Search all"""
   salesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
@@ -265,9 +266,7 @@ input UserRoleInput {
 }
 
 input ProductsProductInput {
-  companyId: String
   id: String
-  productCategoryId: String
   name: String!
   code: String
   description: String
@@ -276,7 +275,11 @@ input ProductsProductInput {
   price: Float
   type: Float!
   enable4Sale: Boolean!
+  companyId: String
+  productCategoryId: String
+  productUnitId: String
   elementList: [ProductsProductElementInput!]
+  movementList: [ProductsMovementInput!]
 }
 
 input ProductsProductElementInput {
@@ -284,9 +287,19 @@ input ProductsProductElementInput {
   qty: Float!
 }
 
+input ProductsMovementInput {
+  id: String!
+  type: Float!
+  reason: Float!
+  qty: Float!
+  relatedId: String!
+  productId: String!
+  userId: String!
+}
+
 input SalesOrderInput {
   id: String
-  code: String
+  code: Float
   customerIdDoc: String
   customerName: String
   customerEmail: String
@@ -334,7 +347,7 @@ input PurchasesOrderProductInput {
   qty: Float!
   comment: String
   name: String!
-  code: String
+  code: Float
   cost: Float!
   amount: Float!
   updateProductCost: Boolean!

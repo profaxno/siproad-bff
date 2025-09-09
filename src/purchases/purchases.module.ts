@@ -8,7 +8,6 @@ import { PurchasesProductService } from './purchases-product.service';
 import { PurchasesTypeResolver } from './purchases-type.resolver';
 import { PurchasesTypeService } from './purchases-type.service';
 
-
 @Module({
   imports: [ConfigModule, PfxHttpModule],
   providers: [PurchasesProductResolver, PurchasesProductService, PurchasesOrderResolver, PurchasesOrderService, PurchasesTypeResolver, PurchasesTypeService],

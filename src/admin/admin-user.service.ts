@@ -10,7 +10,7 @@ import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 import { AdminUserInput } from './dto/inputs/admin-user.input';
 
 import { AdminEnum } from './enums/admin.enum';
-import { AdminUserResponseType } from './dto/types/admin-user-response-type';
+import { AdminUserResponseType } from './dto/types/admin-user.type';
 
 @Injectable()
 export class AdminUserService {

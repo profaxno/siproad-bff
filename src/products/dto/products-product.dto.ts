@@ -10,17 +10,7 @@ export class BaseProductsProductDto {
   @IsOptional()
   @IsUUID()
   @Field( () => String, { nullable: true } )
-  companyId?: string;
-
-  @IsOptional()
-  @IsUUID()
-  @Field( () => String, { nullable: true } )
   id?: string;
-
-  @IsOptional()
-  @IsUUID()
-  @Field( () => String, { nullable: true } )
-  productCategoryId?: string;
 
   @IsString()
   @MaxLength(100)
@@ -61,4 +51,20 @@ export class BaseProductsProductDto {
   @IsBoolean()
   @Field( () => Boolean )
   enable4Sale: boolean;
+
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true } )
+  companyId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true } )
+  productCategoryId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true } )
+  productUnitId?: string;
+
 }

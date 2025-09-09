@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { ResponseType } from "src/common/dto/types/response.type";
 
 @ObjectType()
 export class PurchasesOrderType {
@@ -82,4 +83,16 @@ export class PurchasesOrderProductType {
   @Field( () => Number, { nullable: true} )
   status?: number;
   
+}
+
+@ObjectType()
+export class PurchasesOrderResponseType extends ResponseType {
+  @Field( () => [PurchasesOrderType], {nullable: true})
+  payload?: PurchasesOrderType[];
+
+  constructor(internalCode: number, message: string, qty?: number, payload?: PurchasesOrderType[]){
+    super(internalCode, message, qty);
+    this.payload = payload;
+  
+  }
 }

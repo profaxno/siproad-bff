@@ -6,9 +6,9 @@ import { ConfigService } from '@nestjs/config';
 import { SearchPaginationArgs } from '../common/dto/args';
 
 import { PurchasesEnum } from './enums/purchases.enum';
-import { PurchasesOrderInput } from './dto/inputs/purchases-order.input';
 import { PurchasesOrderSearchInputArgs } from './dto/args/purchases-order-search-input.args';
-import { PurchasesOrderResponseType } from './dto/types/purchases-order-response.type';
+import { PurchasesOrderInput } from './dto/inputs/purchases-order.input';
+import { PurchasesOrderResponseType } from './dto/types/purchases-order.type';
 
 @Injectable()
 export class PurchasesOrderService {
