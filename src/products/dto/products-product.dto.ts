@@ -30,7 +30,8 @@ export class BaseProductsProductDto {
   description?: string;
 
   @IsOptional()
-  @IsIn([UnitMeasuresEnum.UN, UnitMeasuresEnum.KG])
+  @IsString()
+  // @IsIn([UnitMeasuresEnum.UN, UnitMeasuresEnum.KG])
   @MaxLength(5)
   @Field( () => String, { nullable: true } )
   unit?: string;
