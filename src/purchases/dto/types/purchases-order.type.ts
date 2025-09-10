@@ -2,7 +2,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { ResponseType } from "src/common/dto/types/response.type";
 
 @ObjectType()
-export class SalesOrderType {
+export class PurchasesOrderType {
 
   @Field( () => String )
   id: string;
@@ -13,38 +13,38 @@ export class SalesOrderType {
   @Field( () => String )
   companyId: string;
 
-  @Field( () => String )
+  @Field( () => String, { nullable: true } )
   userId: string;
 
-  @Field( () => String, { nullable: true } )
-  customerIdDoc?: string;
+  @Field( () => String)
+  purchaseTypeId?: string;
+  
+ @Field( () => String, { nullable: true } )
+  documentTypeId?: string;
 
   @Field( () => String, { nullable: true } )
-  customerName?: string;
+  providerIdDoc?: string;
 
   @Field( () => String, { nullable: true } )
-  customerEmail?: string;
+  providerName?: string;
 
   @Field( () => String, { nullable: true } )
-  customerPhone?: string;
+  providerEmail?: string;
 
   @Field( () => String, { nullable: true } )
-  customerAddress?: string;
+  providerPhone?: string;
+
+  @Field( () => String, { nullable: true } )
+  providerAddress?: string;
 
   @Field( () => String, { nullable: true } )
   comment?: string;
  
   @Field( () => Number )
-  price: number;
+  amount: number;
 
-  @Field( () => Number )
-  cost: number;
-  
-  @Field( () => Number, { nullable: true } )
-  discount?: number;
-  
-  @Field( () => Number, { nullable: true } )
-  discountPct?: number;
+  @Field( () => String, { nullable: true } )
+  documentNumber?: string;
   
   @Field( () => String )
   createdAt: string;
@@ -52,13 +52,13 @@ export class SalesOrderType {
   @Field( () => Number )
   status?: number;
 
-  @Field( () => [SalesOrderProductType], { nullable: true} )
-  productList?: SalesOrderProductType[];
+  @Field( () => [PurchasesOrderProductType], { nullable: true} )
+  productList?: PurchasesOrderProductType[];
 
 }
 
 @ObjectType()
-export class SalesOrderProductType {
+export class PurchasesOrderProductType {
   @Field( () => String)
   id: string;
 
@@ -78,13 +78,7 @@ export class SalesOrderProductType {
   cost: number;
 
   @Field( () => Number )
-  price: number;
-  
-  @Field( () => Number, { nullable: true} )
-  discount?: number;
-
-  @Field( () => Number, { nullable: true} )
-  discountPct?: number;
+  amount: number;
 
   @Field( () => Number, { nullable: true} )
   status?: number;
@@ -92,11 +86,11 @@ export class SalesOrderProductType {
 }
 
 @ObjectType()
-export class SalesOrderResponseType extends ResponseType {
-  @Field( () => [SalesOrderType], {nullable: true})
-  payload?: SalesOrderType[];
+export class PurchasesOrderResponseType extends ResponseType {
+  @Field( () => [PurchasesOrderType], {nullable: true})
+  payload?: PurchasesOrderType[];
 
-  constructor(internalCode: number, message: string, qty?: number, payload?: SalesOrderType[]){
+  constructor(internalCode: number, message: string, qty?: number, payload?: PurchasesOrderType[]){
     super(internalCode, message, qty);
     this.payload = payload;
   

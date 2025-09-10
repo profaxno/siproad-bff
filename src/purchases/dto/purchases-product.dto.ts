@@ -3,7 +3,7 @@ import { IsBoolean, IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "cl
 
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
-export class BaseSalesProductDto {
+export class BasePurchasesProductDto {
 
   @IsUUID()
   @IsOptional()

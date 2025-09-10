@@ -1,54 +1,40 @@
-import { Type } from "class-transformer";
-import { IsArray, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { Field, ObjectType } from "@nestjs/graphql";
 import { BaseProductsProductDto } from "../products-product.dto";
-import { ProductsFormulaElementType } from "./products-formula.type";
+import { ResponseType } from "src/common/dto/types/response.type";
+import { ProductsMovementType } from "./products-movement.type";
 
 @ObjectType()
 export class ProductsProductType extends BaseProductsProductDto {
   
-  @Field( () => String )
-  companyId: string;
+  // @Field( () => String )
+  // companyId: string;
 
   @Field( () => [ProductsProductElementType], {nullable: true})
   elementList?: ProductsProductElementType[];
 
-  @Field( () => [ProductsProductFormulaType], {nullable: true})
-  formulaList?: ProductsProductFormulaType[];
+  @Field( () => [ProductsMovementType], {nullable: true})
+  movementList?: ProductsMovementType[];
+
 }
 
 @ObjectType()
 export class ProductsProductElementType {
-  @Field( () => String)
-  id: string;
+  
+  @Field( () => ProductsProductType)
+  element: ProductsProductType;
 
   @Field( () => Number )
   qty: number;
 
-  @Field( () => String )
-  name?: string;
-
-  @Field( () => Number )
-  cost?: number;
-
-  @Field( () => String )
-  unit?: string;
 }
 
 @ObjectType()
-export class ProductsProductFormulaType {
-  @Field( () => String)
-  id: string;
+export class ProductsProductResponseType extends ResponseType {
+  @Field( () => [ProductsProductType], {nullable: true})
+  payload?: ProductsProductType[];
 
-  @Field( () => Number )
-  qty: number;
-
-  @Field( () => String )
-  name?: string;
-
-  @Field( () => Number )
-  cost?: number;
-
-  @Field( () => [ProductsFormulaElementType], { nullable: true} )
-  elementList?: ProductsFormulaElementType[];
+  constructor(internalCode: number, message: string, qty?: number, payload?: ProductsProductType[]) {
+    super(internalCode, message, qty);
+    this.payload = payload;
+  }
 }

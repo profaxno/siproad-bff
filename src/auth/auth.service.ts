@@ -8,7 +8,7 @@ import { AuthDataResponseType, AuthResponseType } from './dto/types/auth-respons
 import { AdminUserService } from '../admin/admin-user.service';
 
 import { UserStatusEnum } from 'src/admin/enums/user-status.enum';
-import { AdminUserType, AdminUserResponseType } from 'src/admin/dto/types';
+import { AdminUserType, AdminUserResponseType } from 'src/admin/dto/types/admin-user.type';
 
 @Injectable()
 export class AuthService {

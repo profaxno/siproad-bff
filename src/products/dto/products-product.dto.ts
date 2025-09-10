@@ -1,12 +1,14 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { IsBoolean, IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
+import { IsBoolean, IsIn, IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
+import { UnitMeasuresEnum } from "../enums/unit-measures.enum";
+// import { ProductTypeEnum } from "../enums/product-type.enum";
 
 @ObjectType({isAbstract: true})
 @InputType({isAbstract: true})
 export class BaseProductsProductDto {
 
-  @IsUUID()
   @IsOptional()
+  @IsUUID()
   @Field( () => String, { nullable: true } )
   id?: string;
 
@@ -19,27 +21,51 @@ export class BaseProductsProductDto {
   @IsString()
   @MaxLength(50)
   @Field( () => String, { nullable: true } )
-  code: string;
+  code?: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(255)
   @Field( () => String, { nullable: true } )
-  description: string;
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  // @IsIn([UnitMeasuresEnum.UN, UnitMeasuresEnum.KG])
+  @MaxLength(5)
+  @Field( () => String, { nullable: true } )
+  unit?: string;
 
   @IsNumber()
   @Field( () => Number )
   cost: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Field( () => Number, { nullable: true } )
+  price?: number;
+
   @IsNumber()
   @Field( () => Number )
-  price: number;
+  type: number;
 
   @IsBoolean()
   @Field( () => Boolean )
-  hasFormula: boolean;
+  enable4Sale: boolean;
 
-  // @IsBoolean()
-  // @Field( () => Boolean )
-  // active: boolean;
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true } )
+  companyId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true } )
+  productCategoryId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true } )
+  productUnitId?: string;
+
 }

@@ -6,9 +6,10 @@ import { ConfigService } from '@nestjs/config';
 import { SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsEnum } from './enums/products.enum';
-import { ProductsProductResponseType } from './dto/types/products-product-response.type';
+import { ProductsProductResponseType } from './dto/types/products-product.type';
 import { ProductsProductInput } from './dto/inputs/products-product.input';
 import { ProductsProductSearchInputArgs } from './dto/args/products-product-search-input.args';
+import { ProductsProductSearchQueryArgs } from './dto/args/products-product-search-query.args';
 
 @Injectable()
 export class ProductsProductService {
@@ -54,14 +55,14 @@ export class ProductsProductService {
     })
   }
 
-  searchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: ProductsProductSearchInputArgs): Promise<ProductsProductResponseType>{
+  searchByValues(companyId: string, queryArgs: ProductsProductSearchQueryArgs, inputArgs: ProductsProductSearchInputArgs): Promise<ProductsProductResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
     const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_PRODUCTS_SEARCH_BY_VALUES).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = inputArgs;
-    const params  = paginationArgs;
+    const params  = queryArgs;
 
     return this.pfxHttpService.request<ProductsProductResponseType>(method, path, headers, body, params)
     .then(response => {

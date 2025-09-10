@@ -3,15 +3,16 @@ import { PfxHttpMethodEnum, PfxHttpService } from 'profaxnojs/axios';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
+import { SearchPaginationArgs } from '../common/dto/args';
 
 import { ProductsEnum } from './enums/products.enum';
-import { ProductsFormulaInput } from './dto/inputs/products-formula.input';
-import { ProductsFormulaResponseType } from './dto/types/products-formula-response.type';
+import { ProductsMovementResponseType } from './dto/types/products-movement.type';
+import { ProductsMovementInput } from './dto/inputs/products-movement.input';
+import { ProductsMovementSearchInputArgs } from './dto/args/products-movement-search-input.args';
 
 @Injectable()
-export class ProductsFormulaService {
-  private readonly logger = new Logger(ProductsFormulaService.name);
+export class ProductsMovementService {
+  private readonly logger = new Logger(ProductsMovementService.name);
 
   private siproadProductsHost: string = null;
   private siproadProductsApiKey: string = null;
@@ -24,17 +25,17 @@ export class ProductsFormulaService {
     this.siproadProductsApiKey = this.configService.get('siproadProductsApiKey');
   }
 
-  update(dto: ProductsFormulaInput): Promise<ProductsFormulaResponseType>{
+  update(dto: ProductsMovementInput): Promise<ProductsMovementResponseType>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.PATCH;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_UPDATE);
+    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_MOVEMENTS_UPDATE);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = dto;
 
     // * send request
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsMovementResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(
@@ -53,71 +54,45 @@ export class ProductsFormulaService {
     })
   }
 
-  find(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: SearchInputArgs): Promise<ProductsFormulaResponseType>{
+  searchByValues(companyId: string, paginationArgs: SearchPaginationArgs, inputArgs: ProductsMovementSearchInputArgs): Promise<ProductsMovementResponseType>{
     const start = performance.now();
     
     const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH).concat(`/${companyId}`);
+    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_MOVEMENTS_SEARCH_BY_VALUES).concat(`/${companyId}`);
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = inputArgs;
     const params  = paginationArgs;
 
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body, params)
+    return this.pfxHttpService.request<ProductsMovementResponseType>(method, path, headers, body, params)
     .then(response => {
 
       if ( !(
         response.internalCode == HttpStatus.OK || 
         response.internalCode == HttpStatus.BAD_REQUEST || 
         response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`find: Error, response=${JSON.stringify(response)}`);
+        throw new Error(`searchByValues: Error, response=${JSON.stringify(response)}`);
 
       const end = performance.now();
-      this.logger.log(`find: OK, runtime=${(end - start) / 1000} seconds`);
+      this.logger.log(`searchByValues: OK, runtime=${(end - start) / 1000} seconds`);
       return response;
     })
     .catch(error => {
-      this.logger.error(`find: ${error}`);
+      this.logger.error(`searchByValues: ${error}`);
       throw error;
     })
   }
 
-  findByValue(companyId: string, value: string): Promise<ProductsFormulaResponseType>{
-    const start = performance.now();
-    
-    const method  = PfxHttpMethodEnum.GET;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_SEARCH_VALUE).concat(`/${companyId}`).concat(`/${value}`);
-    const headers = { "x-api-key": this.siproadProductsApiKey };
-
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers)
-    .then(response => {
-
-      if ( !(
-        response.internalCode == HttpStatus.OK || 
-        response.internalCode == HttpStatus.BAD_REQUEST || 
-        response.internalCode == HttpStatus.NOT_FOUND) )
-        throw new Error(`findByValue: Error, response=${JSON.stringify(response)}`);
-
-      const end = performance.now();
-      this.logger.log(`findByValue: OK, runtime=${(end - start) / 1000} seconds`);
-      return response;
-    })
-    .catch(error => {
-      this.logger.error(`findByValue: ${error}`);
-      throw error;
-    })
-  }
-
-  delete(id: string): Promise<ProductsFormulaResponseType>{
+  delete(id: string): Promise<ProductsMovementResponseType>{
     const start = performance.now();
 
     // * generate request values
     const method  = PfxHttpMethodEnum.DELETE;
-    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_FORMULAS_DELETE).concat(`/${id}`);;
+    const path    = this.siproadProductsHost.concat(ProductsEnum.PATH_MOVEMENTS_DELETE).concat(`/${id}`);;
     const headers = { "x-api-key": this.siproadProductsApiKey };
     const body    = {};
 
     // * send request
-    return this.pfxHttpService.request<ProductsFormulaResponseType>(method, path, headers, body)
+    return this.pfxHttpService.request<ProductsMovementResponseType>(method, path, headers, body)
     .then(response => {
 
       if ( !(

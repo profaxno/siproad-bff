@@ -6,9 +6,10 @@ import { ConfigService } from '@nestjs/config';
 import { SearchPaginationArgs } from '../common/dto/args';
 
 import { SalesEnum } from './enums/sales.enum';
-import { SalesOrderInput } from './dto/inputs/sales-order.input';
 import { SalesOrderSearchInputArgs } from './dto/args/sales-order-search-input.args';
-import { SalesOrderResponseType } from './dto/types/sales-order-response.type';
+import { SalesOrderInput } from './dto/inputs/sales-order.input';
+import { SalesOrderResponseType } from './dto/types/sales-order.type';
+import { ProductsMovementService } from 'src/products/products-movement.service';
 
 @Injectable()
 export class SalesOrderService {

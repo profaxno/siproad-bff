@@ -11,6 +11,9 @@ export const config = () => ({
     siproadProductsHost: process.env.SIPROAD_PRODUCTS_HOST,
     siproadProductsApiKey: process.env.SIPROAD_PRODUCTS_API_KEY,
 
+    siproadPurchasesHost: process.env.SIPROAD_PURCHASES_HOST,
+    siproadPurchasesApiKey: process.env.SIPROAD_PURCHASES_API_KEY,
+
     siproadSalesHost: process.env.SIPROAD_SALES_HOST,
     siproadSalesApiKey: process.env.SIPROAD_SALES_API_KEY,
     

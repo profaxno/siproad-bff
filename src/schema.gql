@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type AdminCompanyType {
-  id: String!
-  name: String!
-}
-
 type AdminUserType {
   id: String
   companyId: String
@@ -34,82 +29,6 @@ type AdminUserResponseType {
   payload: [AdminUserType!]
 }
 
-type ProductsElementType {
-  id: String
-  companyId: String!
-  name: String!
-  cost: Float!
-  stock: Float!
-  unit: String!
-}
-
-type ProductsElementResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [ProductsElementType!]
-}
-
-type ProductsFormulaType {
-  id: String
-  companyId: String!
-  name: String!
-  code: String!
-  cost: Float!
-  elementList: [ProductsFormulaElementType!]
-}
-
-type ProductsFormulaElementType {
-  id: String!
-  qty: Float!
-  name: String!
-  cost: Float!
-  unit: String!
-}
-
-type ProductsFormulaResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [ProductsFormulaType!]
-}
-
-type ProductsProductType {
-  id: String
-  name: String!
-  code: String
-  description: String
-  cost: Float!
-  price: Float!
-  hasFormula: Boolean!
-  companyId: String!
-  elementList: [ProductsProductElementType!]
-  formulaList: [ProductsProductFormulaType!]
-}
-
-type ProductsProductElementType {
-  id: String!
-  qty: Float!
-  name: String!
-  cost: Float!
-  unit: String!
-}
-
-type ProductsProductFormulaType {
-  id: String!
-  qty: Float!
-  name: String!
-  cost: Float!
-  elementList: [ProductsFormulaElementType!]
-}
-
-type ProductsProductResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [ProductsProductType!]
-}
-
 type AuthDataResponseType {
   token: String!
   user: AdminUserType!
@@ -123,7 +42,7 @@ type AuthResponseType {
 
 type SalesOrderType {
   id: String!
-  code: String!
+  code: Float!
   companyId: String!
   userId: String!
   customerIdDoc: String
@@ -161,7 +80,45 @@ type SalesOrderResponseType {
   payload: [SalesOrderType!]
 }
 
-type SalesProductType {
+type PurchasesOrderType {
+  id: String!
+  code: Float!
+  companyId: String!
+  userId: String
+  purchaseTypeId: String!
+  documentTypeId: String
+  providerIdDoc: String
+  providerName: String
+  providerEmail: String
+  providerPhone: String
+  providerAddress: String
+  comment: String
+  amount: Float!
+  documentNumber: String
+  createdAt: String!
+  status: Float!
+  productList: [PurchasesOrderProductType!]
+}
+
+type PurchasesOrderProductType {
+  id: String!
+  qty: Float!
+  comment: String
+  name: String!
+  code: String
+  cost: Float!
+  amount: Float!
+  status: Float
+}
+
+type PurchasesOrderResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [PurchasesOrderType!]
+}
+
+type PurchasesProductType {
   id: String
   companyId: String!
   name: String!
@@ -169,13 +126,80 @@ type SalesProductType {
   description: String
   cost: Float!
   price: Float!
+  type: Float!
+  enable4Sale: Boolean!
 }
 
-type SalesProductResponseType {
+type PurchasesProductResponseType {
   internalCode: Float!
   message: String!
   qty: Float
-  payload: [SalesProductType!]
+  payload: [PurchasesProductType!]
+}
+
+type PurchasesTypeType {
+  id: String!
+  companyId: String!
+  name: String!
+}
+
+type PurchasesTypeResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [PurchasesTypeType!]
+}
+
+type ProductsMovementType {
+  id: String!
+  type: Float!
+  reason: Float!
+  qty: Float!
+  relatedId: String!
+  productId: String!
+  userId: String!
+}
+
+type ProductsProductType {
+  id: String
+  name: String!
+  code: String
+  description: String
+  unit: String
+  cost: Float!
+  price: Float
+  type: Float!
+  enable4Sale: Boolean!
+  companyId: String
+  productCategoryId: String
+  productUnitId: String
+  elementList: [ProductsProductElementType!]
+  movementList: [ProductsMovementType!]
+}
+
+type ProductsProductElementType {
+  element: ProductsProductType!
+  qty: Float!
+}
+
+type ProductsProductResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [ProductsProductType!]
+}
+
+type ProductsProductUnitType {
+  id: String!
+  companyId: String!
+  name: String!
+}
+
+type ProductsProductUnitResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [ProductsProductUnitType!]
 }
 
 type Query {
@@ -188,22 +212,22 @@ type Query {
   adminUserFindOneById(value: String!): AdminUserResponseType!
 
   """Search all"""
-  productsElementSearchByValues(page: Float, limit: Float, name: String, elementTypeId: String): ProductsElementResponseType!
-
-  """Find all"""
-  productsFormulaFind(page: Float, limit: Float, searchList: [String!]): ProductsFormulaResponseType!
-
-  """Find one by id"""
-  productsFormulaFindOneById(value: String!): ProductsFormulaResponseType!
+  productsProductSearchByValues(page: Float, limit: Float, withMovements: Boolean, nameCode: String, productTypeList: [Float!], productCategoryId: String, enable4Sale: Boolean): ProductsProductResponseType!
 
   """Search all"""
-  productsProductSearchByValues(page: Float, limit: Float, nameCode: String, productTypeId: String): ProductsProductResponseType!
-
-  """Search all"""
-  salesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeId: String): SalesProductResponseType!
+  productsProductUnitSearchByValues(page: Float, limit: Float, name: String): ProductsProductUnitResponseType!
 
   """Search all"""
   salesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
+
+  """Search all"""
+  purchasesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeList: [Float!], productCategoryId: String): PurchasesProductResponseType!
+
+  """Search all"""
+  purchasesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, providerNameIdDoc: String, comment: String): PurchasesOrderResponseType!
+
+  """Search all"""
+  purchasesTypeSearchByValues(page: Float, limit: Float, name: String): PurchasesTypeResponseType!
 }
 
 type Mutation {
@@ -213,18 +237,6 @@ type Mutation {
   """Block user"""
   adminUserBlock(id: String!): AdminUserResponseType!
 
-  """Create/update element"""
-  productsElementUpdate(element: ProductsElementInput!): ProductsElementResponseType!
-
-  """Delete element"""
-  productsElementDelete(id: String!): ProductsElementResponseType!
-
-  """Create/update formula"""
-  productsFormulaUpdate(formula: ProductsFormulaInput!): ProductsFormulaResponseType!
-
-  """Delete formula"""
-  productsFormulaDelete(id: String!): ProductsFormulaResponseType!
-
   """Create/update product"""
   productsProductUpdate(product: ProductsProductInput!): ProductsProductResponseType!
 
@@ -233,6 +245,9 @@ type Mutation {
 
   """Create/update order"""
   salesOrderUpdate(order: SalesOrderInput!): SalesOrderResponseType!
+
+  """Create/update order"""
+  purchasesOrderUpdate(order: PurchasesOrderInput!): PurchasesOrderResponseType!
 }
 
 input AdminUserInput {
@@ -250,57 +265,41 @@ input UserRoleInput {
   name: String
 }
 
-input ProductsElementInput {
-  id: String
-  companyId: String!
-  name: String!
-  cost: Float!
-  stock: Float!
-  unit: String!
-}
-
-input ProductsFormulaInput {
-  id: String
-  companyId: String!
-  name: String!
-  code: String!
-  cost: Float!
-  elementList: [ProductsFormulaElementInput!]
-}
-
-input ProductsFormulaElementInput {
-  id: String!
-  qty: Float!
-  name: String
-}
-
 input ProductsProductInput {
   id: String
   name: String!
   code: String
   description: String
+  unit: String
   cost: Float!
-  price: Float!
-  hasFormula: Boolean!
+  price: Float
+  type: Float!
+  enable4Sale: Boolean!
+  companyId: String
+  productCategoryId: String
+  productUnitId: String
   elementList: [ProductsProductElementInput!]
-  formulaList: [ProductsProductFormulaInput!]
+  movementList: [ProductsMovementInput!]
 }
 
 input ProductsProductElementInput {
-  id: String!
+  element: ProductsProductInput!
   qty: Float!
-  name: String
 }
 
-input ProductsProductFormulaInput {
+input ProductsMovementInput {
   id: String!
+  type: Float!
+  reason: Float!
   qty: Float!
-  name: String
+  relatedId: String!
+  productId: String!
+  userId: String!
 }
 
 input SalesOrderInput {
   id: String
-  code: String
+  code: Float
   customerIdDoc: String
   customerName: String
   customerEmail: String
@@ -323,5 +322,34 @@ input SalesOrderProductInput {
   price: Float!
   discount: Float
   discountPct: Float
+  status: Float
+}
+
+input PurchasesOrderInput {
+  id: String
+  code: Float
+  purchaseTypeId: String!
+  documentTypeId: String
+  providerIdDoc: String
+  providerName: String
+  providerEmail: String
+  providerPhone: String
+  providerAddress: String
+  comment: String
+  amount: Float
+  documentNumber: String
+  status: Float
+  productList: [PurchasesOrderProductInput!]
+}
+
+input PurchasesOrderProductInput {
+  id: String!
+  qty: Float!
+  comment: String
+  name: String!
+  code: Float
+  cost: Float!
+  amount: Float!
+  updateProductCost: Boolean!
   status: Float
 }

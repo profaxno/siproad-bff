@@ -3,16 +3,17 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
+import { ProductsProductSearchInputArgs } from './dto/args/products-product-search-input.args';
 import { ProductsProductInput } from './dto/inputs/products-product.input';
-import { ProductsProductResponseType } from './dto/types/products-product-response.type';
+import { ProductsProductResponseType } from './dto/types/products-product.type';
 import { ProductsProductService } from './products-product.service';
 
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
 
-import { AdminUserType } from 'src/admin/dto/types';
+import { AdminUserType } from 'src/admin/dto/types/admin-user.type';
 import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
-import { ProductsProductSearchInputArgs } from './dto/args/products-product-search-input.args';
+import { ProductsProductSearchQueryArgs } from './dto/args/products-product-search-query.args';
 
 @Resolver()
 export class ProductsProductResolver {
@@ -50,15 +51,15 @@ export class ProductsProductResolver {
   @UseGuards( JwtAuthGuard )
   searchByValues(
     @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
-    @Args() paginationArgs: SearchPaginationArgs,
+    @Args() queryArgs: ProductsProductSearchQueryArgs,
     @Args() inputArgs: ProductsProductSearchInputArgs
   ): Promise<ProductsProductResponseType> {
 
     const companyId = userDto.companyId;
-    this.logger.log(`>>> searchByValues: companyId=${companyId}, paginationDto=${JSON.stringify(paginationArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
+    this.logger.log(`>>> searchByValues: companyId=${companyId}, queryArgs=${JSON.stringify(queryArgs)}, inputArgs:${JSON.stringify(inputArgs)}`);
     const start = performance.now();
 
-    return this.productsProductService.searchByValues(companyId, paginationArgs, inputArgs)
+    return this.productsProductService.searchByValues(companyId, queryArgs, inputArgs)
     .then( (response: ProductsProductResponseType) => {
       const end = performance.now();
       this.logger.log(`<<< searchByValues: OK, runtime=${(end - start) / 1000} seconds, response=${JSON.stringify(response)}`);

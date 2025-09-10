@@ -4,12 +4,11 @@ import { BadRequestException, HttpStatus, Logger, UseGuards } from '@nestjs/comm
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorators';
 
-import { LoginInput, ResetPasswordInput } from './dto/inputs';
 import { AuthResponseType } from './dto/types/auth-response.type';
 import { AuthService } from './auth.service';
 
 import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
-import { AdminUserType } from 'src/admin/dto/types';
+import { AdminUserType } from 'src/admin/dto/types/admin-user.type';
 
 @Resolver()
 export class AuthResolver {

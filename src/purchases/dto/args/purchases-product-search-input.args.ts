@@ -2,12 +2,11 @@ import { ArgsType, Field, InputType, ObjectType } from "@nestjs/graphql";
 import { IsArray, IsBoolean, IsOptional, IsString } from "class-validator";
 
 @ArgsType()
-export class ProductsProductSearchInputArgs{
-    
+export class PurchasesProductSearchInputArgs{
     @IsOptional()
-    @IsString()
-    @Field( () => String, { nullable: true } )
-    nameCode?: string;
+    @IsArray()
+    @Field( () => [String], { nullable: true } )
+    nameCodeList?: string[];
 
     @IsOptional()
     @IsArray()
@@ -18,9 +17,4 @@ export class ProductsProductSearchInputArgs{
     @IsString()
     @Field( () => String, { nullable: true } )
     productCategoryId?: string;
-
-    @IsOptional()
-    @IsBoolean()
-    @Field( () => Boolean, { nullable: true } )
-    enable4Sale?: boolean;
 }

@@ -2,58 +2,40 @@ import { Type } from "class-transformer";
 import { IsArray, IsNumber, IsOptional, IsPositive, IsString, IsUUID, ValidateNested } from "class-validator";
 import { Field, InputType } from "@nestjs/graphql";
 import { BaseProductsProductDto } from "../products-product.dto";
+import { ProductsMovementInput } from "./products-movement.input";
 
 @InputType()
 export class ProductsProductInput extends BaseProductsProductDto {
   
-  companyId?: string;
+  // companyId?: string;
 
-  @IsArray()
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ProductsProductElementInput)
+  @Type( () => ProductsProductElementInput)
   @Field( () => [ProductsProductElementInput], {nullable: true})
   elementList?: ProductsProductElementInput[];
 
-  @IsArray()
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ProductsProductFormulaInput)
-  @Field( () => [ProductsProductFormulaInput], { nullable: true} )
-  formulaList?: ProductsProductFormulaInput[];
+  @Type( () => ProductsMovementInput)
+  @Field( () => [ProductsMovementInput], {nullable: true})
+  movementList?: ProductsMovementInput[];
+
 }
 
 @InputType()
 export class ProductsProductElementInput {
-  @IsUUID()
-  @Field( () => String)
-  id: string;
+  
+  @ValidateNested()
+  @Type( () => ProductsProductInput)
+  @Field( () => ProductsProductInput)
+  element: ProductsProductInput;
 
   @IsNumber()
   @IsPositive()
   @Field( () => Number )
   qty: number;
 
-  @IsString()
-  @IsOptional()
-  @Field( () => String, { nullable: true } )
-  name?: string;
-
-}
-
-@InputType()
-export class ProductsProductFormulaInput {
-  @IsUUID()
-  @Field( () => String)
-  id: string;
-
-  @IsNumber()
-  @IsPositive()
-  @Field( () => Number )
-  qty: number;
-
-  @IsString()
-  @IsOptional()
-  @Field( () => String, { nullable: true } )
-  name?: string;
 }

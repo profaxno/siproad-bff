@@ -1,12 +1,12 @@
-import { IsArray, IsInt, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, Min, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsInt, IsNumber, IsOptional, IsPositive, IsString, IsUUID, MaxLength, Min, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { Field, InputType } from "@nestjs/graphql";
 
 @InputType()
-export class SalesOrderInput {
+export class PurchasesOrderInput {
 
-  @IsUUID()
   @IsOptional()
+  @IsUUID()
   @Field( () => String, { nullable: true } )
   id?: string;
 
@@ -20,35 +20,44 @@ export class SalesOrderInput {
 
   userId?: string;
 
+  @IsUUID()
+  @Field( () => String)
+  purchaseTypeId?: string;
+
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  @Field( () => String, { nullable: true } )
-  customerIdDoc?: string;
+  @IsUUID()
+  @Field( () => String, { nullable: true })
+  documentTypeId?: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(50)
   @Field( () => String, { nullable: true } )
-  customerName?: string;
+  providerIdDoc?: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(50)
   @Field( () => String, { nullable: true } )
-  customerEmail?: string;
+  providerName?: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(50)
   @Field( () => String, { nullable: true } )
-  customerPhone?: string;
+  providerEmail?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  providerPhone?: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(150)
   @Field( () => String, { nullable: true } )
-  customerAddress?: string;
+  providerAddress?: string;
 
   @IsOptional()
   @IsString()
@@ -60,13 +69,13 @@ export class SalesOrderInput {
   @IsNumber()
   @Min(0)
   @Field( () => Number, { nullable: true } )
-  discount?: number;
+  amount?: number;
   
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Field( () => Number, { nullable: true } )
-  discountPct?: number;
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  documentNumber?: string;
   
   @IsOptional()
   @IsInt()
@@ -77,14 +86,14 @@ export class SalesOrderInput {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => SalesOrderProductInput)
-  @Field( () => [SalesOrderProductInput], { nullable: true} )
-  productList?: SalesOrderProductInput[];
+  @Type(() => PurchasesOrderProductInput)
+  @Field( () => [PurchasesOrderProductInput], { nullable: true} )
+  productList?: PurchasesOrderProductInput[];
 
 }
 
 @InputType()
-export class SalesOrderProductInput {
+export class PurchasesOrderProductInput {
   @IsUUID()
   @Field( () => String)
   id: string;
@@ -106,9 +115,9 @@ export class SalesOrderProductInput {
   name: string;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  @Field( () => String, { nullable: true} )
+  @IsNumber()
+  @Min(1)
+  @Field( () => Number, { nullable: true } )
   code?: string;
 
   @IsNumber()
@@ -119,19 +128,11 @@ export class SalesOrderProductInput {
   @IsNumber()
   @Min(0)
   @Field( () => Number )
-  price: number;
-  
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Field( () => Number, { nullable: true} )
-  discount?: number;
+  amount: number;
 
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Field( () => Number, { nullable: true} )
-  discountPct?: number;
+  @IsBoolean()
+  @Field( () => Boolean )
+  updateProductCost: boolean;
 
   @IsOptional()
   @IsInt()

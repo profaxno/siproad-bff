@@ -4,7 +4,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { SearchInputArgs, SearchPaginationArgs } from '../common/dto/args';
 
 import { AdminUserInput } from './dto/inputs/admin-user.input';
-import { AdminUserType, AdminUserResponseType } from './dto/types';
+import { AdminUserType, AdminUserResponseType } from './dto/types/admin-user.type';
 import { PermissionsEnum } from './enums/permissions.enum';
 import { AdminUserService } from './admin-user.service';
 

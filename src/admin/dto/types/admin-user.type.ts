@@ -1,6 +1,7 @@
 import { IsArray, IsBoolean, IsIn, IsInt, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { Field, ObjectType } from "@nestjs/graphql";
 import { BaseAdminUserDto } from "../admin-user.dto";
+import { ResponseType } from "src/common/dto/types/response.type";
 
 @ObjectType()
 export class AdminUserType extends BaseAdminUserDto {
@@ -33,4 +34,11 @@ export class UserPermissionType {
   
   @Field( () => String )
   code: string
+}
+
+@ObjectType()
+export class AdminUserResponseType extends ResponseType {
+
+  @Field( () => [AdminUserType], {nullable: true})
+  payload?: AdminUserType[];
 }

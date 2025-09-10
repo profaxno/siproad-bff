@@ -3,15 +3,15 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { SearchPaginationArgs } from '../common/dto/args';
 
-import { SalesOrderInput } from './dto/inputs/sales-order.input';
 import { SalesOrderSearchInputArgs } from './dto/args/sales-order-search-input.args';
-import { SalesOrderResponseType } from './dto/types/sales-order-response.type';
+import { SalesOrderInput } from './dto/inputs/sales-order.input';
+import { SalesOrderResponseType } from './dto/types/sales-order.type';
 import { SalesOrderService } from './sales-order.service';
 
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorators';
 
-import { AdminUserType } from 'src/admin/dto/types';
+import { AdminUserType } from 'src/admin/dto/types/admin-user.type';
 import { PermissionsEnum } from 'src/admin/enums/permissions.enum';
 
 
