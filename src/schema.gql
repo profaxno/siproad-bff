@@ -29,6 +29,19 @@ type AdminUserResponseType {
   payload: [AdminUserType!]
 }
 
+type AdminDocumentTypeType {
+  id: String
+  companyId: String
+  name: String!
+}
+
+type AdminDocumentTypeResponseType {
+  internalCode: Float!
+  message: String!
+  qty: Float
+  payload: [AdminDocumentTypeType!]
+}
+
 type AuthDataResponseType {
   token: String!
   user: AdminUserType!
@@ -118,25 +131,6 @@ type PurchasesOrderResponseType {
   payload: [PurchasesOrderType!]
 }
 
-type PurchasesProductType {
-  id: String
-  companyId: String!
-  name: String!
-  code: String
-  description: String
-  cost: Float!
-  price: Float!
-  type: Float!
-  enable4Sale: Boolean!
-}
-
-type PurchasesProductResponseType {
-  internalCode: Float!
-  message: String!
-  qty: Float
-  payload: [PurchasesProductType!]
-}
-
 type PurchasesTypeType {
   id: String!
   companyId: String!
@@ -212,6 +206,9 @@ type Query {
   adminUserFindOneById(value: String!): AdminUserResponseType!
 
   """Search all"""
+  adminDocumentTypeSearchByValues(page: Float, limit: Float, name: String): AdminDocumentTypeResponseType!
+
+  """Search all"""
   productsProductSearchByValues(page: Float, limit: Float, withMovements: Boolean, nameCode: String, productTypeList: [Float!], productCategoryId: String, enable4Sale: Boolean): ProductsProductResponseType!
 
   """Search all"""
@@ -221,13 +218,10 @@ type Query {
   salesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, customerNameIdDoc: String, comment: String): SalesOrderResponseType!
 
   """Search all"""
-  purchasesProductSearchByValues(page: Float, limit: Float, nameCodeList: [String!], productTypeList: [Float!], productCategoryId: String): PurchasesProductResponseType!
-
-  """Search all"""
   purchasesOrderSearchByValues(page: Float, limit: Float, createdAtInit: String, createdAtEnd: String, code: String, providerNameIdDoc: String, comment: String): PurchasesOrderResponseType!
 
   """Search all"""
-  purchasesTypeSearchByValues(page: Float, limit: Float, name: String): PurchasesTypeResponseType!
+  purchasesPurchaseTypeSearchByValues(page: Float, limit: Float, name: String): PurchasesTypeResponseType!
 }
 
 type Mutation {
@@ -236,6 +230,12 @@ type Mutation {
 
   """Block user"""
   adminUserBlock(id: String!): AdminUserResponseType!
+
+  """Create/update"""
+  adminDocumentTypeUpdate(documentType: AdminDocumentTypeInput!): AdminDocumentTypeResponseType!
+
+  """Delete"""
+  adminDocumentTypeDelete(id: String!): AdminDocumentTypeResponseType!
 
   """Create/update product"""
   productsProductUpdate(product: ProductsProductInput!): ProductsProductResponseType!
@@ -263,6 +263,12 @@ input AdminUserInput {
 input UserRoleInput {
   id: String!
   name: String
+}
+
+input AdminDocumentTypeInput {
+  id: String
+  companyId: String
+  name: String!
 }
 
 input ProductsProductInput {
@@ -328,26 +334,26 @@ input SalesOrderProductInput {
 input PurchasesOrderInput {
   id: String
   code: Float
-  purchaseTypeId: String!
-  documentTypeId: String
-  providerIdDoc: String
   providerName: String
+  providerIdDoc: String
   providerEmail: String
   providerPhone: String
   providerAddress: String
   comment: String
   amount: Float
+  documentTypeId: String
   documentNumber: String
   status: Float
+  purchaseTypeId: String!
   productList: [PurchasesOrderProductInput!]
 }
 
 input PurchasesOrderProductInput {
   id: String!
-  qty: Float!
-  comment: String
   name: String!
   code: Float
+  qty: Float!
+  comment: String
   cost: Float!
   amount: Float!
   updateProductCost: Boolean!

@@ -1,1 +1,0 @@
-// TODO: solo metodos de consulta
