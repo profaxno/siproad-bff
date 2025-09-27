@@ -22,10 +22,10 @@ export class PurchasesTypeResolver {
     private readonly purchasesTypeService: PurchasesTypeService,
   ) {}
 
-  @Query(() => PurchasesTypeResponseType, { name: 'purchasesTypeSearchByValues', description: 'Search all' })
+  @Query(() => PurchasesTypeResponseType, { name: 'purchasesPurchaseTypeSearchByValues', description: 'Search all' })
   @UseGuards( JwtAuthGuard )
   searchByValues(
-    @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType,
+    @CurrentUser([PermissionsEnum.PRODUCTS_PRODUCT_READ]) userDto: AdminUserType, // TODO: revisar permiso
     @Args() paginationArgs: SearchPaginationArgs,
     @Args() inputArgs: PurchasesTypeSearchInputArgs
   ): Promise<PurchasesTypeResponseType> {

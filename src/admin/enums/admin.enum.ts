@@ -9,5 +9,9 @@ export enum AdminEnum {
     PATH_USERS_SEARCH_ID    = '/siproad-admin/users/findOneById',
     PATH_USERS_SEARCH_VALUE = '/siproad-admin/users/findByValue',
     PATH_USERS_SEARCH_EMAIL = '/siproad-admin/users/findOneByEmail',
-    PATH_USERS_DELETE       = '/siproad-admin/users'
+    PATH_USERS_DELETE       = '/siproad-admin/users',
+
+    PATH_DOCUMENT_TYPE_UPDATE           = '/siproad-admin/document-types/update',
+    PATH_DOCUMENT_TYPE_SEARCH_BY_VALUES = '/siproad-admin/document-types/searchByValues',
+    PATH_DOCUMENT_TYPE_DELETE           = '/siproad-admin/document-types',
 }

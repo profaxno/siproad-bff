@@ -16,30 +16,17 @@ export class PurchasesOrderInput {
   @Field( () => Number, { nullable: true } )
   code?: number;
 
-  companyId?: string;
-
-  userId?: string;
-
-  @IsUUID()
-  @Field( () => String)
-  purchaseTypeId?: string;
-
   @IsOptional()
-  @IsUUID()
-  @Field( () => String, { nullable: true })
-  documentTypeId?: string;
+  @IsString()
+  @MaxLength(50)
+  @Field( () => String, { nullable: true } )
+  providerName?: string;
 
   @IsOptional()
   @IsString()
   @MaxLength(50)
   @Field( () => String, { nullable: true } )
   providerIdDoc?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  @Field( () => String, { nullable: true } )
-  providerName?: string;
 
   @IsOptional()
   @IsString()
@@ -70,7 +57,12 @@ export class PurchasesOrderInput {
   @Min(0)
   @Field( () => Number, { nullable: true } )
   amount?: number;
-  
+
+  @IsOptional()
+  @IsUUID()
+  @Field( () => String, { nullable: true })
+  documentTypeId?: string;
+
   @IsOptional()
   @IsString()
   @MaxLength(50)
@@ -83,6 +75,14 @@ export class PurchasesOrderInput {
   @Field( () => Number, { nullable: true } )
   status?: number;
 
+  companyId?: string;
+
+  userId?: string;
+
+  @IsUUID()
+  @Field( () => String)
+  purchaseTypeId?: string;
+  
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
@@ -98,17 +98,6 @@ export class PurchasesOrderProductInput {
   @Field( () => String)
   id: string;
 
-  @IsNumber()
-  @IsPositive()
-  @Field( () => Number )
-  qty: number;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(250)
-  @Field( () => String, { nullable: true} )
-  comment?: string;
-
   @IsString()
   @MaxLength(100)
   @Field( () => String )
@@ -119,6 +108,17 @@ export class PurchasesOrderProductInput {
   @Min(1)
   @Field( () => Number, { nullable: true } )
   code?: string;
+
+  @IsNumber()
+  @IsPositive()
+  @Field( () => Number )
+  qty: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(250)
+  @Field( () => String, { nullable: true} )
+  comment?: string;
 
   @IsNumber()
   @Min(0)
